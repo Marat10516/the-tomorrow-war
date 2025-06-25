@@ -1,0 +1,2612 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小隊戰鬥管理系統</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', 'Arial', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* 頁面切換按鈕 */
+        .page-switch {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .switch-btn {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .switch-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        .switch-btn.active {
+            background: linear-gradient(45deg, #00ff88 0%, #00cc6a 100%);
+            text-shadow: 0 0 10px #fff;
+        }
+
+        /* 頁面容器 */
+        .page {
+            display: none;
+            width: 100%;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* 戰鬥控制面板 */
+        .battle-controls {
+            position: fixed;
+            top: 80px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            padding: 20px;
+            width: 300px;
+            z-index: 999;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .battle-title {
+            color: #00ff88;
+            font-size: 1.3em;
+            text-align: center;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px #00ff88;
+        }
+
+        .squad-selector {
+            margin-bottom: 15px;
+        }
+
+        .squad-selector label {
+            color: #ffd700;
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .squad-checkboxes {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .squad-checkbox {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .squad-checkbox:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .squad-checkbox.selected {
+            background: rgba(0, 255, 136, 0.3);
+            border-color: #00ff88;
+        }
+
+        .squad-checkbox.no-attacks {
+            background: rgba(255, 71, 87, 0.2);
+            border-color: #ff4757;
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .squad-checkbox.no-attacks .squad-label {
+            color: #ff4757;
+        }
+
+        .squad-checkbox input {
+            display: none;
+        }
+
+        .squad-label {
+            color: #fff;
+            font-size: 0.9em;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+
+        .squad-points {
+            color: #ffd700;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .squad-attacks {
+            color: #ff6b6b;
+            font-size: 0.7em;
+            font-weight: bold;
+            margin-top: 2px;
+        }
+
+        .target-selector {
+            margin-bottom: 15px;
+        }
+
+        .alien-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+        }
+
+        .alien-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #666;
+            color: #fff;
+            padding: 8px 4px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .alien-btn:hover {
+            border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.2);
+        }
+
+        .alien-btn.selected {
+            border-color: #ff4757;
+            background: rgba(255, 71, 87, 0.3);
+            color: #ff4757;
+        }
+
+        .alien-btn-text {
+            font-size: 0.6em;
+            color: #ccc;
+        }
+
+        .attack-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #ff4757 0%, #ff3742 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .attack-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.5);
+        }
+
+        .attack-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #666;
+        }
+
+        .battle-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #fff;
+        }
+
+        /* 血量調整工具樣式 */
+        .hp-adjustment-tool {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .tool-title {
+            color: #ff6b6b;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #ff6b6b;
+        }
+
+        .hp-controls, .points-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .hp-controls label, .points-controls label {
+            color: #ffd700;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .alien-select, .hp-value-input, .points-value-input {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #666;
+            border-radius: 5px;
+            color: #fff;
+            padding: 8px;
+            font-size: 0.9em;
+        }
+
+        .alien-select:focus, .hp-value-input:focus, .points-value-input:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            box-shadow: 0 0 8px rgba(255, 107, 107, 0.5);
+        }
+
+        .hp-set-btn, .points-set-btn {
+            background: linear-gradient(45deg, #ff6b6b 0%, #ff5252 100%);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .hp-set-btn:hover, .points-set-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+        }
+
+        .quick-hp-buttons, .quick-points-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .quick-hp-btn, .quick-points-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid #666;
+            color: #fff;
+            padding: 8px 4px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.3s ease;
+        }
+
+        .quick-hp-btn:hover, .quick-points-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: #ff6b6b;
+        }
+
+        /* 小隊點數顯示工具樣式 */
+        .squad-points-tool {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #00ffff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .squad-points-tool .tool-title {
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .squad-points-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .squad-points-item {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #666;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .squad-points-item:hover {
+            border-color: #00ffff;
+            background: rgba(0, 255, 255, 0.1);
+        }
+
+        .squad-points-label {
+            color: #00ffff;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .squad-points-value {
+            color: #fff;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-shadow: 0 0 8px #00ffff;
+        }
+
+        .squad-points-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .reset-squad-points-btn {
+            flex: 1;
+            background: linear-gradient(45deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .reset-squad-points-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+        }
+
+        .add-points-btn {
+            flex: 1;
+            background: linear-gradient(45deg, #00ffff 0%, #00cccc 100%);
+            color: #000;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .add-points-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 255, 255, 0.4);
+        }
+
+        /* 攻擊次數調整工具樣式 */
+        .attack-count-tool {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #9b59b6;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        /* 小隊點數顯示工具樣式 */
+        .squad-points-tool {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #00ffff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .squad-points-tool .tool-title {
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .squad-points-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .reset-squad-points-btn {
+            flex: 1;
+            background: linear-gradient(45deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .reset-squad-points-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+        }
+
+        .add-points-btn {
+            flex: 1;
+            background: linear-gradient(45deg, #00ffff 0%, #00cccc 100%);
+            color: #000;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .add-points-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 255, 255, 0.4);
+        }
+
+        /* 小隊管理中的點數顯示和使用 */
+        .available-points {
+            background: rgba(0, 255, 255, 0.2);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            margin-bottom: 15px;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+        }
+
+        .available-points .points-label {
+            color: #00ffff;
+            font-size: 1em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .points-value-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .points-value-input {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #00ffff;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-align: center;
+            width: 80px;
+            padding: 5px;
+            text-shadow: 0 0 10px #00ffff;
+            transition: all 0.3s ease;
+        }
+
+        .points-value-input:focus {
+            outline: none;
+            border-color: #00ccff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+            color: #00ffff;
+        }
+
+        .points-set-button {
+            background: linear-gradient(45deg, #00ffff 0%, #00cccc 100%);
+            color: #000;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .points-set-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .point-controls {
+            display: flex;
+            gap: 5px;
+            margin-top: 8px;
+            align-items: center;
+        }
+
+        .point-btn {
+            background: rgba(0, 255, 255, 0.3);
+            border: 1px solid #00ffff;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            min-width: 25px;
+        }
+
+        .point-btn:hover {
+            background: rgba(0, 255, 255, 0.5);
+            transform: scale(1.1);
+        }
+
+        .point-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .point-input {
+            width: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00ffff;
+            border-radius: 3px;
+            color: #fff;
+            text-align: center;
+            padding: 2px;
+            font-size: 0.8em;
+        }
+
+        .squad-points-item {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #666;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .squad-points-item:hover {
+            border-color: #00ffff;
+            background: rgba(0, 255, 255, 0.1);
+        }
+
+        .squad-points-label {
+            color: #00ffff;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .squad-points-value {
+            color: #fff;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-shadow: 0 0 8px #00ffff;
+        }
+
+        .total-squad-points {
+            background: rgba(0, 255, 255, 0.2);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            margin-bottom: 15px;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+        }
+
+        .total-squad-points .total-label {
+            color: #00ffff;
+            font-size: 1em;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .total-squad-points .total-value {
+            color: #fff;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-shadow: 0 0 15px #00ffff;
+        }
+
+        .squad-points-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .reset-squad-points-btn {
+            flex: 1;
+            background: linear-gradient(45deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .reset-squad-points-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+        }
+
+        .add-points-btn {
+            flex: 1;
+            background: linear-gradient(45deg, #00ffff 0%, #00cccc 100%);
+            color: #000;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .add-points-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 255, 255, 0.4);
+        }
+
+        .attack-count-tool .tool-title {
+            color: #9b59b6;
+            text-shadow: 0 0 10px #9b59b6;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .attack-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .attack-controls label {
+            color: #ffd700;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .squad-select, .attack-count-input {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #666;
+            border-radius: 5px;
+            color: #fff;
+            padding: 8px;
+            font-size: 0.9em;
+        }
+
+        .squad-select:focus, .attack-count-input:focus {
+            outline: none;
+            border-color: #9b59b6;
+            box-shadow: 0 0 8px rgba(155, 89, 182, 0.5);
+        }
+
+        .attack-set-btn {
+            background: linear-gradient(45deg, #9b59b6 0%, #8e44ad 100%);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .attack-set-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(155, 89, 182, 0.4);
+        }
+
+        .quick-attack-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .quick-attack-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid #666;
+            color: #fff;
+            padding: 8px 4px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.3s ease;
+        }
+
+        .quick-attack-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: #9b59b6;
+        }
+
+        .reset-attacks-section {
+            margin-top: 10px;
+        }
+
+        .reset-attacks-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .reset-attacks-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+        }
+
+        /* 標題 */
+        .main-title {
+            text-align: center;
+            color: #00ff88;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px #00ff88, 0 0 40px #00ff88;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* 小隊管理頁面樣式 */
+        .squads-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .squad-card {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border: 2px solid #00ff88;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .squad-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 40px rgba(0, 255, 136, 0.5);
+        }
+
+        .squad-title {
+            color: #00ff88;
+            font-size: 1.5em;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #00ff88;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .squad-icon {
+            font-size: 1.2em;
+        }
+
+        .attributes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .attribute {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .attribute:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #00ff88;
+        }
+
+        .attribute-label {
+            color: #ffd700;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .attribute-icon {
+            font-size: 1.2em;
+        }
+
+        .attribute-input {
+            width: 100%;
+            background: transparent;
+            border: 2px solid #666;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-align: center;
+            padding: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .attribute-input:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+            color: #00ff88;
+        }
+
+        .attribute-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .attribute-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff4757 0%, #ffa502 50%, #2ed573 100%);
+            transition: width 0.5s ease;
+            border-radius: 3px;
+        }
+
+        .total-points {
+            text-align: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            color: #00ffff;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        /* 戰場頁面樣式 */
+        .battlefield {
+            position: relative;
+            width: calc(100% - 320px);
+            min-height: 100vh;
+            margin-left: 320px;
+            padding-right: 20px;
+        }
+
+        .alien {
+            position: absolute;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 5;
+        }
+
+        .alien:hover {
+            transform: scale(1.1);
+            z-index: 6;
+        }
+
+        .alien.targeted {
+            z-index: 10;
+        }
+
+        .alien.targeted .alien-sprite {
+            box-shadow: 0 0 50px rgba(255, 71, 87, 1), 0 0 100px rgba(255, 71, 87, 0.8);
+            animation: targetPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes targetPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .alien-sprite {
+            width: 100px;
+            height: 100px;
+            border-radius: 20%;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.8), 0 0 60px rgba(0, 255, 136, 0.4);
+            transition: all 0.3s ease;
+            background-size: 80%;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .alien:hover .alien-sprite {
+            box-shadow: 0 0 40px rgba(0, 255, 136, 1), 0 0 80px rgba(0, 255, 136, 0.6);
+            transform: rotate(5deg);
+        }
+
+        .hp-display {
+            position: absolute;
+            top: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            padding: 8px 15px;
+            min-width: 120px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            z-index: 5;
+        }
+
+        .points-display {
+            position: absolute;
+            top: 185px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid #ffd700;
+            border-radius: 10px;
+            padding: 4px 10px;
+            min-width: 90px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+            z-index: 4;
+        }
+
+        .points-label {
+            color: #ffd700;
+            font-size: 0.7em;
+            font-weight: bold;
+            margin-bottom: 2px;
+            text-shadow: 0 0 8px #ffd700;
+        }
+
+        .points-input {
+            background: transparent;
+            border: 1px solid #ffd700;
+            border-radius: 3px;
+            color: #fff;
+            font-size: 0.9em;
+            font-weight: bold;
+            text-align: center;
+            width: 60px;
+            outline: none;
+            padding: 1px;
+            height: 22px;
+        }
+
+        .points-input:focus {
+            color: #ffd700;
+            text-shadow: 0 0 8px #ffd700;
+            border-color: #ffed4e;
+        }
+
+        .alien-id {
+            color: #00ff88;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px #00ff88;
+        }
+
+        .hp-input {
+            background: transparent;
+            border: 1px solid #00ff88;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            width: 80px;
+            outline: none;
+            padding: 2px;
+        }
+
+        .hp-input:focus {
+            color: #00ff88;
+            text-shadow: 0 0 10px #00ff88;
+            border-color: #00ffff;
+        }
+
+        .hp-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 5px;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .hp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff4757 0%, #ffa502 50%, #2ed573 100%);
+            transition: width 0.5s ease;
+            border-radius: 4px;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        /* 外星人位置 */
+        .alien-1 { top: 10%; left: 8%; }
+        .alien-2 { top: 10%; left: 55%; }
+        .alien-3 { top: 25%; left: 25%; }
+        .alien-4 { top: 25%; left: 70%; }
+        .alien-5 { top: 40%; left: 5%; }
+        .alien-6 { top: 40%; left: 40%; }
+        .alien-7 { top: 55%; left: 15%; }
+        .alien-8 { top: 55%; left: 60%; }
+        .alien-9 { top: 70%; left: 30%; }
+        .alien-10 { top: 70%; left: 75%; }
+
+        .alien.dead .alien-sprite {
+            opacity: 0.3;
+            filter: grayscale(100%);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            background-color: rgba(100, 100, 100, 0.5);
+        }
+
+        .alien.dead .hp-display {
+            border-color: #ff4757;
+            box-shadow: 0 0 20px rgba(255, 71, 87, 0.5);
+        }
+
+        .alien.dead .alien-id {
+            color: #ff4757;
+            text-shadow: 0 0 10px #ff4757;
+        }
+
+        .alien.dead .points-display {
+            border-color: #ff4757;
+            box-shadow: 0 0 20px rgba(255, 71, 87, 0.5);
+        }
+
+        .alien.dead .points-label {
+            color: #ff4757;
+            text-shadow: 0 0 10px #ff4757;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .alien {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .alien:nth-child(even) {
+            animation-delay: 2s;
+        }
+
+        .monster-icon {
+            font-size: 60px;
+        }
+
+        /* 控制按鈕 */
+        .controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        /* 星星背景 */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* 戰鬥結果顯示 */
+        .battle-result {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            border: 3px solid #00ff88;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            text-align: center;
+            z-index: 2000;
+            box-shadow: 0 0 50px rgba(0, 255, 136, 0.8);
+            display: none;
+        }
+
+        .result-title {
+            color: #00ff88;
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px #00ff88;
+        }
+
+        .result-content {
+            color: #fff;
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .result-close {
+            background: linear-gradient(45deg, #00ff88 0%, #00cc6a 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 1200px) {
+            .battle-controls {
+                width: 250px;
+            }
+            
+            .battlefield {
+                margin-left: 270px;
+                width: calc(100% - 270px);
+            }
+            
+            .alien-2 { left: 50%; }
+            .alien-4 { left: 65%; }
+            .alien-6 { left: 35%; }
+            .alien-8 { left: 55%; }
+            .alien-10 { left: 70%; }
+        }
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2em;
+            }
+            
+            .squads-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .battle-controls {
+                position: static;
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            
+            .battlefield {
+                margin-left: 0;
+                width: 100%;
+                padding-right: 10px;
+            }
+            
+            .alien-1 { top: 10%; left: 5%; }
+            .alien-2 { top: 10%; left: 55%; }
+            .alien-3 { top: 25%; left: 30%; }
+            .alien-4 { top: 25%; left: 75%; }
+            .alien-5 { top: 40%; left: 5%; }
+            .alien-6 { top: 40%; left: 55%; }
+            .alien-7 { top: 55%; left: 30%; }
+            .alien-8 { top: 55%; left: 75%; }
+            .alien-9 { top: 70%; left: 15%; }
+            .alien-10 { top: 70%; left: 65%; }
+            
+            .alien-sprite {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .hp-display {
+                top: 90px;
+                padding: 6px 12px;
+                min-width: 100px;
+            }
+
+            .points-display {
+                top: 155px;
+            }
+            
+            .hp-input, .points-input {
+                font-size: 1em;
+                width: 70px;
+            }
+
+            .monster-icon {
+                font-size: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <!-- 頁面切換按鈕 -->
+    <div class="page-switch">
+        <button class="switch-btn active" onclick="switchPage('squads')">小隊管理</button>
+        <button class="switch-btn" onclick="switchPage('battlefield')">戰場</button>
+    </div>
+
+    <!-- 小隊管理頁面 -->
+    <div class="page active" id="squads-page">
+        <h1 class="main-title">🎮 小隊能力值管理系統 🎮</h1>
+        
+        <div class="controls">
+            <button class="btn" onclick="resetAllSquads()">重置所有小隊</button>
+            <button class="btn" onclick="randomizeAllSquads()">隨機屬性</button>
+            <button class="btn" onclick="showStatistics()">統計數據</button>
+        </div>
+
+        <div class="squads-container" id="squads-container">
+            <!-- 小隊卡片將在這裡動態生成 -->
+        </div>
+    </div>
+
+    <!-- 戰場頁面 -->
+    <div class="page" id="battlefield-page">
+        <!-- 戰鬥控制面板 -->
+        <div class="battle-controls">
+            <div class="battle-title">⚔️ 戰鬥控制 ⚔️</div>
+            
+            <div class="squad-selector">
+                <label>選擇攻擊小隊:</label>
+                <div class="squad-checkboxes" id="squad-checkboxes">
+                    <!-- 小隊選擇框將在這裡生成 -->
+                </div>
+            </div>
+            
+            <div class="target-selector">
+                <label>選擇目標外星人:</label>
+                <div class="alien-buttons">
+                    <button class="alien-btn" onclick="selectTarget(1)">
+                        👾
+                        <span class="alien-btn-text">#1</span>
+                    </button>
+                    <button class="alien-btn" onclick="selectTarget(2)">
+                        👹
+                        <span class="alien-btn-text">#2</span>
+                    </button>
+                    <button class="alien-btn" onclick="selectTarget(3)">
+                        👺
+                        <span class="alien-btn-text">#3</span>
+                    </button>
+                    <button class="alien-btn" onclick="selectTarget(4)">
+                        🤖
+                        <span class="alien-btn-text">#4</span>
+                    </button>
+                    <button class="alien-btn" onclick="selectTarget(5)">
+                        👻
+                        <span class="alien-btn-text">#5</span>
+                    </button>
+                    <button class="alien-btn" onclick="selectTarget(6)">
+                        🎃
+                        <span class="alien-btn-text">#6</span>
+                    </button>
+                    <button class="alien-btn" onclick="selectTarget(7)">
+                        🤡
+                        <span class="alien-btn-text">#7</span>
+                    </button>
+                    <button class="alien-btn" onclick="selectTarget(8)">
+                        💀
+                        <span class="alien-btn-text">#8</span>
+                    </button>
+                    <button class="alien-btn" onclick="selectTarget(9)">
+                        🦖
+                        <span class="alien-btn-text">#9</span>
+                    </button>
+                    <button class="alien-btn" onclick="selectTarget(10)">
+                        🐙
+                        <span class="alien-btn-text">#10</span>
+                    </button>
+                </div>
+            </div>
+            
+            <button class="attack-btn" id="attack-btn" onclick="executeAttack()" disabled>
+                發動攻擊
+            </button>
+
+            <div class="battle-info" id="battle-info">
+                選擇小隊和目標開始戰鬥
+            </div>
+
+            <!-- 血量調整工具 -->
+            <div class="hp-adjustment-tool">
+                <div class="tool-title">🩸 血量調整工具</div>
+                <div class="hp-controls">
+                    <label>選擇外星人:</label>
+                    <select id="hp-alien-select" class="alien-select">
+                        <option value="">選擇外星人</option>
+                        <option value="1">外星人 #1 (👾)</option>
+                        <option value="2">外星人 #2 (👹)</option>
+                        <option value="3">外星人 #3 (👺)</option>
+                        <option value="4">外星人 #4 (🤖)</option>
+                        <option value="5">外星人 #5 (👻)</option>
+                        <option value="6">外星人 #6 (🎃)</option>
+                        <option value="7">外星人 #7 (🤡)</option>
+                        <option value="8">外星人 #8 (💀)</option>
+                        <option value="9">外星人 #9 (🦖)</option>
+                        <option value="10">外星人 #10 (🐙)</option>
+                    </select>
+                    
+                    <label>設定血量:</label>
+                    <input type="number" id="hp-value-input" placeholder="輸入血量" min="0" max="9999" class="hp-value-input">
+                    
+                    <button class="hp-set-btn" onclick="setAlienHp()">設定血量</button>
+                </div>
+                
+                <div class="quick-hp-buttons">
+                    <button class="quick-hp-btn" onclick="setAllAliensHp('max')">全部滿血</button>
+                    <button class="quick-hp-btn" onclick="setAllAliensHp('half')">全部半血</button>
+                    <button class="quick-hp-btn" onclick="setAllAliensHp('zero')">全部歸零</button>
+                </div>
+            </div>
+
+            <!-- 攻擊次數調整工具 -->
+            <div class="attack-count-tool">
+                <div class="tool-title">⚡ 攻擊次數管理</div>
+                <div class="attack-controls">
+                    <label>選擇小隊:</label>
+                    <select id="attack-squad-select" class="squad-select">
+                        <option value="">選擇小隊</option>
+                        <option value="1">小隊 #1</option>
+                        <option value="2">小隊 #2</option>
+                        <option value="3">小隊 #3</option>
+                        <option value="4">小隊 #4</option>
+                        <option value="5">小隊 #5</option>
+                        <option value="6">小隊 #6</option>
+                        <option value="7">小隊 #7</option>
+                        <option value="8">小隊 #8</option>
+                        <option value="9">小隊 #9</option>
+                        <option value="10">小隊 #10</option>
+                    </select>
+                    
+                    <label>設定攻擊次數:</label>
+                    <input type="number" id="attack-count-input" placeholder="輸入次數" min="0" max="99" class="attack-count-input">
+                    
+                    <button class="attack-set-btn" onclick="setSquadAttackCount()">設定次數</button>
+                </div>
+                
+                <div class="quick-attack-buttons">
+                    <button class="quick-attack-btn" onclick="setAllSquadsAttackCount(1)">全部設為1次</button>
+                    <button class="quick-attack-btn" onclick="setAllSquadsAttackCount(3)">全部設為3次</button>
+                    <button class="quick-attack-btn" onclick="setAllSquadsAttackCount(5)">全部設為5次</button>
+                </div>
+                
+                <div class="reset-attacks-section">
+                    <button class="reset-attacks-btn" onclick="resetAllAttackCounts()">重置所有攻擊次數</button>
+                </div>
+            </div>
+
+            <div class="points-adjustment-tool">
+                <div class="tool-title">💰 點數調整工具</div>
+                <div class="points-controls">
+                    <label>選擇外星人:</label>
+                    <select id="points-alien-select" class="alien-select">
+                        <option value="">選擇外星人</option>
+                        <option value="1">外星人 #1 (👾)</option>
+                        <option value="2">外星人 #2 (👹)</option>
+                        <option value="3">外星人 #3 (👺)</option>
+                        <option value="4">外星人 #4 (🤖)</option>
+                        <option value="5">外星人 #5 (👻)</option>
+                        <option value="6">外星人 #6 (🎃)</option>
+                        <option value="7">外星人 #7 (🤡)</option>
+                        <option value="8">外星人 #8 (💀)</option>
+                        <option value="9">外星人 #9 (🦖)</option>
+                        <option value="10">外星人 #10 (🐙)</option>
+                    </select>
+                    
+                    <label>設定獲得點數:</label>
+                    <input type="number" id="points-value-input" placeholder="輸入點數" min="0" max="9999" class="points-value-input">
+                    
+                    <button class="points-set-btn" onclick="setAlienPoints()">設定點數</button>
+                </div>
+                
+                <div class="quick-points-buttons">
+                    <button class="quick-points-btn" onclick="setAllAliensPoints(50)">全部設為50</button>
+                    <button class="quick-points-btn" onclick="setAllAliensPoints(100)">全部設為100</button>
+                    <button class="quick-points-btn" onclick="setAllAliensPoints(200)">全部設為200</button>
+                </div>
+            </div>
+
+            <!-- 小隊點數顯示工具 -->
+            <div class="squad-points-tool">
+                <div class="tool-title">💎 小隊獲得點數</div>
+                
+                <div class="squad-points-grid" id="squad-points-grid">
+                    <!-- 小隊點數將在這裡動態生成 -->
+                </div>
+                
+                <div class="squad-points-controls">
+                    <button class="reset-squad-points-btn" onclick="resetAllSquadPoints()">全部歸零</button>
+                    <button class="add-points-btn" onclick="addPointsToAll()">測試加點</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="battlefield">
+            <h1 class="main-title">🛸 外星人戰場 🛸</h1>
+            
+            <div class="controls">
+                <button class="btn" onclick="randomizeAliens()">隨機血量</button>
+                <button class="btn" onclick="calculateTotalPoints()">計算總點數</button>
+                <button class="btn" onclick="resetBattle()">重置戰鬥</button>
+            </div>
+
+            <!-- 外星人們 -->
+            <div class="alien alien-1" data-id="1">
+                <div class="alien-sprite">
+                    <span class="monster-icon">👾</span>
+                </div>
+                <div class="hp-display">
+                    <div class="alien-id">外星人 #1</div>
+                    <input type="number" class="hp-input" value="300" min="0" oninput="updateHp(1, this.value)">
+                    <div class="hp-bar">
+                        <div class="hp-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="points-display">
+                    <div class="points-label">獲得點數</div>
+                    <input type="number" class="points-input" value="100" min="0">
+                </div>
+            </div>
+
+            <div class="alien alien-2" data-id="2">
+                <div class="alien-sprite">
+                    <span class="monster-icon">👹</span>
+                </div>
+                <div class="hp-display">
+                    <div class="alien-id">外星人 #2</div>
+                    <input type="number" class="hp-input" value="300" min="0" oninput="updateHp(2, this.value)">
+                    <div class="hp-bar">
+                        <div class="hp-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="points-display">
+                    <div class="points-label">獲得點數</div>
+                    <input type="number" class="points-input" value="80" min="0">
+                </div>
+            </div>
+
+            <div class="alien alien-3" data-id="3">
+                <div class="alien-sprite">
+                    <span class="monster-icon">👺</span>
+                </div>
+                <div class="hp-display">
+                    <div class="alien-id">外星人 #3</div>
+                    <input type="number" class="hp-input" value="400" min="0" oninput="updateHp(3, this.value)">
+                    <div class="hp-bar">
+                        <div class="hp-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="points-display">
+                    <div class="points-label">獲得點數</div>
+                    <input type="number" class="points-input" value="150" min="0">
+                </div>
+            </div>
+
+            <div class="alien alien-4" data-id="4">
+                <div class="alien-sprite">
+                    <span class="monster-icon">🤖</span>
+                </div>
+                <div class="hp-display">
+                    <div class="alien-id">外星人 #4</div>
+                    <input type="number" class="hp-input" value="300" min="0" oninput="updateHp(4, this.value)">
+                    <div class="hp-bar">
+                        <div class="hp-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="points-display">
+                    <div class="points-label">獲得點數</div>
+                    <input type="number" class="points-input" value="60" min="0">
+                </div>
+            </div>
+
+            <div class="alien alien-5" data-id="5">
+                <div class="alien-sprite">
+                    <span class="monster-icon">👻</span>
+                </div>
+                <div class="hp-display">
+                    <div class="alien-id">外星人 #5</div>
+                    <input type="number" class="hp-input" value="400" min="0" oninput="updateHp(5, this.value)">
+                    <div class="hp-bar">
+                        <div class="hp-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="points-display">
+                    <div class="points-label">獲得點數</div>
+                    <input type="number" class="points-input" value="120" min="0">
+                </div>
+            </div>
+
+            <div class="alien alien-6" data-id="6">
+                <div class="alien-sprite">
+                    <span class="monster-icon">🎃</span>
+                </div>
+                <div class="hp-display">
+                    <div class="alien-id">外星人 #6</div>
+                    <input type="number" class="hp-input" value="300" min="0" oninput="updateHp(6, this.value)">
+                    <div class="hp-bar">
+                        <div class="hp-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="points-display">
+                    <div class="points-label">獲得點數</div>
+                    <input type="number" class="points-input" value="70" min="0">
+                </div>
+            </div>
+
+            <div class="alien alien-7" data-id="7">
+                <div class="alien-sprite">
+                    <span class="monster-icon">🤡</span>
+                </div>
+                <div class="hp-display">
+                    <div class="alien-id">外星人 #7</div>
+                    <input type="number" class="hp-input" value="400" min="0" oninput="updateHp(7, this.value)">
+                    <div class="hp-bar">
+                        <div class="hp-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="points-display">
+                    <div class="points-label">獲得點數</div>
+                    <input type="number" class="points-input" value="90" min="0">
+                </div>
+            </div>
+
+            <div class="alien alien-8" data-id="8">
+                <div class="alien-sprite">
+                    <span class="monster-icon">💀</span>
+                </div>
+                <div class="hp-display">
+                    <div class="alien-id">外星人 #8</div>
+                    <input type="number" class="hp-input" value="400" min="0" oninput="updateHp(8, this.value)">
+                    <div class="hp-bar">
+                        <div class="hp-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="points-display">
+                    <div class="points-label">獲得點數</div>
+                    <input type="number" class="points-input" value="110" min="0">
+                </div>
+            </div>
+
+            <div class="alien alien-9" data-id="9">
+                <div class="alien-sprite">
+                    <span class="monster-icon">🦖</span>
+                </div>
+                <div class="hp-display">
+                    <div class="alien-id">外星人 #9</div>
+                    <input type="number" class="hp-input" value="300" min="0" oninput="updateHp(9, this.value)">
+                    <div class="hp-bar">
+                        <div class="hp-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="points-display">
+                    <div class="points-label">獲得點數</div>
+                    <input type="number" class="points-input" value="50" min="0">
+                </div>
+            </div>
+
+            <div class="alien alien-10" data-id="10">
+                <div class="alien-sprite">
+                    <span class="monster-icon">🐙</span>
+                </div>
+                <div class="hp-display">
+                    <div class="alien-id">外星人 #10</div>
+                    <input type="number" class="hp-input" value="450" min="0" oninput="updateHp(10, this.value)">
+                    <div class="hp-bar">
+                        <div class="hp-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="points-display">
+                    <div class="points-label">獲得點數</div>
+                    <input type="number" class="points-input" value="200" min="0">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 戰鬥結果彈窗 -->
+    <div class="battle-result" id="battle-result">
+        <div class="result-title">🎯 戰鬥結果 🎯</div>
+        <div class="result-content" id="result-content">
+            <!-- 結果內容將在這裡顯示 -->
+        </div>
+        <button class="result-close" onclick="closeBattleResult()">確定</button>
+    </div>
+
+    <script>
+        // 全域變數
+        let selectedSquads = [];
+        let selectedTarget = null;
+        let squadData = {};
+        let squadAttackCounts = {};
+        let squadPoints = {};
+        
+        // 屬性定義
+        const attributes = ['intelligence', 'vision', 'hearing', 'smell', 'upperLimb', 'lowerLimb', 'chest', 'abdomen'];
+        const attributeNames = {
+            intelligence: '智力',
+            vision: '視覺',
+            hearing: '聽覺',
+            smell: '嗅覺',
+            upperLimb: '上肢',
+            lowerLimb: '下肢',
+            chest: '胸',
+            abdomen: '腹'
+        };
+        const attributeIcons = {
+            intelligence: '🧠',
+            vision: '👁️',
+            hearing: '👂',
+            smell: '👃',
+            upperLimb: '💪',
+            lowerLimb: '🦵',
+            chest: '🫁',
+            abdomen: '🎯'
+        };
+
+        const maxHp = {
+            1: 300, 2: 300, 3: 400, 4: 300, 5: 400,
+            6: 300, 7: 400, 8: 400, 9: 300, 10: 450
+        };
+
+        const initialHp = {
+            1: 300, 2: 300, 3: 400, 4: 300, 5: 400,
+            6: 300, 7: 400, 8: 400, 9: 300, 10: 450
+        };
+
+        // 頁面切換
+        function switchPage(pageName) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.switch-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(pageName + '-page').classList.add('active');
+            event.target.classList.add('active');
+            
+            if (pageName === 'battlefield') {
+                syncSquadData();
+                updateSquadCheckboxes();
+            } else if (pageName === 'squads') {
+                // 切換到小隊管理時，更新點數顯示
+                updateSquadPointsDisplay();
+            }
+        }
+
+        // 初始化小隊卡片
+        function initializeSquads() {
+            const container = document.getElementById('squads-container');
+            
+            for (let squadId = 1; squadId <= 10; squadId++) {
+                const squadCard = createSquadCard(squadId);
+                container.appendChild(squadCard);
+                
+                squadData[squadId] = {
+                    intelligence: 5, vision: 5, hearing: 5, smell: 5,
+                    upperLimb: 5, lowerLimb: 5, chest: 5, abdomen: 5,
+                    total: 40
+                };
+                
+                squadAttackCounts[squadId] = 3;
+                squadPoints[squadId] = 0;
+            }
+        }
+
+        // 創建小隊卡片
+        function createSquadCard(squadId) {
+            const card = document.createElement('div');
+            card.className = 'squad-card';
+            card.setAttribute('data-squad', squadId);
+            
+            let attributesHTML = '';
+            attributes.forEach(attr => {
+                attributesHTML += `
+                    <div class="attribute">
+                        <div class="attribute-label">
+                            <span class="attribute-icon">${attributeIcons[attr]}</span>
+                            ${attributeNames[attr]}
+                        </div>
+                        <input type="number" class="attribute-input" data-attr="${attr}" value="5" min="0" max="100" oninput="updateAttribute(${squadId}, '${attr}', this.value)">
+                        <div class="attribute-bar">
+                            <div class="attribute-fill" style="width: 10%"></div>
+                        </div>
+                        <div class="point-controls">
+                            <button class="point-btn" onclick="addPointToAttribute(${squadId}, '${attr}', -5)" title="減少5點">-5</button>
+                            <button class="point-btn" onclick="addPointToAttribute(${squadId}, '${attr}', -1)" title="減少1點">-1</button>
+                            <input type="number" class="point-input" placeholder="點數" min="1" max="100" onkeypress="handlePointInputEnter(event, ${squadId}, '${attr}')">
+                            <button class="point-btn" onclick="addPointToAttribute(${squadId}, '${attr}', 1)" title="增加1點">+1</button>
+                            <button class="point-btn" onclick="addPointToAttribute(${squadId}, '${attr}', 5)" title="增加5點">+5</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            card.innerHTML = `
+                <h2 class="squad-title">
+                    <span class="squad-icon">⚔️</span>
+                    小隊 #${squadId}
+                </h2>
+                
+                <div class="available-points">
+                    <div class="points-label">可用點數</div>
+                    <div class="points-value-container">
+                        <input type="number" class="points-value-input" id="squad-${squadId}-points-input" value="0" min="0" max="9999">
+                        <button class="points-set-button" onclick="setSquadPoints(${squadId})">設定</button>
+                    </div>
+                </div>
+                
+                <div class="attributes-grid">
+                    ${attributesHTML}
+                </div>
+                <div class="total-points">總點數: <span class="total-value">40</span> / 400</div>
+            `;
+            
+            return card;
+        }
+
+        // 更新屬性
+        function updateAttribute(squadId, attribute, value) {
+            const squad = document.querySelector(`[data-squad="${squadId}"]`);
+            if (!squad) return;
+            
+            const input = squad.querySelector(`[data-attr="${attribute}"]`);
+            const bar = input.nextElementSibling.querySelector('.attribute-fill');
+            
+            const numValue = Math.max(0, Math.min(100, parseInt(value) || 0));
+            input.value = numValue;
+            
+            squadData[squadId][attribute] = numValue;
+            
+            const percentage = (numValue / 100) * 100;
+            bar.style.width = percentage + '%';
+            
+            if (percentage < 20) {
+                bar.style.background = 'linear-gradient(90deg, #ff4757 0%, #ff6348 100%)';
+            } else if (percentage < 60) {
+                bar.style.background = 'linear-gradient(90deg, #ffa502 0%, #ff7675 100%)';
+            } else {
+                bar.style.background = 'linear-gradient(90deg, #2ed573 0%, #26de81 100%)';
+            }
+            
+            updateTotalPoints(squadId);
+        }
+
+        // 更新總點數
+        function updateTotalPoints(squadId) {
+            const squad = document.querySelector(`[data-squad="${squadId}"]`);
+            if (!squad) return;
+            
+            let total = 0;
+            attributes.forEach(attr => {
+                total += squadData[squadId][attr] || 0;
+            });
+            
+            squadData[squadId].total = total;
+            squad.querySelector('.total-value').textContent = total;
+            
+            updateSquadCheckboxes();
+        }
+
+        // 同步小隊資料到戰場
+        function syncSquadData() {
+            for (let squadId = 1; squadId <= 10; squadId++) {
+                const squad = document.querySelector(`[data-squad="${squadId}"]`);
+                if (squad) {
+                    let total = 0;
+                    squad.querySelectorAll('.attribute-input').forEach(input => {
+                        const attr = input.getAttribute('data-attr');
+                        const value = parseInt(input.value) || 0;
+                        squadData[squadId][attr] = value;
+                        total += value;
+                    });
+                    squadData[squadId].total = total;
+                }
+            }
+        }
+
+        // 更新小隊點數顯示
+        function updateSquadPointsDisplay() {
+            const grid = document.getElementById('squad-points-grid');
+            
+            if (!grid) return;
+            
+            grid.innerHTML = '';
+            
+            for (let squadId = 1; squadId <= 10; squadId++) {
+                const points = squadPoints[squadId] || 0;
+                
+                const item = document.createElement('div');
+                item.className = 'squad-points-item';
+                item.innerHTML = `
+                    <div class="squad-points-label">小隊 #${squadId}</div>
+                    <div class="squad-points-value">${points}</div>
+                `;
+                
+                grid.appendChild(item);
+                
+                // 同時更新小隊管理頁面的點數輸入框
+                const squadPointsInput = document.getElementById(`squad-${squadId}-points-input`);
+                if (squadPointsInput) {
+                    squadPointsInput.value = points;
+                }
+            }
+        }
+
+        // 設定小隊可用點數
+        function setSquadPoints(squadId) {
+            const inputElement = document.getElementById(`squad-${squadId}-points-input`);
+            const newPoints = parseInt(inputElement.value);
+            
+            if (isNaN(newPoints) || newPoints < 0) {
+                alert('請輸入有效的點數值（0或更多）！');
+                inputElement.value = squadPoints[squadId] || 0; // 恢復原值
+                return;
+            }
+            
+            squadPoints[squadId] = newPoints;
+            updateSquadPointsDisplay();
+            
+            // 顯示確認訊息
+            const message = `小隊 #${squadId} 可用點數已設定為 ${newPoints} 點`;
+            
+            // 創建臨時提示訊息
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: rgba(0, 255, 255, 0.9);
+                color: #000;
+                padding: 10px 20px;
+                border-radius: 8px;
+                font-weight: bold;
+                z-index: 9999;
+                animation: fadeInOut 2s ease-in-out;
+            `;
+            notification.textContent = message;
+            
+            // 添加動畫樣式
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeInOut {
+                    0% { opacity: 0; transform: translateX(100%); }
+                    20% { opacity: 1; transform: translateX(0); }
+                    80% { opacity: 1; transform: translateX(0); }
+                    100% { opacity: 0; transform: translateX(100%); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(notification);
+            
+            // 2秒後移除提示
+            setTimeout(() => {
+                document.body.removeChild(notification);
+                document.head.removeChild(style);
+            }, 2000);
+        }
+
+        // 使用點數來增加屬性值
+        function addPointToAttribute(squadId, attribute, amount) {
+            const availablePoints = squadPoints[squadId] || 0;
+            const currentValue = squadData[squadId][attribute] || 5;
+            
+            // 如果是增加點數，檢查是否有足夠的可用點數
+            if (amount > 0 && availablePoints < amount) {
+                alert(`小隊 #${squadId} 可用點數不足！當前可用: ${availablePoints} 點`);
+                return;
+            }
+            
+            // 檢查屬性值不會超出範圍
+            const newValue = currentValue + amount;
+            if (newValue < 0 || newValue > 100) {
+                alert(`屬性值必須在 0-100 之間！`);
+                return;
+            }
+            
+            // 更新可用點數
+            if (amount < 0) {
+                // 如果是減少屬性值，增加可用點數
+                squadPoints[squadId] = availablePoints + Math.abs(amount);
+            } else {
+                // 如果是增加屬性值，減少可用點數
+                squadPoints[squadId] = availablePoints - amount;
+            }
+            
+            // 更新屬性值
+            squadData[squadId][attribute] = newValue;
+            const squad = document.querySelector(`[data-squad="${squadId}"]`);
+            const input = squad.querySelector(`[data-attr="${attribute}"]`);
+            input.value = newValue;
+            
+            // 調用updateAttribute來更新UI
+            updateAttribute(squadId, attribute, newValue);
+            
+            // 更新點數顯示
+            updateSquadPointsDisplay();
+        }
+
+        // 處理手動輸入點數
+        function handlePointInputEnter(event, squadId, attribute) {
+            if (event.key === 'Enter') {
+                const inputValue = parseInt(event.target.value);
+                if (isNaN(inputValue) || inputValue <= 0) {
+                    alert('請輸入有效的正整數！');
+                    event.target.value = '';
+                    return;
+                }
+                
+                addPointToAttribute(squadId, attribute, inputValue);
+                event.target.value = '';
+            }
+        }
+
+        // 更新小隊選擇框
+        function updateSquadCheckboxes() {
+            const container = document.getElementById('squad-checkboxes');
+            container.innerHTML = '';
+            
+            for (let squadId = 1; squadId <= 10; squadId++) {
+                const checkbox = document.createElement('div');
+                checkbox.className = 'squad-checkbox';
+                const attacksLeft = squadAttackCounts[squadId] || 0;
+                
+                if (attacksLeft <= 0) {
+                    checkbox.classList.add('no-attacks');
+                }
+                
+                checkbox.onclick = () => toggleSquadSelection(squadId);
+                
+                checkbox.innerHTML = `
+                    <input type="checkbox" id="squad-${squadId}">
+                    <div class="squad-label">小隊 #${squadId}</div>
+                    <div class="squad-points">${squadData[squadId]?.total || 40} 點</div>
+                    <div class="squad-attacks">攻擊次數: ${attacksLeft}</div>
+                `;
+                
+                container.appendChild(checkbox);
+            }
+        }
+
+        // 切換小隊選擇
+        function toggleSquadSelection(squadId) {
+            const checkbox = document.querySelector(`#squad-${squadId}`).parentElement;
+            const isSelected = selectedSquads.includes(squadId);
+            const attacksLeft = squadAttackCounts[squadId] || 0;
+            
+            if (!isSelected && attacksLeft <= 0) {
+                alert(`小隊 #${squadId} 沒有剩餘攻擊次數！`);
+                return;
+            }
+            
+            if (isSelected) {
+                selectedSquads = selectedSquads.filter(id => id !== squadId);
+                checkbox.classList.remove('selected');
+            } else {
+                selectedSquads.push(squadId);
+                checkbox.classList.add('selected');
+            }
+            
+            updateBattleInfo();
+            updateAttackButton();
+        }
+
+        // 選擇目標
+        function selectTarget(alienId) {
+            document.querySelectorAll('.alien-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.querySelectorAll('.alien').forEach(alien => {
+                alien.classList.remove('targeted');
+            });
+            
+            selectedTarget = alienId;
+            event.target.closest('.alien-btn').classList.add('selected');
+            document.querySelector(`.alien-${alienId}`).classList.add('targeted');
+            
+            updateBattleInfo();
+            updateAttackButton();
+        }
+
+        // 更新戰鬥資訊
+        function updateBattleInfo() {
+            const infoDiv = document.getElementById('battle-info');
+            
+            if (selectedSquads.length === 0 && !selectedTarget) {
+                infoDiv.innerHTML = '選擇小隊和目標開始戰鬥';
+                return;
+            }
+            
+            let info = '';
+            
+            if (selectedSquads.length > 0) {
+                const totalDamage = selectedSquads.reduce((sum, squadId) => {
+                    return sum + (squadData[squadId]?.total || 0);
+                }, 0);
+                
+                const attacksInfo = selectedSquads.map(squadId => {
+                    const attacks = squadAttackCounts[squadId] || 0;
+                    return `#${squadId}(${attacks}次)`;
+                }).join(', ');
+                
+                info += `已選擇小隊: ${attacksInfo}<br>`;
+                info += `總傷害: ${totalDamage} 點<br>`;
+            }
+            
+            if (selectedTarget) {
+                const targetHp = document.querySelector(`.alien-${selectedTarget} .hp-input`).value;
+                info += `目標: 外星人 #${selectedTarget}<br>`;
+                info += `目標血量: ${targetHp} HP`;
+            }
+            
+            infoDiv.innerHTML = info;
+        }
+
+        // 更新攻擊按鈕狀態
+        function updateAttackButton() {
+            const attackBtn = document.getElementById('attack-btn');
+            const canAttack = selectedSquads.length > 0 && selectedTarget !== null;
+            
+            attackBtn.disabled = !canAttack;
+            
+            if (canAttack) {
+                attackBtn.textContent = '發動攻擊';
+            } else {
+                attackBtn.textContent = '選擇小隊和目標';
+            }
+        }
+
+        // 執行攻擊時的血量計算（保持原有戰鬥邏輯）
+        function executeAttack() {
+            if (selectedSquads.length === 0 || !selectedTarget) return;
+            
+            const invalidSquads = selectedSquads.filter(squadId => (squadAttackCounts[squadId] || 0) <= 0);
+            if (invalidSquads.length > 0) {
+                alert(`小隊 ${invalidSquads.map(id => `#${id}`).join(', ')} 沒有剩餘攻擊次數！`);
+                return;
+            }
+            
+            const totalDamage = selectedSquads.reduce((sum, squadId) => {
+                return sum + (squadData[squadId]?.total || 0);
+            }, 0);
+            
+            const targetAlien = document.querySelector(`.alien-${selectedTarget}`);
+            const hpInput = targetAlien.querySelector('.hp-input');
+            const currentHp = parseInt(hpInput.value) || 0;
+            const pointsInput = targetAlien.querySelector('.points-input');
+            const rewardPoints = parseInt(pointsInput.value) || 0;
+            
+            const newHp = Math.max(0, currentHp - totalDamage);
+            hpInput.value = newHp;
+            
+            // 戰鬥時使用特殊的血量更新邏輯
+            updateHpInBattle(selectedTarget, newHp, currentHp);
+            
+            selectedSquads.forEach(squadId => {
+                squadAttackCounts[squadId] = Math.max(0, (squadAttackCounts[squadId] || 0) - 1);
+            });
+            
+            updateSquadCheckboxes();
+            
+            let resultMessage = `⚔️ 戰鬥結果 ⚔️\n\n`;
+            resultMessage += `攻擊小隊: ${selectedSquads.map(id => `#${id}`).join(', ')}\n`;
+            resultMessage += `造成傷害: ${totalDamage} 點\n`;
+            resultMessage += `外星人 #${selectedTarget}: ${currentHp} → ${newHp} HP\n\n`;
+            
+            resultMessage += `剩餘攻擊次數:\n`;
+            selectedSquads.forEach(squadId => {
+                resultMessage += `小隊 #${squadId}: ${squadAttackCounts[squadId]} 次\n`;
+            });
+            resultMessage += `\n`;
+            
+            if (newHp <= 0) {
+                const pointsPerSquad = Math.floor(rewardPoints / selectedSquads.length);
+                
+                selectedSquads.forEach((squadId) => {
+                    squadPoints[squadId] = (squadPoints[squadId] || 0) + pointsPerSquad;
+                });
+                
+                updateSquadPointsDisplay();
+                
+                resultMessage += `🎉 外星人 #${selectedTarget} 被擊敗！\n\n`;
+                resultMessage += `獎勵分配:\n`;
+                
+                selectedSquads.forEach((squadId) => {
+                    resultMessage += `小隊 #${squadId}: +${pointsPerSquad} 點\n`;
+                });
+                
+                const totalDistributed = pointsPerSquad * selectedSquads.length;
+                const remainder = rewardPoints - totalDistributed;
+                if (remainder > 0) {
+                    resultMessage += `\n(剩餘 ${remainder} 點未分配)`;
+                }
+            } else {
+                resultMessage += `外星人 #${selectedTarget} 還有 ${newHp} HP`;
+            }
+            
+            showBattleResult(resultMessage);
+            clearSelections();
+        }
+
+        // 戰鬥時的血量更新（保持相對血量顯示）
+        function updateHpInBattle(id, newHp, originalMaxHp) {
+            const alien = document.querySelector(`.alien-${id}`);
+            if (!alien) return;
+            
+            const hpBar = alien.querySelector('.hp-fill');
+            const hpInput = alien.querySelector('.hp-input');
+            
+            // 確保血量不會小於0
+            const validHp = Math.max(0, newHp);
+            hpInput.value = validHp;
+            
+            // 戰鬥時使用原始最大血量來計算百分比
+            const percentage = Math.max(0, Math.min(100, (validHp / originalMaxHp) * 100));
+            hpBar.style.width = percentage + '%';
+            
+            // 死亡狀態
+            if (validHp <= 0) {
+                alien.classList.add('dead');
+            } else {
+                alien.classList.remove('dead');
+            }
+            
+            // 根據血量百分比設置顏色
+            if (percentage > 60) {
+                hpBar.style.background = 'linear-gradient(90deg, #2ed573 0%, #26de81 100%)';
+            } else if (percentage > 30) {
+                hpBar.style.background = 'linear-gradient(90deg, #ffa502 0%, #ff7675 100%)';
+            } else {
+                hpBar.style.background = 'linear-gradient(90deg, #ff4757 0%, #ee5a6f 100%)';
+            }
+        }
+
+        // 顯示戰鬥結果
+        function showBattleResult(message) {
+            const resultDiv = document.getElementById('battle-result');
+            const contentDiv = document.getElementById('result-content');
+            
+            contentDiv.innerHTML = message.replace(/\n/g, '<br>');
+            resultDiv.style.display = 'block';
+        }
+
+        // 關閉戰鬥結果
+        function closeBattleResult() {
+            document.getElementById('battle-result').style.display = 'none';
+        }
+
+        // 清除選擇
+        function clearSelections() {
+            selectedSquads = [];
+            selectedTarget = null;
+            
+            document.querySelectorAll('.squad-checkbox').forEach(checkbox => {
+                checkbox.classList.remove('selected');
+            });
+            
+            document.querySelectorAll('.alien-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            document.querySelectorAll('.alien').forEach(alien => {
+                alien.classList.remove('targeted');
+            });
+            
+            updateBattleInfo();
+            updateAttackButton();
+        }
+
+        // 更新外星人血量
+        function updateHp(id, value) {
+            const alien = document.querySelector(`.alien-${id}`);
+            if (!alien) return;
+            
+            const hpBar = alien.querySelector('.hp-fill');
+            const hpInput = alien.querySelector('.hp-input');
+            const currentHp = parseInt(value) || 0;
+            
+            // 確保血量不會小於0
+            const validHp = Math.max(0, currentHp);
+            if (hpInput.value !== value) {
+                hpInput.value = validHp;
+            }
+            
+            // 當手動調整血量時，將當前血量設為新的最大血量，血條顯示100%
+            maxHp[id] = validHp;
+            
+            // 血條永遠顯示100%（因為當前血量就是最大血量）
+            const percentage = validHp > 0 ? 100 : 0;
+            hpBar.style.width = percentage + '%';
+            
+            // 死亡狀態 - 血量為0或以下
+            if (validHp <= 0) {
+                alien.classList.add('dead');
+                hpBar.style.background = 'linear-gradient(90deg, #ff4757 0%, #ee5a6f 100%)';
+            } else {
+                alien.classList.remove('dead');
+                // 血條永遠顯示為綠色（滿血狀態）
+                hpBar.style.background = 'linear-gradient(90deg, #2ed573 0%, #26de81 100%)';
+            }
+        }
+
+        // 重置所有小隊
+        function resetAllSquads() {
+            for (let squadId = 1; squadId <= 10; squadId++) {
+                const squad = document.querySelector(`[data-squad="${squadId}"]`);
+                if (!squad) continue;
+                
+                squad.querySelectorAll('.attribute-input').forEach(input => {
+                    input.value = 5;
+                    updateAttribute(squadId, input.getAttribute('data-attr'), 5);
+                });
+            }
+        }
+
+        // 隨機分配屬性
+        function randomizeAllSquads() {
+            for (let squadId = 1; squadId <= 10; squadId++) {
+                const squad = document.querySelector(`[data-squad="${squadId}"]`);
+                if (!squad) continue;
+                
+                squad.querySelectorAll('.attribute-input').forEach(input => {
+                    const randomValue = Math.floor(Math.random() * 46) + 5;
+                    input.value = randomValue;
+                    updateAttribute(squadId, input.getAttribute('data-attr'), randomValue);
+                });
+            }
+        }
+
+        // 顯示統計數據
+        function showStatistics() {
+            let totalPoints = 0;
+            let squadStats = [];
+            
+            for (let squadId = 1; squadId <= 10; squadId++) {
+                const squadTotal = squadData[squadId]?.total || 0;
+                totalPoints += squadTotal;
+                squadStats.push(`小隊 #${squadId}: ${squadTotal} 點`);
+            }
+            
+            alert(`===== 統計數據 =====\n\n${squadStats.join('\n')}\n\n總計: ${totalPoints} 點\n平均: ${(totalPoints/10).toFixed(1)} 點/小隊`);
+        }
+
+        // 隨機血量
+        function randomizeAliens() {
+            for (let i = 1; i <= 10; i++) {
+                const randomHp = Math.floor(Math.random() * maxHp[i]);
+                const input = document.querySelector(`.alien-${i} .hp-input`);
+                if (input) {
+                    input.value = randomHp;
+                    updateHp(i, randomHp);
+                }
+            }
+        }
+
+        // 計算總點數
+        function calculateTotalPoints() {
+            let totalPoints = 0;
+            let defeatedCount = 0;
+            
+            for (let i = 1; i <= 10; i++) {
+                const hpInput = document.querySelector(`.alien-${i} .hp-input`);
+                const pointsInput = document.querySelector(`.alien-${i} .points-input`);
+                
+                if (hpInput && pointsInput) {
+                    const hp = parseInt(hpInput.value) || 0;
+                    const points = parseInt(pointsInput.value) || 0;
+                    
+                    if (hp <= 0) {
+                        totalPoints += points;
+                        defeatedCount++;
+                    }
+                }
+            }
+            
+            alert(`已擊敗 ${defeatedCount} 隻外星人\n獲得總點數: ${totalPoints} 點`);
+        }
+
+        // 重置戰鬥
+        function resetBattle() {
+            for (let i = 1; i <= 10; i++) {
+                const input = document.querySelector(`.alien-${i} .hp-input`);
+                if (input) {
+                    input.value = maxHp[i];
+                    updateHp(i, maxHp[i]);
+                }
+            }
+            
+            clearSelections();
+            alert('戰鬥已重置！所有外星人血量已恢復滿血狀態。');
+        }
+
+        // 重置所有小隊點數
+        function resetAllSquadPoints() {
+            for (let squadId = 1; squadId <= 10; squadId++) {
+                squadPoints[squadId] = 0;
+            }
+            updateSquadPointsDisplay();
+            alert('所有小隊點數已歸零！');
+        }
+
+        // 測試功能：給所有小隊加點數
+        function addPointsToAll() {
+            const points = parseInt(prompt('給每個小隊加多少點數？', '50'));
+            if (isNaN(points) || points <= 0) {
+                alert('請輸入有效的點數！');
+                return;
+            }
+            
+            for (let squadId = 1; squadId <= 10; squadId++) {
+                squadPoints[squadId] = (squadPoints[squadId] || 0) + points;
+            }
+            updateSquadPointsDisplay();
+            alert(`已給所有小隊各增加 ${points} 點！`);
+        }
+
+        // 設定單一外星人血量
+        function setAlienHp() {
+            const selectElement = document.getElementById('hp-alien-select');
+            const inputElement = document.getElementById('hp-value-input');
+            
+            const alienId = selectElement.value;
+            const hpValue = parseInt(inputElement.value);
+            
+            if (!alienId) {
+                alert('請選擇一個外星人！');
+                return;
+            }
+            
+            if (isNaN(hpValue) || hpValue < 0) {
+                alert('請輸入有效的血量值！');
+                return;
+            }
+            
+            const hpInput = document.querySelector(`.alien-${alienId} .hp-input`);
+            if (hpInput) {
+                hpInput.value = hpValue;
+                updateHp(alienId, hpValue);
+                
+                inputElement.value = '';
+                selectElement.value = '';
+                
+                alert(`外星人 #${alienId} 血量已設定為 ${hpValue} HP`);
+            }
+        }
+
+        // 批量設定外星人血量
+        function setAllAliensHp(type) {
+            let targetHp;
+            let actionName;
+            
+            switch(type) {
+                case 'max':
+                    actionName = '滿血';
+                    break;
+                case 'half':
+                    actionName = '半血';
+                    break;
+                case 'zero':
+                    targetHp = 0;
+                    actionName = '歸零';
+                    break;
+                default:
+                    return;
+            }
+            
+            for (let i = 1; i <= 10; i++) {
+                if (type === 'max') {
+                    targetHp = maxHp[i];
+                } else if (type === 'half') {
+                    targetHp = Math.floor(maxHp[i] / 2);
+                }
+                
+                const hpInput = document.querySelector(`.alien-${i} .hp-input`);
+                if (hpInput) {
+                    hpInput.value = targetHp;
+                    updateHp(i, targetHp);
+                }
+            }
+            
+            alert(`所有外星人血量已設定為${actionName}狀態！`);
+        }
+
+        // 設定單一外星人點數
+        function setAlienPoints() {
+            const selectElement = document.getElementById('points-alien-select');
+            const inputElement = document.getElementById('points-value-input');
+            
+            const alienId = selectElement.value;
+            const pointsValue = parseInt(inputElement.value);
+            
+            if (!alienId) {
+                alert('請選擇一個外星人！');
+                return;
+            }
+            
+            if (isNaN(pointsValue) || pointsValue < 0) {
+                alert('請輸入有效的點數值！');
+                return;
+            }
+            
+            const pointsInput = document.querySelector(`.alien-${alienId} .points-input`);
+            if (pointsInput) {
+                pointsInput.value = pointsValue;
+                
+                inputElement.value = '';
+                selectElement.value = '';
+                
+                alert(`外星人 #${alienId} 獲得點數已設定為 ${pointsValue} 點`);
+            }
+        }
+
+        // 批量設定外星人點數
+        function setAllAliensPoints(pointsValue) {
+            for (let i = 1; i <= 10; i++) {
+                const pointsInput = document.querySelector(`.alien-${i} .points-input`);
+                if (pointsInput) {
+                    pointsInput.value = pointsValue;
+                }
+            }
+            
+            alert(`所有外星人獲得點數已設定為 ${pointsValue} 點！`);
+        }
+
+        // 設定單一小隊攻擊次數
+        function setSquadAttackCount() {
+            const selectElement = document.getElementById('attack-squad-select');
+            const inputElement = document.getElementById('attack-count-input');
+            
+            const squadId = parseInt(selectElement.value);
+            const attackCount = parseInt(inputElement.value);
+            
+            if (!squadId) {
+                alert('請選擇一個小隊！');
+                return;
+            }
+            
+            if (isNaN(attackCount) || attackCount < 0) {
+                alert('請輸入有效的攻擊次數！');
+                return;
+            }
+            
+            squadAttackCounts[squadId] = attackCount;
+            updateSquadCheckboxes();
+            
+            inputElement.value = '';
+            selectElement.value = '';
+            
+            alert(`小隊 #${squadId} 攻擊次數已設定為 ${attackCount} 次`);
+        }
+
+        // 批量設定小隊攻擊次數
+        function setAllSquadsAttackCount(attackCount) {
+            for (let i = 1; i <= 10; i++) {
+                squadAttackCounts[i] = attackCount;
+            }
+            
+            updateSquadCheckboxes();
+            alert(`所有小隊攻擊次數已設定為 ${attackCount} 次！`);
+        }
+
+        // 重置所有攻擊次數
+        function resetAllAttackCounts() {
+            for (let i = 1; i <= 10; i++) {
+                squadAttackCounts[i] = 3;
+            }
+            
+            updateSquadCheckboxes();
+            clearSelections();
+            alert('所有小隊攻擊次數已重置為 3 次！');
+        }
+
+        // 創建星星背景
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 100;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // 初始化
+        window.addEventListener('load', () => {
+            initializeSquads();
+            createStars();
+            updateSquadCheckboxes();
+            updateSquadPointsDisplay();
+            
+            for (let i = 1; i <= 10; i++) {
+                const input = document.querySelector(`.alien-${i} .hp-input`);
+                if (input) {
+                    updateHp(i, input.value);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
