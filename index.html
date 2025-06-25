@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小隊戰鬥管理系統</title>
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>小隊戰鬥管理系統</title>
+<style>
         * {
             margin: 0;
             padding: 0;
@@ -1289,402 +1290,363 @@
     </style>
 </head>
 <body>
-    <div class="stars" id="stars"></div>
-    
-    <!-- 頁面切換按鈕 -->
-    <div class="page-switch">
-        <button class="switch-btn active" onclick="switchPage('squads')">小隊管理</button>
-        <button class="switch-btn" onclick="switchPage('battlefield')">戰場</button>
-    </div>
-
-    <!-- 小隊管理頁面 -->
-    <div class="page active" id="squads-page">
-        <h1 class="main-title">🎮 小隊能力值管理系統 🎮</h1>
-        
-        <div class="controls">
-            <button class="btn" onclick="resetAllSquads()">重置所有小隊</button>
-            <button class="btn" onclick="randomizeAllSquads()">隨機屬性</button>
-            <button class="btn" onclick="showStatistics()">統計數據</button>
-        </div>
-
-        <div class="squads-container" id="squads-container">
-            <!-- 小隊卡片將在這裡動態生成 -->
-        </div>
-    </div>
-
-    <!-- 戰場頁面 -->
-    <div class="page" id="battlefield-page">
-        <!-- 戰鬥控制面板 -->
-        <div class="battle-controls">
-            <div class="battle-title">⚔️ 戰鬥控制 ⚔️</div>
-            
-            <div class="squad-selector">
-                <label>選擇攻擊小隊:</label>
-                <div class="squad-checkboxes" id="squad-checkboxes">
-                    <!-- 小隊選擇框將在這裡生成 -->
-                </div>
-            </div>
-            
-            <div class="target-selector">
-                <label>選擇目標外星人:</label>
-                <div class="alien-buttons">
-                    <button class="alien-btn" onclick="selectTarget(1)">
+<div class="stars" id="stars"></div>
+<!-- 頁面切換按鈕 -->
+<div class="page-switch">
+<button class="switch-btn active" onclick="switchPage('squads')">小隊管理</button>
+<button class="switch-btn" onclick="switchPage('battlefield')">戰場</button>
+</div>
+<!-- 小隊管理頁面 -->
+<div class="page active" id="squads-page">
+<h1 class="main-title">🎮 小隊能力值管理系統 🎮</h1>
+<div class="controls">
+<button class="btn" onclick="resetAllSquads()">重置所有小隊</button>
+<button class="btn" onclick="randomizeAllSquads()">隨機屬性</button>
+<button class="btn" onclick="showStatistics()">統計數據</button>
+</div>
+<div class="squads-container" id="squads-container">
+<!-- 小隊卡片將在這裡動態生成 -->
+</div>
+</div>
+<!-- 戰場頁面 -->
+<div class="page" id="battlefield-page">
+<!-- 戰鬥控制面板 -->
+<div class="battle-controls">
+<div class="battle-title">⚔️ 戰鬥控制 ⚔️</div>
+<div class="squad-selector">
+<label>選擇攻擊小隊:</label>
+<div class="squad-checkboxes" id="squad-checkboxes">
+<!-- 小隊選擇框將在這裡生成 -->
+</div>
+</div>
+<div class="target-selector">
+<label>選擇目標外星人:</label>
+<div class="alien-buttons">
+<button class="alien-btn" onclick="selectTarget(1)">
                         👾
                         <span class="alien-btn-text">#1</span>
-                    </button>
-                    <button class="alien-btn" onclick="selectTarget(2)">
+</button>
+<button class="alien-btn" onclick="selectTarget(2)">
                         👹
                         <span class="alien-btn-text">#2</span>
-                    </button>
-                    <button class="alien-btn" onclick="selectTarget(3)">
+</button>
+<button class="alien-btn" onclick="selectTarget(3)">
                         👺
                         <span class="alien-btn-text">#3</span>
-                    </button>
-                    <button class="alien-btn" onclick="selectTarget(4)">
+</button>
+<button class="alien-btn" onclick="selectTarget(4)">
                         🤖
                         <span class="alien-btn-text">#4</span>
-                    </button>
-                    <button class="alien-btn" onclick="selectTarget(5)">
+</button>
+<button class="alien-btn" onclick="selectTarget(5)">
                         👻
                         <span class="alien-btn-text">#5</span>
-                    </button>
-                    <button class="alien-btn" onclick="selectTarget(6)">
+</button>
+<button class="alien-btn" onclick="selectTarget(6)">
                         🎃
                         <span class="alien-btn-text">#6</span>
-                    </button>
-                    <button class="alien-btn" onclick="selectTarget(7)">
+</button>
+<button class="alien-btn" onclick="selectTarget(7)">
                         🤡
                         <span class="alien-btn-text">#7</span>
-                    </button>
-                    <button class="alien-btn" onclick="selectTarget(8)">
+</button>
+<button class="alien-btn" onclick="selectTarget(8)">
                         💀
                         <span class="alien-btn-text">#8</span>
-                    </button>
-                    <button class="alien-btn" onclick="selectTarget(9)">
+</button>
+<button class="alien-btn" onclick="selectTarget(9)">
                         🦖
                         <span class="alien-btn-text">#9</span>
-                    </button>
-                    <button class="alien-btn" onclick="selectTarget(10)">
+</button>
+<button class="alien-btn" onclick="selectTarget(10)">
                         🐙
                         <span class="alien-btn-text">#10</span>
-                    </button>
-                </div>
-            </div>
-            
-            <button class="attack-btn" id="attack-btn" onclick="executeAttack()" disabled>
+</button>
+</div>
+</div>
+<button class="attack-btn" disabled="" id="attack-btn" onclick="executeAttack()">
                 發動攻擊
             </button>
-
-            <div class="battle-info" id="battle-info">
+<div class="battle-info" id="battle-info">
                 選擇小隊和目標開始戰鬥
             </div>
-
-            <!-- 血量調整工具 -->
-            <div class="hp-adjustment-tool">
-                <div class="tool-title">🩸 血量調整工具</div>
-                <div class="hp-controls">
-                    <label>選擇外星人:</label>
-                    <select id="hp-alien-select" class="alien-select">
-                        <option value="">選擇外星人</option>
-                        <option value="1">外星人 #1 (👾)</option>
-                        <option value="2">外星人 #2 (👹)</option>
-                        <option value="3">外星人 #3 (👺)</option>
-                        <option value="4">外星人 #4 (🤖)</option>
-                        <option value="5">外星人 #5 (👻)</option>
-                        <option value="6">外星人 #6 (🎃)</option>
-                        <option value="7">外星人 #7 (🤡)</option>
-                        <option value="8">外星人 #8 (💀)</option>
-                        <option value="9">外星人 #9 (🦖)</option>
-                        <option value="10">外星人 #10 (🐙)</option>
-                    </select>
-                    
-                    <label>設定血量:</label>
-                    <input type="number" id="hp-value-input" placeholder="輸入血量" min="0" max="9999" class="hp-value-input">
-                    
-                    <button class="hp-set-btn" onclick="setAlienHp()">設定血量</button>
-                </div>
-                
-                <div class="quick-hp-buttons">
-                    <button class="quick-hp-btn" onclick="setAllAliensHp('max')">全部滿血</button>
-                    <button class="quick-hp-btn" onclick="setAllAliensHp('half')">全部半血</button>
-                    <button class="quick-hp-btn" onclick="setAllAliensHp('zero')">全部歸零</button>
-                </div>
-            </div>
-
-            <!-- 攻擊次數調整工具 -->
-            <div class="attack-count-tool">
-                <div class="tool-title">⚡ 攻擊次數管理</div>
-                <div class="attack-controls">
-                    <label>選擇小隊:</label>
-                    <select id="attack-squad-select" class="squad-select">
-                        <option value="">選擇小隊</option>
-                        <option value="1">小隊 #1</option>
-                        <option value="2">小隊 #2</option>
-                        <option value="3">小隊 #3</option>
-                        <option value="4">小隊 #4</option>
-                        <option value="5">小隊 #5</option>
-                        <option value="6">小隊 #6</option>
-                        <option value="7">小隊 #7</option>
-                        <option value="8">小隊 #8</option>
-                        <option value="9">小隊 #9</option>
-                        <option value="10">小隊 #10</option>
-                    </select>
-                    
-                    <label>設定攻擊次數:</label>
-                    <input type="number" id="attack-count-input" placeholder="輸入次數" min="0" max="99" class="attack-count-input">
-                    
-                    <button class="attack-set-btn" onclick="setSquadAttackCount()">設定次數</button>
-                </div>
-                
-                <div class="quick-attack-buttons">
-                    <button class="quick-attack-btn" onclick="setAllSquadsAttackCount(1)">全部設為1次</button>
-                    <button class="quick-attack-btn" onclick="setAllSquadsAttackCount(3)">全部設為3次</button>
-                    <button class="quick-attack-btn" onclick="setAllSquadsAttackCount(5)">全部設為5次</button>
-                </div>
-                
-                <div class="reset-attacks-section">
-                    <button class="reset-attacks-btn" onclick="resetAllAttackCounts()">重置所有攻擊次數</button>
-                </div>
-            </div>
-
-            <div class="points-adjustment-tool">
-                <div class="tool-title">💰 點數調整工具</div>
-                <div class="points-controls">
-                    <label>選擇外星人:</label>
-                    <select id="points-alien-select" class="alien-select">
-                        <option value="">選擇外星人</option>
-                        <option value="1">外星人 #1 (👾)</option>
-                        <option value="2">外星人 #2 (👹)</option>
-                        <option value="3">外星人 #3 (👺)</option>
-                        <option value="4">外星人 #4 (🤖)</option>
-                        <option value="5">外星人 #5 (👻)</option>
-                        <option value="6">外星人 #6 (🎃)</option>
-                        <option value="7">外星人 #7 (🤡)</option>
-                        <option value="8">外星人 #8 (💀)</option>
-                        <option value="9">外星人 #9 (🦖)</option>
-                        <option value="10">外星人 #10 (🐙)</option>
-                    </select>
-                    
-                    <label>設定獲得點數:</label>
-                    <input type="number" id="points-value-input" placeholder="輸入點數" min="0" max="9999" class="points-value-input">
-                    
-                    <button class="points-set-btn" onclick="setAlienPoints()">設定點數</button>
-                </div>
-                
-                <div class="quick-points-buttons">
-                    <button class="quick-points-btn" onclick="setAllAliensPoints(50)">全部設為50</button>
-                    <button class="quick-points-btn" onclick="setAllAliensPoints(100)">全部設為100</button>
-                    <button class="quick-points-btn" onclick="setAllAliensPoints(200)">全部設為200</button>
-                </div>
-            </div>
-
-            <!-- 小隊點數顯示工具 -->
-            <div class="squad-points-tool">
-                <div class="tool-title">💎 小隊獲得點數</div>
-                
-                <div class="squad-points-grid" id="squad-points-grid">
-                    <!-- 小隊點數將在這裡動態生成 -->
-                </div>
-                
-                <div class="squad-points-controls">
-                    <button class="reset-squad-points-btn" onclick="resetAllSquadPoints()">全部歸零</button>
-                    <button class="add-points-btn" onclick="addPointsToAll()">測試加點</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="battlefield">
-            <h1 class="main-title">🛸 外星人戰場 🛸</h1>
-            
-            <div class="controls">
-                <button class="btn" onclick="randomizeAliens()">隨機血量</button>
-                <button class="btn" onclick="calculateTotalPoints()">計算總點數</button>
-                <button class="btn" onclick="resetBattle()">重置戰鬥</button>
-            </div>
-
-            <!-- 外星人們 -->
-            <div class="alien alien-1" data-id="1">
-                <div class="alien-sprite">
-                    <span class="monster-icon">👾</span>
-                </div>
-                <div class="hp-display">
-                    <div class="alien-id">外星人 #1</div>
-                    <input type="number" class="hp-input" value="300" min="0" oninput="updateHp(1, this.value)">
-                    <div class="hp-bar">
-                        <div class="hp-fill" style="width: 100%"></div>
-                    </div>
-                </div>
-                <div class="points-display">
-                    <div class="points-label">獲得點數</div>
-                    <input type="number" class="points-input" value="100" min="0">
-                </div>
-            </div>
-
-            <div class="alien alien-2" data-id="2">
-                <div class="alien-sprite">
-                    <span class="monster-icon">👹</span>
-                </div>
-                <div class="hp-display">
-                    <div class="alien-id">外星人 #2</div>
-                    <input type="number" class="hp-input" value="300" min="0" oninput="updateHp(2, this.value)">
-                    <div class="hp-bar">
-                        <div class="hp-fill" style="width: 100%"></div>
-                    </div>
-                </div>
-                <div class="points-display">
-                    <div class="points-label">獲得點數</div>
-                    <input type="number" class="points-input" value="80" min="0">
-                </div>
-            </div>
-
-            <div class="alien alien-3" data-id="3">
-                <div class="alien-sprite">
-                    <span class="monster-icon">👺</span>
-                </div>
-                <div class="hp-display">
-                    <div class="alien-id">外星人 #3</div>
-                    <input type="number" class="hp-input" value="400" min="0" oninput="updateHp(3, this.value)">
-                    <div class="hp-bar">
-                        <div class="hp-fill" style="width: 100%"></div>
-                    </div>
-                </div>
-                <div class="points-display">
-                    <div class="points-label">獲得點數</div>
-                    <input type="number" class="points-input" value="150" min="0">
-                </div>
-            </div>
-
-            <div class="alien alien-4" data-id="4">
-                <div class="alien-sprite">
-                    <span class="monster-icon">🤖</span>
-                </div>
-                <div class="hp-display">
-                    <div class="alien-id">外星人 #4</div>
-                    <input type="number" class="hp-input" value="300" min="0" oninput="updateHp(4, this.value)">
-                    <div class="hp-bar">
-                        <div class="hp-fill" style="width: 100%"></div>
-                    </div>
-                </div>
-                <div class="points-display">
-                    <div class="points-label">獲得點數</div>
-                    <input type="number" class="points-input" value="60" min="0">
-                </div>
-            </div>
-
-            <div class="alien alien-5" data-id="5">
-                <div class="alien-sprite">
-                    <span class="monster-icon">👻</span>
-                </div>
-                <div class="hp-display">
-                    <div class="alien-id">外星人 #5</div>
-                    <input type="number" class="hp-input" value="400" min="0" oninput="updateHp(5, this.value)">
-                    <div class="hp-bar">
-                        <div class="hp-fill" style="width: 100%"></div>
-                    </div>
-                </div>
-                <div class="points-display">
-                    <div class="points-label">獲得點數</div>
-                    <input type="number" class="points-input" value="120" min="0">
-                </div>
-            </div>
-
-            <div class="alien alien-6" data-id="6">
-                <div class="alien-sprite">
-                    <span class="monster-icon">🎃</span>
-                </div>
-                <div class="hp-display">
-                    <div class="alien-id">外星人 #6</div>
-                    <input type="number" class="hp-input" value="300" min="0" oninput="updateHp(6, this.value)">
-                    <div class="hp-bar">
-                        <div class="hp-fill" style="width: 100%"></div>
-                    </div>
-                </div>
-                <div class="points-display">
-                    <div class="points-label">獲得點數</div>
-                    <input type="number" class="points-input" value="70" min="0">
-                </div>
-            </div>
-
-            <div class="alien alien-7" data-id="7">
-                <div class="alien-sprite">
-                    <span class="monster-icon">🤡</span>
-                </div>
-                <div class="hp-display">
-                    <div class="alien-id">外星人 #7</div>
-                    <input type="number" class="hp-input" value="400" min="0" oninput="updateHp(7, this.value)">
-                    <div class="hp-bar">
-                        <div class="hp-fill" style="width: 100%"></div>
-                    </div>
-                </div>
-                <div class="points-display">
-                    <div class="points-label">獲得點數</div>
-                    <input type="number" class="points-input" value="90" min="0">
-                </div>
-            </div>
-
-            <div class="alien alien-8" data-id="8">
-                <div class="alien-sprite">
-                    <span class="monster-icon">💀</span>
-                </div>
-                <div class="hp-display">
-                    <div class="alien-id">外星人 #8</div>
-                    <input type="number" class="hp-input" value="400" min="0" oninput="updateHp(8, this.value)">
-                    <div class="hp-bar">
-                        <div class="hp-fill" style="width: 100%"></div>
-                    </div>
-                </div>
-                <div class="points-display">
-                    <div class="points-label">獲得點數</div>
-                    <input type="number" class="points-input" value="110" min="0">
-                </div>
-            </div>
-
-            <div class="alien alien-9" data-id="9">
-                <div class="alien-sprite">
-                    <span class="monster-icon">🦖</span>
-                </div>
-                <div class="hp-display">
-                    <div class="alien-id">外星人 #9</div>
-                    <input type="number" class="hp-input" value="300" min="0" oninput="updateHp(9, this.value)">
-                    <div class="hp-bar">
-                        <div class="hp-fill" style="width: 100%"></div>
-                    </div>
-                </div>
-                <div class="points-display">
-                    <div class="points-label">獲得點數</div>
-                    <input type="number" class="points-input" value="50" min="0">
-                </div>
-            </div>
-
-            <div class="alien alien-10" data-id="10">
-                <div class="alien-sprite">
-                    <span class="monster-icon">🐙</span>
-                </div>
-                <div class="hp-display">
-                    <div class="alien-id">外星人 #10</div>
-                    <input type="number" class="hp-input" value="450" min="0" oninput="updateHp(10, this.value)">
-                    <div class="hp-bar">
-                        <div class="hp-fill" style="width: 100%"></div>
-                    </div>
-                </div>
-                <div class="points-display">
-                    <div class="points-label">獲得點數</div>
-                    <input type="number" class="points-input" value="200" min="0">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 戰鬥結果彈窗 -->
-    <div class="battle-result" id="battle-result">
-        <div class="result-title">🎯 戰鬥結果 🎯</div>
-        <div class="result-content" id="result-content">
-            <!-- 結果內容將在這裡顯示 -->
-        </div>
-        <button class="result-close" onclick="closeBattleResult()">確定</button>
-    </div>
-
-    <script>
+<!-- 血量調整工具 -->
+<div class="hp-adjustment-tool">
+<div class="tool-title">🩸 血量調整工具</div>
+<div class="hp-controls">
+<label>選擇外星人:</label>
+<select class="alien-select" id="hp-alien-select">
+<option value="">選擇外星人</option>
+<option value="1">外星人 #1 (👾)</option>
+<option value="2">外星人 #2 (👹)</option>
+<option value="3">外星人 #3 (👺)</option>
+<option value="4">外星人 #4 (🤖)</option>
+<option value="5">外星人 #5 (👻)</option>
+<option value="6">外星人 #6 (🎃)</option>
+<option value="7">外星人 #7 (🤡)</option>
+<option value="8">外星人 #8 (💀)</option>
+<option value="9">外星人 #9 (🦖)</option>
+<option value="10">外星人 #10 (🐙)</option>
+</select>
+<label>設定血量:</label>
+<input class="hp-value-input" id="hp-value-input" max="9999" min="0" placeholder="輸入血量" type="number"/>
+<button class="hp-set-btn" onclick="setAlienHp()">設定血量</button>
+</div>
+<div class="quick-hp-buttons">
+<button class="quick-hp-btn" onclick="setAllAliensHp('max')">全部滿血</button>
+<button class="quick-hp-btn" onclick="setAllAliensHp('half')">全部半血</button>
+<button class="quick-hp-btn" onclick="setAllAliensHp('zero')">全部歸零</button>
+</div>
+</div>
+<!-- 攻擊次數調整工具 -->
+<div class="attack-count-tool">
+<div class="tool-title">⚡ 攻擊次數管理</div>
+<div class="attack-controls">
+<label>選擇小隊:</label>
+<select class="squad-select" id="attack-squad-select">
+<option value="">選擇小隊</option>
+<option value="1">小隊 #1</option>
+<option value="2">小隊 #2</option>
+<option value="3">小隊 #3</option>
+<option value="4">小隊 #4</option>
+<option value="5">小隊 #5</option>
+<option value="6">小隊 #6</option>
+<option value="7">小隊 #7</option>
+<option value="8">小隊 #8</option>
+<option value="9">小隊 #9</option>
+<option value="10">小隊 #10</option>
+</select>
+<label>設定攻擊次數:</label>
+<input class="attack-count-input" id="attack-count-input" max="99" min="0" placeholder="輸入次數" type="number"/>
+<button class="attack-set-btn" onclick="setSquadAttackCount()">設定次數</button>
+</div>
+<div class="quick-attack-buttons">
+<button class="quick-attack-btn" onclick="setAllSquadsAttackCount(1)">全部設為1次</button>
+<button class="quick-attack-btn" onclick="setAllSquadsAttackCount(3)">全部設為3次</button>
+<button class="quick-attack-btn" onclick="setAllSquadsAttackCount(5)">全部設為5次</button>
+</div>
+<div class="reset-attacks-section">
+<button class="reset-attacks-btn" onclick="resetAllAttackCounts()">重置所有攻擊次數</button>
+</div>
+</div>
+<div class="points-adjustment-tool">
+<div class="tool-title">💰 點數調整工具</div>
+<div class="points-controls">
+<label>選擇外星人:</label>
+<select class="alien-select" id="points-alien-select">
+<option value="">選擇外星人</option>
+<option value="1">外星人 #1 (👾)</option>
+<option value="2">外星人 #2 (👹)</option>
+<option value="3">外星人 #3 (👺)</option>
+<option value="4">外星人 #4 (🤖)</option>
+<option value="5">外星人 #5 (👻)</option>
+<option value="6">外星人 #6 (🎃)</option>
+<option value="7">外星人 #7 (🤡)</option>
+<option value="8">外星人 #8 (💀)</option>
+<option value="9">外星人 #9 (🦖)</option>
+<option value="10">外星人 #10 (🐙)</option>
+</select>
+<label>設定獲得點數:</label>
+<input class="points-value-input" id="points-value-input" max="9999" min="0" placeholder="輸入點數" type="number"/>
+<button class="points-set-btn" onclick="setAlienPoints()">設定點數</button>
+</div>
+<div class="quick-points-buttons">
+<button class="quick-points-btn" onclick="setAllAliensPoints(50)">全部設為50</button>
+<button class="quick-points-btn" onclick="setAllAliensPoints(100)">全部設為100</button>
+<button class="quick-points-btn" onclick="setAllAliensPoints(200)">全部設為200</button>
+</div>
+</div>
+<!-- 小隊點數顯示工具 -->
+<div class="squad-points-tool">
+<div class="tool-title">💎 小隊獲得點數</div>
+<div class="squad-points-grid" id="squad-points-grid">
+<!-- 小隊點數將在這裡動態生成 -->
+</div>
+<div class="squad-points-controls">
+<button class="reset-squad-points-btn" onclick="resetAllSquadPoints()">全部歸零</button>
+<button class="add-points-btn" onclick="addPointsToAll()">測試加點</button>
+</div>
+</div>
+</div>
+<div class="battlefield">
+<h1 class="main-title">🛸 外星人戰場 🛸</h1>
+<div class="controls">
+<button class="btn" onclick="randomizeAliens()">隨機血量</button>
+<button class="btn" onclick="calculateTotalPoints()">計算總點數</button>
+<button class="btn" onclick="resetBattle()">重置戰鬥</button>
+</div>
+<!-- 外星人們 -->
+<div class="alien alien-1" data-id="1">
+<div class="alien-sprite">
+<span class="monster-icon">👾</span>
+</div>
+<div class="hp-display">
+<div class="alien-id">外星人 #1</div>
+<input class="hp-input" min="0" oninput="updateHp(1, this.value)" type="number" value="300"/>
+<div class="hp-bar">
+<div class="hp-fill" style="width: 100%"></div>
+</div>
+</div>
+<div class="points-display">
+<div class="points-label">獲得點數</div>
+<input class="points-input" min="0" type="number" value="100"/>
+</div>
+</div>
+<div class="alien alien-2" data-id="2">
+<div class="alien-sprite">
+<span class="monster-icon">👹</span>
+</div>
+<div class="hp-display">
+<div class="alien-id">外星人 #2</div>
+<input class="hp-input" min="0" oninput="updateHp(2, this.value)" type="number" value="300"/>
+<div class="hp-bar">
+<div class="hp-fill" style="width: 100%"></div>
+</div>
+</div>
+<div class="points-display">
+<div class="points-label">獲得點數</div>
+<input class="points-input" min="0" type="number" value="80"/>
+</div>
+</div>
+<div class="alien alien-3" data-id="3">
+<div class="alien-sprite">
+<span class="monster-icon">👺</span>
+</div>
+<div class="hp-display">
+<div class="alien-id">外星人 #3</div>
+<input class="hp-input" min="0" oninput="updateHp(3, this.value)" type="number" value="400"/>
+<div class="hp-bar">
+<div class="hp-fill" style="width: 100%"></div>
+</div>
+</div>
+<div class="points-display">
+<div class="points-label">獲得點數</div>
+<input class="points-input" min="0" type="number" value="150"/>
+</div>
+</div>
+<div class="alien alien-4" data-id="4">
+<div class="alien-sprite">
+<span class="monster-icon">🤖</span>
+</div>
+<div class="hp-display">
+<div class="alien-id">外星人 #4</div>
+<input class="hp-input" min="0" oninput="updateHp(4, this.value)" type="number" value="300"/>
+<div class="hp-bar">
+<div class="hp-fill" style="width: 100%"></div>
+</div>
+</div>
+<div class="points-display">
+<div class="points-label">獲得點數</div>
+<input class="points-input" min="0" type="number" value="60"/>
+</div>
+</div>
+<div class="alien alien-5" data-id="5">
+<div class="alien-sprite">
+<span class="monster-icon">👻</span>
+</div>
+<div class="hp-display">
+<div class="alien-id">外星人 #5</div>
+<input class="hp-input" min="0" oninput="updateHp(5, this.value)" type="number" value="400"/>
+<div class="hp-bar">
+<div class="hp-fill" style="width: 100%"></div>
+</div>
+</div>
+<div class="points-display">
+<div class="points-label">獲得點數</div>
+<input class="points-input" min="0" type="number" value="120"/>
+</div>
+</div>
+<div class="alien alien-6" data-id="6">
+<div class="alien-sprite">
+<span class="monster-icon">🎃</span>
+</div>
+<div class="hp-display">
+<div class="alien-id">外星人 #6</div>
+<input class="hp-input" min="0" oninput="updateHp(6, this.value)" type="number" value="300"/>
+<div class="hp-bar">
+<div class="hp-fill" style="width: 100%"></div>
+</div>
+</div>
+<div class="points-display">
+<div class="points-label">獲得點數</div>
+<input class="points-input" min="0" type="number" value="70"/>
+</div>
+</div>
+<div class="alien alien-7" data-id="7">
+<div class="alien-sprite">
+<span class="monster-icon">🤡</span>
+</div>
+<div class="hp-display">
+<div class="alien-id">外星人 #7</div>
+<input class="hp-input" min="0" oninput="updateHp(7, this.value)" type="number" value="400"/>
+<div class="hp-bar">
+<div class="hp-fill" style="width: 100%"></div>
+</div>
+</div>
+<div class="points-display">
+<div class="points-label">獲得點數</div>
+<input class="points-input" min="0" type="number" value="90"/>
+</div>
+</div>
+<div class="alien alien-8" data-id="8">
+<div class="alien-sprite">
+<span class="monster-icon">💀</span>
+</div>
+<div class="hp-display">
+<div class="alien-id">外星人 #8</div>
+<input class="hp-input" min="0" oninput="updateHp(8, this.value)" type="number" value="400"/>
+<div class="hp-bar">
+<div class="hp-fill" style="width: 100%"></div>
+</div>
+</div>
+<div class="points-display">
+<div class="points-label">獲得點數</div>
+<input class="points-input" min="0" type="number" value="110"/>
+</div>
+</div>
+<div class="alien alien-9" data-id="9">
+<div class="alien-sprite">
+<span class="monster-icon">🦖</span>
+</div>
+<div class="hp-display">
+<div class="alien-id">外星人 #9</div>
+<input class="hp-input" min="0" oninput="updateHp(9, this.value)" type="number" value="300"/>
+<div class="hp-bar">
+<div class="hp-fill" style="width: 100%"></div>
+</div>
+</div>
+<div class="points-display">
+<div class="points-label">獲得點數</div>
+<input class="points-input" min="0" type="number" value="50"/>
+</div>
+</div>
+<div class="alien alien-10" data-id="10">
+<div class="alien-sprite">
+<span class="monster-icon">🐙</span>
+</div>
+<div class="hp-display">
+<div class="alien-id">外星人 #10</div>
+<input class="hp-input" min="0" oninput="updateHp(10, this.value)" type="number" value="450"/>
+<div class="hp-bar">
+<div class="hp-fill" style="width: 100%"></div>
+</div>
+</div>
+<div class="points-display">
+<div class="points-label">獲得點數</div>
+<input class="points-input" min="0" type="number" value="200"/>
+</div>
+</div>
+</div>
+</div>
+<!-- 戰鬥結果彈窗 -->
+<div class="battle-result" id="battle-result">
+<div class="result-title">🎯 戰鬥結果 🎯</div>
+<div class="result-content" id="result-content">
+<!-- 結果內容將在這裡顯示 -->
+</div>
+<button class="result-close" onclick="closeBattleResult()">確定</button>
+</div>
+<script>
         // 全域變數
         let selectedSquads = [];
         let selectedTarget = null;
@@ -2608,19 +2570,15 @@
             }
         });
     </script>
-    <script>
-    window.addEventListener("DOMContentLoaded", () => {
+<script>
+window.addEventListener("DOMContentLoaded", () => {
     const isAdmin = window.location.hash === "#admin";
-
-    // 假設你要限制的按鈕 ID 是 #myButton
     const btn = document.getElementById("myButton");
     if (btn && !isAdmin) {
-      btn.disabled = true;
-      btn.style.opacity = "0.5";
-      btn.title = "只有擁有者可以操作";
+        btn.disabled = true;
+        btn.style.opacity = "0.5";
+        btn.title = "只有擁有者可以操作";
     }
-    });
-    </script>
-
-</body>
+});
+</script></body>
 </html>
