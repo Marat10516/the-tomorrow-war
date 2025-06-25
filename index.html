@@ -2608,5 +2608,19 @@
             }
         });
     </script>
+    <script>
+    window.addEventListener("DOMContentLoaded", () => {
+    const isAdmin = window.location.hash === "#admin";
+
+    // 假設你要限制的按鈕 ID 是 #myButton
+    const btn = document.getElementById("myButton");
+    if (btn && !isAdmin) {
+      btn.disabled = true;
+      btn.style.opacity = "0.5";
+      btn.title = "只有擁有者可以操作";
+    }
+    });
+    </script>
+
 </body>
 </html>
