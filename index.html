@@ -2570,15 +2570,5 @@
             }
         });
     </script>
-<script>
-window.addEventListener("DOMContentLoaded", () => {
-    const isAdmin = window.location.hash === "#admin";
-    const btn = document.getElementById("myButton");
-    if (btn && !isAdmin) {
-        btn.disabled = true;
-        btn.style.opacity = "0.5";
-        btn.title = "只有擁有者可以操作";
-    }
-});
-</script></body>
+</body>
 </html>
