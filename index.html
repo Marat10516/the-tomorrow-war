@@ -1006,7 +1006,143 @@
             font-weight: bold;
         }
 
-        /* 響應式設計 */
+        /* 競技場地圖選擇器樣式 */
+        .arena-map-selector {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff6b35;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .arena-map-title {
+            color: #ff6b35;
+            font-size: 1.5em;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #ff6b35;
+        }
+
+        .arena-map-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .arena-map-option {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #666;
+            border-radius: 12px;
+            padding: 15px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .arena-map-option:hover {
+            border-color: #ff6b35;
+            background: rgba(255, 107, 53, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .arena-map-option.selected {
+            border-color: #ff6b35;
+            background: rgba(255, 107, 53, 0.3);
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+        }
+
+        .arena-map-icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+
+        .arena-map-name {
+            color: #fff;
+            font-size: 0.9em;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+
+        .arena-map-effects {
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid #ff6b35;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .arena-map-effects.visible {
+            display: block;
+        }
+
+        .arena-map-effects-title {
+            color: #ff6b35;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .arena-effect-item {
+            color: #fff;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            padding: 5px 8px;
+            border-radius: 5px;
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .arena-effect-zero {
+            background: rgba(255, 71, 87, 0.3);
+            border-left: 3px solid #ff4757;
+        }
+
+        .arena-effect-nerf {
+            background: rgba(255, 193, 7, 0.3);
+            border-left: 3px solid #ffc107;
+        }
+
+        .arena-effect-boost {
+            background: rgba(0, 255, 136, 0.3);
+            border-left: 3px solid #00ff88;
+        }
+
+        /* 響應式設計 - 競技場地圖 */
+        @media (max-width: 1200px) {
+            .arena-map-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .arena-map-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .arena-map-option {
+                min-height: 80px;
+                padding: 10px 5px;
+            }
+            
+            .arena-map-icon {
+                font-size: 1.5em;
+                margin-bottom: 5px;
+            }
+            
+            .arena-map-name {
+                font-size: 0.8em;
+            }
+        }
         @media (max-width: 1200px) {
             .battle-controls {
                 width: 250px;
@@ -1568,6 +1704,11 @@
                 text-align: center;
             }
         }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
     </style>
 </head>
 <body>
@@ -1958,6 +2099,72 @@
         </div>
     </div>
 
+    <!-- 競技場頁面 -->
+    <div class="page" id="arena-page">
+        <h1 class="main-title">⚔️ 小隊競技場 ⚔️</h1>
+        
+        <!-- 地圖選擇區域 -->
+        <div class="arena-map-selector">
+            <h2 class="arena-map-title">🗺️ 選擇戰鬥地圖</h2>
+            <div class="arena-map-grid" id="arena-map-grid">
+                <!-- 地圖選項將在這裡動態生成 -->
+            </div>
+            <div class="arena-map-effects" id="arena-map-effects">
+                <div class="arena-map-effects-title">地圖效果</div>
+                <div id="arena-map-effects-content">
+                    <!-- 地圖效果將在這裡顯示 -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="arena-container">
+            <!-- 左側小隊選擇 -->
+            <div class="squad-selector-arena">
+                <h2 class="selector-title">選擇小隊 A</h2>
+                <div class="squad-options" id="squad-a-options">
+                    <!-- 小隊選項將在這裡生成 -->
+                </div>
+            </div>
+
+            <!-- 中央戰鬥區域 -->
+            <div class="battle-area-arena">
+                <h2 class="battle-title-arena">🏟️ 競技場對戰 🏟️</h2>
+                
+                <div class="vs-display">
+                    <div class="squad-display">
+                        <div class="squad-display-name" id="squad-a-name">選擇小隊 A</div>
+                        <div class="squad-display-total" id="squad-a-total">總點數: --</div>
+                    </div>
+                    
+                    <div class="vs-text">VS</div>
+                    
+                    <div class="squad-display">
+                        <div class="squad-display-name" id="squad-b-name">選擇小隊 B</div>
+                        <div class="squad-display-total" id="squad-b-total">總點數: --</div>
+                    </div>
+                </div>
+
+                <button class="battle-button-arena" id="arena-battle-btn" onclick="startArenaBattle()" disabled>
+                    開始對戰
+                </button>
+
+                <div class="comparison-results" id="comparison-results">
+                    <!-- 比較結果將在這裡顯示 -->
+                </div>
+
+                <button class="reset-button-arena" onclick="resetArenaBattle()">重置對戰</button>
+            </div>
+
+            <!-- 右側小隊選擇 -->
+            <div class="squad-selector-arena">
+                <h2 class="selector-title">選擇小隊 B</h2>
+                <div class="squad-options" id="squad-b-options">
+                    <!-- 小隊選項將在這裡生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 戰鬥結果彈窗 -->
     <div class="battle-result" id="battle-result">
         <div class="result-title">🎯 戰鬥結果 🎯</div>
@@ -1978,6 +2185,91 @@
         // 競技場變數
         let selectedSquadA = null;
         let selectedSquadB = null;
+        let selectedArenaMap = null;
+        
+        // 競技場地圖定義
+        const arenaMaps = {
+            'gravity_field': {
+                name: '10倍重力場',
+                icon: '🌍',
+                effects: {
+                    lowerLimb: 0,      // 下肢 → 0
+                    chest: 0.5,        // 胸部 ×0.5
+                    hearing: 1.5,      // 聽覺 ×1.5
+                    abdomen: 1.5       // 腹部 ×1.5
+                }
+            },
+            'vacuum_ridge': {
+                name: '高空真空嶺',
+                icon: '⛰️',
+                effects: {
+                    chest: 0,          // 胸部 → 0
+                    hearing: 0.5,      // 聽覺 ×0.5
+                    vision: 1.5,       // 視覺 ×1.5
+                    upperLimb: 1.5     // 上肢 ×1.5
+                }
+            },
+            'mind_interference': {
+                name: '心智干擾區',
+                icon: '🧠',
+                effects: {
+                    intelligence: 0,   // 智力 → 0
+                    vision: 0.5,       // 視覺 ×0.5
+                    upperLimb: 1.5,    // 上肢 ×1.5
+                    hearing: 1.5       // 聽覺 ×1.5
+                }
+            },
+            'sterile_chamber': {
+                name: '無味滅菌艙',
+                icon: '🧪',
+                effects: {
+                    smell: 0,          // 嗅覺 → 0
+                    lowerLimb: 0.5,    // 下肢 ×0.5
+                    chest: 1.5,        // 胸部 ×1.5
+                    intelligence: 1.5  // 智力 ×1.5
+                }
+            },
+            'silent_swamp': {
+                name: '寂靜沼澤',
+                icon: '🏞️',
+                effects: {
+                    hearing: 0,        // 聽覺 → 0
+                    vision: 0.5,       // 視覺 ×0.5
+                    lowerLimb: 1.5,    // 下肢 ×1.5
+                    smell: 1.5         // 嗅覺 ×1.5
+                }
+            },
+            'electromagnetic_city': {
+                name: '電磁枷鎖城',
+                icon: '🌆',
+                effects: {
+                    upperLimb: 0,      // 上肢 → 0
+                    abdomen: 0.5,      // 腹部 ×0.5
+                    intelligence: 1.5, // 智力 ×1.5
+                    chest: 1.5         // 胸部 ×1.5
+                }
+            },
+            'misty_illusion': {
+                name: '迷霧幻境',
+                icon: '🌫️',
+                effects: {
+                    vision: 0,         // 視覺 → 0
+                    smell: 0.5,        // 嗅覺 ×0.5
+                    abdomen: 1.5,      // 腹部 ×1.5
+                    upperLimb: 1.5     // 上肢 ×1.5
+                }
+            },
+            'poison_garden': {
+                name: '毒花園',
+                icon: '🌺',
+                effects: {
+                    abdomen: 0,        // 腹部 → 0
+                    intelligence: 0.5, // 智力 ×0.5
+                    smell: 1.5,        // 嗅覺 ×1.5
+                    vision: 1.5        // 視覺 ×1.5
+                }
+            }
+        };
         
         // 屬性定義
         const attributes = ['intelligence', 'vision', 'hearing', 'smell', 'upperLimb', 'lowerLimb', 'chest', 'abdomen'];
@@ -2048,6 +2340,7 @@
                 syncSquadData();
                 setTimeout(() => {
                     updateArenaSquadOptions();
+                    initializeArenaMaps();
                 }, 100); // 延遲一點確保數據同步完成
             }
         }
@@ -2841,126 +3134,205 @@
             alert('所有小隊攻擊次數已重置為 3 次！');
         }
 
-        // 創建星星背景
-        function createStars() {
-            const starsContainer = document.getElementById('stars');
-            if (!starsContainer) return;
+        // ======== 競技場地圖相關函數 ========
+        
+        // 初始化競技場地圖選擇器
+        function initializeArenaMaps() {
+            const mapGrid = document.getElementById('arena-map-grid');
+            if (!mapGrid) return;
             
-            const starCount = 100;
+            mapGrid.innerHTML = '';
             
-            for (let i = 0; i < starCount; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
+            Object.keys(arenaMaps).forEach(mapId => {
+                const map = arenaMaps[mapId];
+                const mapOption = document.createElement('div');
+                mapOption.className = 'arena-map-option';
+                mapOption.setAttribute('data-map-id', mapId);
+                mapOption.onclick = () => selectArenaMap(mapId);
                 
-                const size = Math.random() * 3 + 1;
-                star.style.width = size + 'px';
-                star.style.height = size + 'px';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.animationDelay = Math.random() * 3 + 's';
-                
-                starsContainer.appendChild(star);
-            }
-        }
-
-        // 初始化
-        window.addEventListener('load', () => {
-            initializeSquads();
-            createStars();
-            updateSquadCheckboxes();
-            updateSquadPointsDisplay();
-            
-            // 確保競技場頁面存在
-            ensureArenaPageExists();
-            
-            for (let i = 1; i <= 10; i++) {
-                const input = document.querySelector(`.alien-${i} .hp-input`);
-                if (input) {
-                    updateHp(i, input.value);
-                }
-            }
-        });
-
-        // 確保競技場頁面存在
-        function ensureArenaPageExists() {
-            console.log('Checking if arena page exists...');
-            let arenaPage = document.getElementById('arena-page');
-            
-            if (!arenaPage) {
-                console.log('Arena page not found, creating it...');
-                
-                // 創建競技場頁面
-                arenaPage = document.createElement('div');
-                arenaPage.className = 'page';
-                arenaPage.id = 'arena-page';
-                
-                arenaPage.innerHTML = `
-                    <h1 class="main-title">⚔️ 小隊競技場 ⚔️</h1>
-                    
-                    <div class="arena-container">
-                        <!-- 左側小隊選擇 -->
-                        <div class="squad-selector-arena">
-                            <h2 class="selector-title">選擇小隊 A</h2>
-                            <div class="squad-options" id="squad-a-options">
-                                <!-- 小隊選項將在這裡生成 -->
-                            </div>
-                        </div>
-
-                        <!-- 中央戰鬥區域 -->
-                        <div class="battle-area-arena">
-                            <h2 class="battle-title-arena">🏟️ 競技場對戰 🏟️</h2>
-                            
-                            <div class="vs-display">
-                                <div class="squad-display">
-                                    <div class="squad-display-name" id="squad-a-name">選擇小隊 A</div>
-                                    <div class="squad-display-total" id="squad-a-total">總點數: --</div>
-                                </div>
-                                
-                                <div class="vs-text">VS</div>
-                                
-                                <div class="squad-display">
-                                    <div class="squad-display-name" id="squad-b-name">選擇小隊 B</div>
-                                    <div class="squad-display-total" id="squad-b-total">總點數: --</div>
-                                </div>
-                            </div>
-
-                            <button class="battle-button-arena" id="arena-battle-btn" onclick="startArenaBattle()" disabled>
-                                開始對戰
-                            </button>
-
-                            <div class="comparison-results" id="comparison-results">
-                                <!-- 比較結果將在這裡顯示 -->
-                            </div>
-
-                            <button class="reset-button-arena" onclick="resetArenaBattle()">重置對戰</button>
-                        </div>
-
-                        <!-- 右側小隊選擇 -->
-                        <div class="squad-selector-arena">
-                            <h2 class="selector-title">選擇小隊 B</h2>
-                            <div class="squad-options" id="squad-b-options">
-                                <!-- 小隊選項將在這裡生成 -->
-                            </div>
-                        </div>
-                    </div>
+                mapOption.innerHTML = `
+                    <div class="arena-map-icon">${map.icon}</div>
+                    <div class="arena-map-name">${map.name}</div>
                 `;
                 
-                // 添加到body中，在戰鬥結果彈窗之前
-                const battleResult = document.getElementById('battle-result');
-                if (battleResult) {
-                    document.body.insertBefore(arenaPage, battleResult);
-                } else {
-                    document.body.appendChild(arenaPage);
-                }
-                
-                console.log('Arena page created successfully');
-            } else {
-                console.log('Arena page already exists');
+                mapGrid.appendChild(mapOption);
+            });
+        }
+
+        // 選擇競技場地圖
+        function selectArenaMap(mapId) {
+            // 清除之前的選擇
+            document.querySelectorAll('.arena-map-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // 設置新選擇
+            selectedArenaMap = mapId;
+            const selectedOption = document.querySelector(`[data-map-id="${mapId}"]`);
+            if (selectedOption) {
+                selectedOption.classList.add('selected');
+            }
+            
+            // 顯示地圖效果
+            showArenaMapEffects(mapId);
+            
+            // 更新小隊選項列表（顯示地圖效果後的能力值）
+            updateArenaSquadOptions();
+            
+            // 重新選擇已選中的小隊（更新選中狀態）
+            if (selectedSquadA) {
+                const optionA = document.querySelector(`#squad-a-options .squad-option[data-squad-id="${selectedSquadA}"]`);
+                if (optionA) optionA.classList.add('selected');
+            }
+            if (selectedSquadB) {
+                const optionB = document.querySelector(`#squad-b-options .squad-option[data-squad-id="${selectedSquadB}"]`);
+                if (optionB) optionB.classList.add('selected');
+            }
+            
+            // 更新已選擇小隊的能力值顯示
+            updateSquadDisplays();
+            
+            // 更新戰鬥按鈕狀態
+            updateArenaBattleButton();
+        }
+
+        // 更新小隊顯示（考慮地圖效果）
+        function updateSquadDisplays() {
+            // 更新小隊A顯示
+            if (selectedSquadA) {
+                updateSquadDisplay('A', selectedSquadA);
+            }
+            
+            // 更新小隊B顯示
+            if (selectedSquadB) {
+                updateSquadDisplay('B', selectedSquadB);
             }
         }
 
-        // ======== 競技場相關函數 ========
-        
+        // 更新單個小隊顯示
+        function updateSquadDisplay(side, squadId) {
+            const originalData = squadData[squadId];
+            if (!originalData) return;
+            
+            const nameElement = document.getElementById(`squad-${side.toLowerCase()}-name`);
+            const totalElement = document.getElementById(`squad-${side.toLowerCase()}-total`);
+            
+            if (!nameElement || !totalElement) return;
+            
+            let displayTotal = originalData.total;
+            let displayText = `總點數: ${displayTotal}`;
+            
+            // 如果選擇了地圖，計算修正後的能力值
+            if (selectedArenaMap) {
+                const modifiedData = applyMapEffects(originalData, selectedArenaMap);
+                displayTotal = modifiedData.total;
+                
+                if (displayTotal !== originalData.total) {
+                    displayText = `總點數: ${originalData.total} → ${displayTotal}`;
+                    totalElement.style.color = displayTotal > originalData.total ? '#00ff88' : '#ff4757';
+                } else {
+                    displayText = `總點數: ${displayTotal}`;
+                    totalElement.style.color = '#ffd700';
+                }
+            } else {
+                totalElement.style.color = '#ffd700';
+            }
+            
+            nameElement.textContent = `小隊 #${squadId}`;
+            totalElement.textContent = displayText;
+        }
+
+        // 顯示競技場地圖效果
+        function showArenaMapEffects(mapId) {
+            const map = arenaMaps[mapId];
+            const effectsContainer = document.getElementById('arena-map-effects');
+            const effectsContent = document.getElementById('arena-map-effects-content');
+            
+            if (!map || !effectsContainer || !effectsContent) return;
+            
+            effectsContent.innerHTML = '';
+            
+            Object.keys(map.effects).forEach(attrKey => {
+                const multiplier = map.effects[attrKey];
+                const attrName = attributeNames[attrKey];
+                const attrIcon = attributeIcons[attrKey];
+                
+                if (!attrName || !attrIcon) return;
+                
+                const effectItem = document.createElement('div');
+                let effectClass = '';
+                let effectText = '';
+                
+                if (multiplier === 0) {
+                    effectClass = 'arena-effect-zero';
+                    effectText = `${attrIcon} ${attrName} → 0`;
+                } else if (multiplier < 1) {
+                    effectClass = 'arena-effect-nerf';
+                    effectText = `${attrIcon} ${attrName} ×${multiplier}`;
+                } else if (multiplier > 1) {
+                    effectClass = 'arena-effect-boost';
+                    effectText = `${attrIcon} ${attrName} ×${multiplier}`;
+                }
+                
+                effectItem.className = `arena-effect-item ${effectClass}`;
+                effectItem.innerHTML = effectText;
+                effectsContent.appendChild(effectItem);
+            });
+            
+            effectsContainer.classList.add('visible');
+        }
+
+        // 應用地圖效果到屬性值
+        function applyMapEffects(squadData, mapId) {
+            if (!mapId || !arenaMaps[mapId]) return squadData;
+            
+            const map = arenaMaps[mapId];
+            const modifiedData = {...squadData};
+            
+            // 應用地圖效果
+            Object.keys(map.effects).forEach(attrKey => {
+                if (modifiedData[attrKey] !== undefined) {
+                    const multiplier = map.effects[attrKey];
+                    if (multiplier === 0) {
+                        modifiedData[attrKey] = 0;
+                    } else {
+                        modifiedData[attrKey] = Math.round(modifiedData[attrKey] * multiplier);
+                    }
+                }
+            });
+            
+            // 重新計算總點數
+            let total = 0;
+            attributes.forEach(attr => {
+                total += modifiedData[attr] || 0;
+            });
+            modifiedData.total = total;
+            
+            return modifiedData;
+        }
+
+        // 更新競技場戰鬥按鈕狀態
+        function updateArenaBattleButton() {
+            const battleBtn = document.getElementById('arena-battle-btn');
+            if (!battleBtn) return;
+            
+            const canBattle = selectedSquadA && selectedSquadB && selectedSquadA !== selectedSquadB && selectedArenaMap;
+            
+            battleBtn.disabled = !canBattle;
+            
+            if (canBattle) {
+                battleBtn.textContent = '開始對戰';
+            } else if (!selectedArenaMap) {
+                battleBtn.textContent = '請選擇地圖';
+            } else if (!selectedSquadA || !selectedSquadB) {
+                battleBtn.textContent = '請選擇兩支小隊';
+            } else if (selectedSquadA === selectedSquadB) {
+                battleBtn.textContent = '不能選擇同一小隊';
+            } else {
+                battleBtn.textContent = '請選擇地圖和小隊';
+            }
+        }
+
         // 更新競技場小隊選項
         function updateArenaSquadOptions() {
             console.log('Updating arena squad options...'); // 調試用
@@ -2988,6 +3360,20 @@
                 
                 console.log(`Creating options for squad ${squadId}:`, data); // 調試用
                 
+                // 計算顯示的總點數（考慮地圖效果）
+                let displayTotal = data.total;
+                let totalText = `總點數: ${displayTotal}`;
+                let totalStyle = 'color: #ffd700;';
+                
+                if (selectedArenaMap) {
+                    const modifiedData = applyMapEffects(data, selectedArenaMap);
+                    if (modifiedData.total !== data.total) {
+                        displayTotal = modifiedData.total;
+                        totalText = `總點數: ${data.total} → ${displayTotal}`;
+                        totalStyle = displayTotal > data.total ? 'color: #00ff88;' : 'color: #ff4757;';
+                    }
+                }
+                
                 // 創建小隊A選項
                 const optionA = document.createElement('div');
                 optionA.className = 'squad-option';
@@ -3000,7 +3386,7 @@
                 });
                 optionA.innerHTML = `
                     <div class="squad-name">小隊 #${squadId}</div>
-                    <div class="squad-total">總點數: ${data.total}</div>
+                    <div class="squad-total" style="${totalStyle}">${totalText}</div>
                 `;
                 squadAContainer.appendChild(optionA);
                 
@@ -3016,7 +3402,7 @@
                 });
                 optionB.innerHTML = `
                     <div class="squad-name">小隊 #${squadId}</div>
-                    <div class="squad-total">總點數: ${data.total}</div>
+                    <div class="squad-total" style="${totalStyle}">${totalText}</div>
                 `;
                 squadBContainer.appendChild(optionB);
             }
@@ -3045,13 +3431,8 @@
                         console.error('Could not find squad A option'); // 調試用
                     }
                     
-                    // 更新顯示
-                    const squadAName = document.getElementById('squad-a-name');
-                    const squadATotal = document.getElementById('squad-a-total');
-                    if (squadAName) squadAName.textContent = `小隊 #${squadId}`;
-                    if (squadATotal && squadData[squadId]) {
-                        squadATotal.textContent = `總點數: ${squadData[squadId].total}`;
-                    }
+                    // 更新顯示（考慮地圖效果）
+                    updateSquadDisplay('A', squadId);
                     
                 } else if (side === 'B') {
                     // 清除之前的選擇
@@ -3069,33 +3450,12 @@
                         console.error('Could not find squad B option'); // 調試用
                     }
                     
-                    // 更新顯示
-                    const squadBName = document.getElementById('squad-b-name');
-                    const squadBTotal = document.getElementById('squad-b-total');
-                    if (squadBName) squadBName.textContent = `小隊 #${squadId}`;
-                    if (squadBTotal && squadData[squadId]) {
-                        squadBTotal.textContent = `總點數: ${squadData[squadId].total}`;
-                    }
+                    // 更新顯示（考慮地圖效果）
+                    updateSquadDisplay('B', squadId);
                 }
                 
                 // 檢查是否可以開始戰鬥
-                const battleBtn = document.getElementById('arena-battle-btn');
-                if (!battleBtn) {
-                    console.error('Arena battle button not found'); // 調試用
-                    return;
-                }
-                
-                if (selectedSquadA && selectedSquadB && selectedSquadA !== selectedSquadB) {
-                    battleBtn.disabled = false;
-                    battleBtn.textContent = '開始對戰';
-                    console.log('Battle ready!'); // 調試用
-                } else if (selectedSquadA === selectedSquadB && selectedSquadA !== null) {
-                    battleBtn.disabled = true;
-                    battleBtn.textContent = '不能選擇同一小隊';
-                } else {
-                    battleBtn.disabled = true;
-                    battleBtn.textContent = '請選擇兩支不同的小隊';
-                }
+                updateArenaBattleButton();
             } catch (error) {
                 console.error('Error in selectArenaSquad:', error); // 調試用
             }
@@ -3103,22 +3463,27 @@
 
         // 開始競技場戰鬥
         function startArenaBattle() {
-            if (!selectedSquadA || !selectedSquadB || selectedSquadA === selectedSquadB) {
-                alert('請選擇兩支不同的小隊！');
+            if (!selectedSquadA || !selectedSquadB || selectedSquadA === selectedSquadB || !selectedArenaMap) {
+                alert('請選擇兩支不同的小隊和一個地圖！');
                 return;
             }
             
-            const squadA = squadData[selectedSquadA];
-            const squadB = squadData[selectedSquadB];
+            const originalSquadA = squadData[selectedSquadA];
+            const originalSquadB = squadData[selectedSquadB];
+            const selectedMap = arenaMaps[selectedArenaMap];
+            
+            // 應用地圖效果
+            const modifiedSquadA = applyMapEffects(originalSquadA, selectedArenaMap);
+            const modifiedSquadB = applyMapEffects(originalSquadB, selectedArenaMap);
             
             const resultsContainer = document.getElementById('comparison-results');
             if (!resultsContainer) return;
             
             resultsContainer.innerHTML = '';
             
-            // 只比較總能力值
-            const totalA = squadA.total;
-            const totalB = squadB.total;
+            // 比較修改後的總能力值
+            const totalA = modifiedSquadA.total;
+            const totalB = modifiedSquadB.total;
             
             let winner = '';
             let winnerText = '';
@@ -3133,14 +3498,48 @@
                 winnerText = '🤝 平手！ 🤝';
             }
             
+            // 顯示地圖信息
+            const mapInfoDiv = document.createElement('div');
+            mapInfoDiv.className = 'arena-map-selector';
+            mapInfoDiv.style.marginBottom = '20px';
+            mapInfoDiv.innerHTML = `
+                <div class="arena-map-title">🗺️ 戰鬥地圖: ${selectedMap.icon} ${selectedMap.name}</div>
+                <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                    ${Object.keys(selectedMap.effects).map(attrKey => {
+                        const multiplier = selectedMap.effects[attrKey];
+                        const attrName = attributeNames[attrKey];
+                        const attrIcon = attributeIcons[attrKey];
+                        let effectClass = '';
+                        let effectText = '';
+                        
+                        if (multiplier === 0) {
+                            effectClass = 'arena-effect-zero';
+                            effectText = `${attrIcon} ${attrName} → 0`;
+                        } else if (multiplier < 1) {
+                            effectClass = 'arena-effect-nerf';
+                            effectText = `${attrIcon} ${attrName} ×${multiplier}`;
+                        } else if (multiplier > 1) {
+                            effectClass = 'arena-effect-boost';
+                            effectText = `${attrIcon} ${attrName} ×${multiplier}`;
+                        }
+                        
+                        return `<div class="arena-effect-item ${effectClass}" style="margin: 5px;">${effectText}</div>`;
+                    }).join('')}
+                </div>
+            `;
+            resultsContainer.appendChild(mapInfoDiv);
+            
             // 創建總能力值比較顯示
             const totalComparisonDiv = document.createElement('div');
             totalComparisonDiv.className = 'total-comparison';
             totalComparisonDiv.innerHTML = `
-                <div class="total-comparison-title">⚔️ 總能力值對決 ⚔️</div>
+                <div class="total-comparison-title">⚔️ 地圖效果後總能力值對決 ⚔️</div>
                 <div class="total-vs-display">
                     <div class="total-squad-info">
                         <div class="total-squad-name">小隊 #${selectedSquadA}</div>
+                        <div style="color: #ffd700; font-size: 1em; margin: 5px 0;">
+                            原始: ${originalSquadA.total} → 修正: ${totalA}
+                        </div>
                         <div class="total-value ${winner === 'A' ? 'winner' : (winner === 'B' ? 'loser' : '')}">${totalA}</div>
                     </div>
                     
@@ -3148,6 +3547,9 @@
                     
                     <div class="total-squad-info">
                         <div class="total-squad-name">小隊 #${selectedSquadB}</div>
+                        <div style="color: #ffd700; font-size: 1em; margin: 5px 0;">
+                            原始: ${originalSquadB.total} → 修正: ${totalB}
+                        </div>
                         <div class="total-value ${winner === 'B' ? 'winner' : (winner === 'A' ? 'loser' : '')}">${totalB}</div>
                     </div>
                 </div>
@@ -3158,31 +3560,37 @@
             `;
             resultsContainer.appendChild(totalComparisonDiv);
             
-            // 顯示詳細屬性比較（僅供參考，不影響勝負）
+            // 顯示詳細屬性比較（地圖效果後）
             const detailsDiv = document.createElement('div');
             detailsDiv.className = 'attribute-details';
             detailsDiv.innerHTML = `
-                <div class="details-title">📊 詳細屬性比較（僅供參考）</div>
+                <div class="details-title">📊 詳細屬性比較（地圖效果後）</div>
                 <div class="details-grid">
             `;
             
             // 顯示各屬性的詳細比較
             attributes.forEach(attr => {
-                const valueA = squadA[attr];
-                const valueB = squadB[attr];
+                const originalA = originalSquadA[attr];
+                const originalB = originalSquadB[attr];
+                const modifiedA = modifiedSquadA[attr];
+                const modifiedB = modifiedSquadB[attr];
                 
                 let attrWinner = '';
-                if (valueA > valueB) {
+                if (modifiedA > modifiedB) {
                     attrWinner = 'A';
-                } else if (valueB > valueA) {
+                } else if (modifiedB > modifiedA) {
                     attrWinner = 'B';
                 }
                 
                 detailsDiv.innerHTML += `
                     <div class="detail-row">
-                        <div class="detail-value ${attrWinner === 'A' ? 'detail-winner' : ''}">${valueA}</div>
+                        <div class="detail-value ${attrWinner === 'A' ? 'detail-winner' : ''}">
+                            ${originalA !== modifiedA ? `${originalA}→` : ''}${modifiedA}
+                        </div>
                         <div class="detail-attr">${attributeIcons[attr]} ${attributeNames[attr]}</div>
-                        <div class="detail-value ${attrWinner === 'B' ? 'detail-winner' : ''}">${valueB}</div>
+                        <div class="detail-value ${attrWinner === 'B' ? 'detail-winner' : ''}">
+                            ${originalB !== modifiedB ? `${originalB}→` : ''}${modifiedB}
+                        </div>
                     </div>
                 `;
             });
@@ -3198,13 +3606,15 @@
                 <div class="winner-announcement">${winnerText}</div>
                 ${winner ? `
                     <div class="victory-details">
-                        勝利方式：總能力值優勢<br>
+                        勝利方式：地圖效果後總能力值優勢<br>
+                        戰鬥地圖：${selectedMap.icon} ${selectedMap.name}<br>
                         ${winner === 'A' ? `小隊 #${selectedSquadA}` : `小隊 #${selectedSquadB}`} 
                         以 ${Math.max(totalA, totalB)} 點擊败了 ${Math.min(totalA, totalB)} 點
                     </div>
                 ` : `
                     <div class="tie-details">
-                        兩隊實力相當，都擁有 ${totalA} 點總能力值！
+                        即使在 ${selectedMap.icon} ${selectedMap.name} 的地圖效果下，<br>
+                        兩隊仍然實力相當，都擁有 ${totalA} 點總能力值！
                     </div>
                 `}
             `;
@@ -3224,11 +3634,21 @@
         function resetArenaBattle() {
             selectedSquadA = null;
             selectedSquadB = null;
+            selectedArenaMap = null;
             
-            // 清除選擇狀態
-            document.querySelectorAll('.squad-option').forEach(option => {
+            // 清除地圖選擇狀態
+            document.querySelectorAll('.arena-map-option').forEach(option => {
                 option.classList.remove('selected');
             });
+            
+            // 隱藏地圖效果
+            const mapEffects = document.getElementById('arena-map-effects');
+            if (mapEffects) {
+                mapEffects.classList.remove('visible');
+            }
+            
+            // 重新更新小隊選項（移除地圖效果）
+            updateArenaSquadOptions();
             
             // 重置顯示
             const squadAName = document.getElementById('squad-a-name');
@@ -3237,16 +3657,18 @@
             const squadBTotal = document.getElementById('squad-b-total');
             
             if (squadAName) squadAName.textContent = '選擇小隊 A';
-            if (squadATotal) squadATotal.textContent = '總點數: --';
+            if (squadATotal) {
+                squadATotal.textContent = '總點數: --';
+                squadATotal.style.color = '#ffd700'; // 重置顏色
+            }
             if (squadBName) squadBName.textContent = '選擇小隊 B';
-            if (squadBTotal) squadBTotal.textContent = '總點數: --';
+            if (squadBTotal) {
+                squadBTotal.textContent = '總點數: --';
+                squadBTotal.style.color = '#ffd700'; // 重置顏色
+            }
             
             // 重置戰鬥按鈕
-            const battleBtn = document.getElementById('arena-battle-btn');
-            if (battleBtn) {
-                battleBtn.disabled = true;
-                battleBtn.textContent = '開始對戰';
-            }
+            updateArenaBattleButton();
             
             // 隱藏結果
             const resultsContainer = document.getElementById('comparison-results');
@@ -3254,6 +3676,44 @@
                 resultsContainer.classList.remove('active');
             }
         }
+
+        // 創建星星背景
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            if (!starsContainer) return;
+            
+            const starCount = 100;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // 初始化
+        window.addEventListener('load', () => {
+            initializeSquads();
+            createStars();
+            updateSquadCheckboxes();
+            updateSquadPointsDisplay();
+            initializeArenaMaps();
+            
+            for (let i = 1; i <= 10; i++) {
+                const input = document.querySelector(`.alien-${i} .hp-input`);
+                if (input) {
+                    updateHp(i, input.value);
+                }
+            }
+        });
     </script>
 </body>
 </html>
