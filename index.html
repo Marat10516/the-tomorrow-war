@@ -3142,9 +3142,9 @@
             // 計算積分
             let scoreA = 0, scoreB = 0;
             if (winner === 'A') {
-                scoreA = 10;
+                scoreA = 100;
             } else if (winner === 'B') {
-                scoreB = 10;
+                scoreB = 100;
             } else {
                 // 平手時雙方都得5分
                 scoreA = scoreB = 5;
@@ -3178,12 +3178,12 @@
             
             // 檢查AIR JORDAN 1（跳過戰鬥）
             if (squadItemCards[selectedSquadA] === 'air_jordan') {
-                addSquadScore(selectedSquadA, 10);
+                addSquadScore(selectedSquadA, 100);
                 alert(`小隊 #${selectedSquadA} 使用 AIR JORDAN 1，直接獲得勝者積分！`);
                 skipBattle = true;
             }
             if (squadItemCards[selectedSquadB] === 'air_jordan') {
-                addSquadScore(selectedSquadB, 10);
+                addSquadScore(0);
                 alert(`小隊 #${selectedSquadB} 使用 AIR JORDAN 1，直接獲得勝者積分！`);
                 skipBattle = true;
             }
@@ -3192,8 +3192,8 @@
             if (squadItemCards[selectedSquadA] === 'big_doll' || squadItemCards[selectedSquadB] === 'big_doll') {
                 const agree = confirm('使用超大絨毛玩偶：雙方是否同意各得10分？');
                 if (agree) {
-                    addSquadScore(selectedSquadA, 10);
-                    addSquadScore(selectedSquadB, 10);
+                    addSquadScore(selectedSquadA, 100);
+                    addSquadScore(selectedSquadB, 100);
                     alert('雙方都獲得了10分！');
                     skipBattle = true;
                 }
@@ -3358,7 +3358,7 @@
             // 檢查5090ti顯卡（高風險高回報）
             if (squadItemCards[selectedSquadA] === 'rtx_5090') {
                 if ((newWinner === 'A' || (newWinner === null && originalWinner === 'A'))) {
-                    scoreA = 20; // 勝利獲得20分
+                    scoreA = 200; // 勝利獲得20分
                     specialScoring = true;
                 } else {
                     // 失敗減少所有能力10點
@@ -3371,7 +3371,7 @@
             
             if (squadItemCards[selectedSquadB] === 'rtx_5090') {
                 if ((newWinner === 'B' || (newWinner === null && originalWinner === 'B'))) {
-                    scoreB = 20; // 勝利獲得20分
+                    scoreB = 200; // 勝利獲得20分
                     specialScoring = true;
                 } else {
                     // 失敗減少所有能力10點
