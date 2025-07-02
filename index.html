@@ -1874,7 +1874,302 @@
             box-shadow: none;
         }
 
-        /* 積分排行頁面樣式 */
+        /* 下注系統樣式 */
+        .betting-system {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #ffd700;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .betting-system.active {
+            display: block;
+        }
+
+        .betting-title {
+            color: #ffd700;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #ffd700;
+        }
+
+        .betting-info {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .betting-matchup {
+            color: #00ffff;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .betting-reward {
+            color: #ffd700;
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        .betting-options {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .betting-side {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #666;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .betting-side:hover {
+            border-color: #ffd700;
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .betting-side.selected {
+            border-color: #ffd700;
+            background: rgba(255, 215, 0, 0.2);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .betting-squad-name {
+            color: #00ffff;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .betting-odds {
+            color: #ffd700;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .betting-vs {
+            color: #ff4757;
+            font-size: 2em;
+            font-weight: bold;
+            text-shadow: 0 0 15px #ff4757;
+        }
+
+        .betting-participants {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .betting-participants-title {
+            color: #00ffff;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .betting-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .betting-squad-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #666;
+            border-radius: 8px;
+            padding: 10px 5px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .betting-squad-btn:hover {
+            border-color: #ffd700;
+            background: rgba(255, 215, 0, 0.2);
+        }
+
+        .betting-squad-btn.bet-a {
+            border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+
+        .betting-squad-btn.bet-b {
+            border-color: #ff4757;
+            background: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+        }
+
+        .betting-squad-btn.fighting {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .betting-summary {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .betting-summary-side {
+            text-align: center;
+        }
+
+        .betting-count {
+            color: #ffd700;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .betting-label {
+            color: #ccc;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .betting-summary-vs {
+            color: #ff4757;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .betting-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .betting-btn {
+            background: linear-gradient(45deg, #ffd700 0%, #ffed4e 100%);
+            color: #000;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .betting-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .betting-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #666;
+            color: #ccc;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .clear-bets-btn {
+            background: linear-gradient(45deg, #ff4757 0%, #ff3742 100%);
+            color: white;
+        }
+
+        .betting-results {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #ffd700;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .betting-results.active {
+            display: block;
+        }
+
+        .betting-results-title {
+            color: #ffd700;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #ffd700;
+        }
+
+        .betting-winner-announcement {
+            background: rgba(0, 255, 136, 0.2);
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .betting-winner-text {
+            color: #00ff88;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-shadow: 0 0 10px #00ff88;
+        }
+
+        .betting-rewards-list {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .betting-rewards-title {
+            color: #ffd700;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .betting-reward-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 15px;
+            margin-bottom: 8px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #ffd700;
+        }
+
+        .betting-reward-squad {
+            color: #00ffff;
+            font-weight: bold;
+        }
+
+        .betting-reward-points {
+            color: #ffd700;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
         .rankings-container {
             max-width: 1000px;
             margin: 0 auto;
@@ -1979,7 +2274,54 @@
             text-align: center;
             text-shadow: 0 0 10px #fff;
         }
-
+        
+        .squad-score-container {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        }
+        
+        .squad-score-input {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #ffd700;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1.6em;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 0 0 10px #fff;
+            width: 100px;
+            padding: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .squad-score-input:focus {
+            outline: none;
+            border-color: #ffed4e;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+            color: #ffd700;
+        }
+        
+        .score-update-btn {
+            background: linear-gradient(45deg, #00ff88 0%, #00cc6a 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .score-update-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+        
         .squad-power {
             color: #ffd700;
             font-size: 1.2em;
@@ -2161,7 +2503,12 @@
             }
             
             .items-grid {
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+            
+            .item-card {
+                min-height: 140px;
+                font-size: 0.9em;
             }
             
             .rankings-list .ranking-item {
@@ -2171,6 +2518,63 @@
             
             .squad-power {
                 display: none;
+            }
+            
+            .arena-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .selected-item-display {
+                min-height: 180px;
+                font-size: 0.9em;
+            }
+            
+            /* 下注系統響應式 */
+            .betting-options {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .betting-vs {
+                order: -1;
+                font-size: 1.5em;
+            }
+            
+            .betting-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            
+            .betting-squad-btn {
+                font-size: 0.8em;
+                padding: 8px 4px;
+            }
+            
+            .betting-summary {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .betting-summary-vs {
+                order: -1;
+            }
+            
+            .betting-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .betting-btn {
+                width: 100%;
+                padding: 15px;
+            }
+            
+            .betting-reward-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 5px;
             }
         }
     </style>
@@ -2662,6 +3066,82 @@
                     </div>
                 </div>
 
+                <!-- 下注系統 -->
+                <div class="betting-system" id="betting-system">
+                    <div class="betting-title">💰 下注系統 💰</div>
+                    
+                    <div class="betting-info">
+                        <div class="betting-matchup" id="betting-matchup">
+                            請選擇對戰雙方後開始下注
+                        </div>
+                        <div class="betting-reward">
+                            基礎獎勵: 20 積分 × (1 + 對方下注隊伍數 ÷ 總下注隊伍數)
+                        </div>
+                    </div>
+
+                    <div class="betting-options" id="betting-options" style="display: none;">
+                        <div class="betting-side" id="betting-side-a" onclick="selectBettingSide('A')">
+                            <div class="betting-squad-name" id="betting-squad-a">小隊 A</div>
+                            <div class="betting-odds" id="betting-odds-a">等待計算賠率</div>
+                        </div>
+                        
+                        <div class="betting-vs">VS</div>
+                        
+                        <div class="betting-side" id="betting-side-b" onclick="selectBettingSide('B')">
+                            <div class="betting-squad-name" id="betting-squad-b">小隊 B</div>
+                            <div class="betting-odds" id="betting-odds-b">等待計算賠率</div>
+                        </div>
+                    </div>
+
+                    <div class="betting-participants" id="betting-participants" style="display: none;">
+                        <div class="betting-participants-title">💎 下注參與者 💎</div>
+                        <div class="betting-grid" id="betting-grid">
+                            <!-- 下注參與者將在這裡顯示 -->
+                        </div>
+                    </div>
+
+                    <div class="betting-summary" id="betting-summary" style="display: none;">
+                        <div class="betting-summary-side">
+                            <div class="betting-count" id="betting-count-a">0</div>
+                            <div class="betting-label">押小隊 A</div>
+                        </div>
+                        
+                        <div class="betting-summary-vs">VS</div>
+                        
+                        <div class="betting-summary-side">
+                            <div class="betting-count" id="betting-count-b">0</div>
+                            <div class="betting-label">押小隊 B</div>
+                        </div>
+                    </div>
+
+                    <div class="betting-controls">
+                        <button class="betting-btn" id="start-betting-btn" onclick="startBetting()" disabled>
+                            開始下注
+                        </button>
+                        <button class="betting-btn clear-bets-btn" id="clear-bets-btn" onclick="clearAllBets()" disabled>
+                            清空下注
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 下注結果 -->
+                <div class="betting-results" id="betting-results">
+                    <div class="betting-results-title">🎰 下注結算 🎰</div>
+                    
+                    <div class="betting-winner-announcement" id="betting-winner-announcement">
+                        <div class="betting-winner-text" id="betting-winner-text">
+                            等待戰鬥結果...
+                        </div>
+                    </div>
+
+                    <div class="betting-rewards-list" id="betting-rewards-list">
+                        <div class="betting-rewards-title">💰 積分獎勵</div>
+                        <div id="betting-rewards-content">
+                            <!-- 獎勵詳情將在這裡顯示 -->
+                        </div>
+                    </div>
+                </div>
+
                 <button class="reveal-skills-btn" id="reveal-skills-btn" onclick="revealSkills()" disabled>
                     🔍 公布技能並開始對戰
                 </button>
@@ -2707,7 +3187,10 @@
         let squadData = {};
         let squadAttackCounts = {};
         let squadPoints = {};
-        
+        let isGoldCoinRetry = false; // 是否為大金幣重打狀態
+        let goldCoinRetrySquad = null; // 使用大金幣重打的隊伍
+        let permanentlyUsedItems = {}; // 永久使用過的道具卡 { itemKey: true }
+        let battleParticipatedSquads = {}; // 已參與戰鬥的小隊 { squadId: true }
         // 新增的全域變數
         let squadPassiveSkills = {}; // 小隊被動技能
         let squadItemCards = {}; // 小隊技能卡
@@ -2715,6 +3198,13 @@
         let takenItems = {}; // 已被選擇的技能卡
         let selectedItemCard = null; // 當前選中的技能卡
         let selectedSquadForItem = null; // 當前選中要分配技能卡的小隊
+        
+        // 新增下注相關變數
+        let bettingSystem = {
+            enabled: false,
+            bets: {}, // squadId: 'A' or 'B'
+            baseReward: 20 // 基礎下注獎勵
+        };
         
         // 競技場變數
         let selectedSquadA = null;
@@ -2942,12 +3432,12 @@
                 type: 'attribute'
             },
             'gold_coin': {
-                name: '大金幣',
-                description: '神奇金幣，擁有神奇技能，此次對戰若戰敗，可以自行選擇地圖再打一次',
-                effects: { all: 1.1 },
-                type: 'special',
-                special: 'retry_on_lose'
-            },
+    name: '大金幣',
+    description: '神奇金幣，擁有神奇技能，此次對戰若戰敗，可以自行選擇地圖再打一次',
+    effects: { all: 1.1 },
+    type: 'special',
+    special: 'retry_on_lose'
+},
             'smelly_sock': {
                 name: '超臭襪子',
                 description: '超級臭，害兩邊都失去思考能力，輸的一方變成勝者',
@@ -2970,7 +3460,7 @@
             },
             'iphone18': {
                 name: 'Iphone18',
-                description: '充滿未來科技，擁有超強能力，可以將對手最高的數值歸0',
+                description: '充滿未來科技，擁有超強能力，自行選擇將對手一項能力歸0',
                 effects: { all: 1.1 },
                 type: 'special',
                 special: 'zero_max_attribute'
@@ -3080,1056 +3570,6 @@
             6: 300, 7: 400, 8: 400, 9: 300, 10: 450
         };
 
-        // 增強版競技場戰鬥
-        function startEnhancedArenaBattle() {
-            if (!selectedSquadA || !selectedSquadB || selectedSquadA === selectedSquadB || !selectedArenaMap) {
-                alert('請選擇兩支不同的小隊和一個地圖！');
-                return;
-            }
-            
-            // 處理特殊技能卡（戰鬥前）
-            const specialResults = handlePreBattleSpecialCards();
-            if (specialResults && specialResults.skipBattle) {
-                updateRankings(); // 更新積分排行榜
-                return; // 某些技能卡會跳過戰鬥
-            }
-            
-            const originalSquadA = {...squadData[selectedSquadA]};
-            const originalSquadB = {...squadData[selectedSquadB]};
-            const selectedMap = arenaMaps[selectedArenaMap];
-            
-            // 應用地圖效果
-            let modifiedSquadA = applyMapEffects(originalSquadA, selectedArenaMap);
-            let modifiedSquadB = applyMapEffects(originalSquadB, selectedArenaMap);
-            
-            // 應用被動技能效果
-            modifiedSquadA = applyPassiveSkillEffects(modifiedSquadA, selectedSquadA, selectedSquadB);
-            modifiedSquadB = applyPassiveSkillEffects(modifiedSquadB, selectedSquadB, selectedSquadA);
-            
-            // 應用技能卡效果
-            const cardResults = applyItemCardEffects(modifiedSquadA, modifiedSquadB, selectedSquadA, selectedSquadB);
-            modifiedSquadA = cardResults.squadA;
-            modifiedSquadB = cardResults.squadB;
-            
-            // 比較最終能力值
-            const totalA = modifiedSquadA.total;
-            const totalB = modifiedSquadB.total;
-            
-            let winner = '';
-            let winnerSquadId = null;
-            let loserSquadId = null;
-            
-            if (totalA > totalB) {
-                winner = 'A';
-                winnerSquadId = selectedSquadA;
-                loserSquadId = selectedSquadB;
-            } else if (totalB > totalA) {
-                winner = 'B';
-                winnerSquadId = selectedSquadB;
-                loserSquadId = selectedSquadA;
-            }
-            
-            // 處理特殊技能卡效果（戰鬥後）
-            const postBattleResults = handlePostBattleSpecialCards(winner, winnerSquadId, loserSquadId, totalA, totalB);
-            
-            // 如果有特殊效果改變了結果
-            if (postBattleResults && postBattleResults.newWinner !== null) {
-                winner = postBattleResults.newWinner;
-                winnerSquadId = postBattleResults.newWinnerSquadId;
-                loserSquadId = postBattleResults.newLoserSquadId;
-            }
-            
-            // 計算積分
-            let scoreA = 0, scoreB = 0;
-            if (winner === 'A') {
-                scoreA = 100;
-            } else if (winner === 'B') {
-                scoreB = 100;
-            } else {
-                // 平手時雙方都得5分
-                scoreA = scoreB = 5;
-            }
-            
-            // 處理特殊積分效果
-            if (postBattleResults && postBattleResults.specialScoring) {
-                scoreA = postBattleResults.scoreA || scoreA;
-                scoreB = postBattleResults.scoreB || scoreB;
-            }
-            
-            // 更新積分
-            addSquadScore(selectedSquadA, scoreA);
-            addSquadScore(selectedSquadB, scoreB);
-            
-            // 顯示戰鬥結果
-            displayEnhancedBattleResults(originalSquadA, originalSquadB, modifiedSquadA, modifiedSquadB, winner, scoreA, scoreB, postBattleResults || {});
-            
-            // 處理戰後效果
-            if (winnerSquadId && loserSquadId) {
-                handlePostBattleEffects(winnerSquadId, loserSquadId);
-            }
-            
-            // 更新積分排行榜
-            updateRankings();
-        }
-
-        // 處理戰鬥前特殊技能卡
-        function handlePreBattleSpecialCards() {
-            let skipBattle = false;
-            
-            // 檢查AIR JORDAN 1（跳過戰鬥）
-            if (squadItemCards[selectedSquadA] === 'air_jordan') {
-                addSquadScore(selectedSquadA, 100);
-                alert(`小隊 #${selectedSquadA} 使用 AIR JORDAN 1，直接獲得勝者積分！`);
-                skipBattle = true;
-            }
-            if (squadItemCards[selectedSquadB] === 'air_jordan') {
-                addSquadScore(0);
-                alert(`小隊 #${selectedSquadB} 使用 AIR JORDAN 1，直接獲得勝者積分！`);
-                skipBattle = true;
-            }
-            
-            // 檢查超大絨毛玩偶（雙方同意）
-            if (squadItemCards[selectedSquadA] === 'big_doll' || squadItemCards[selectedSquadB] === 'big_doll') {
-                const agree = confirm('使用超大絨毛玩偶：雙方是否同意各得100分？');
-                if (agree) {
-                    addSquadScore(selectedSquadA, 100);
-                    addSquadScore(selectedSquadB, 100);
-                    alert('雙方都獲得了10分！');
-                    skipBattle = true;
-                }
-            }
-            
-            return { skipBattle: skipBattle };
-        }
-
-        // 應用被動技能效果
-        function applyPassiveSkillEffects(squadData, selfSquadId, opponentSquadId) {
-            let modifiedData = {...squadData};
-            
-            // 檢查是否被超大雨傘消除
-            const opponentItem = squadItemCards[opponentSquadId];
-            if (opponentItem === 'big_umbrella') {
-                return modifiedData; // 被動技能被消除
-            }
-            
-            const passiveSkill = squadPassiveSkills[selfSquadId];
-            if (!passiveSkill) return modifiedData;
-            
-            const skill = passiveSkills[passiveSkill];
-            if (!skill) return modifiedData;
-            
-            // 應用被動技能效果
-            Object.keys(skill.effects).forEach(attr => {
-                const multiplier = skill.effects[attr];
-                if (attr === 'opponent_all') {
-                    // 毒氣炸彈效果會在對手身上體現，這裡先記錄
-                    return;
-                } else if (modifiedData[attr] !== undefined) {
-                    modifiedData[attr] = Math.round(modifiedData[attr] * multiplier);
-                }
-            });
-            
-            // 重新計算總點數
-            recalculateTotal(modifiedData);
-            
-            return modifiedData;
-        }
-
-        // 應用技能卡效果
-        function applyItemCardEffects(squadAData, squadBData, squadAId, squadBId) {
-            let modifiedSquadA = {...squadAData};
-            let modifiedSquadB = {...squadBData};
-            
-            // 處理小隊A的技能卡
-            if (squadItemCards[squadAId]) {
-                const cardKey = squadItemCards[squadAId];
-                const card = itemCards[cardKey];
-                modifiedSquadA = applyItemCardToSquad(modifiedSquadA, card, modifiedSquadB, squadAId, squadBId);
-            }
-            
-            // 處理小隊B的技能卡
-            if (squadItemCards[squadBId]) {
-                const cardKey = squadItemCards[squadBId];
-                const card = itemCards[cardKey];
-                modifiedSquadB = applyItemCardToSquad(modifiedSquadB, card, modifiedSquadA, squadBId, squadAId);
-            }
-            
-            // 處理毒氣炸彈（被動技能）
-            if (squadPassiveSkills[squadAId] === 'poison_bomb') {
-                attributes.forEach(attr => {
-                    modifiedSquadB[attr] = Math.round(modifiedSquadB[attr] * 0.7);
-                });
-                recalculateTotal(modifiedSquadB);
-            }
-            if (squadPassiveSkills[squadBId] === 'poison_bomb') {
-                attributes.forEach(attr => {
-                    modifiedSquadA[attr] = Math.round(modifiedSquadA[attr] * 0.7);
-                });
-                recalculateTotal(modifiedSquadA);
-            }
-            
-            return { squadA: modifiedSquadA, squadB: modifiedSquadB };
-        }
-
-        // 應用單個技能卡效果
-        function applyItemCardToSquad(squadData, card, opponentData, selfSquadId, opponentSquadId) {
-            let modifiedData = {...squadData};
-            
-            if (card.type === 'attribute') {
-                // 普通屬性調整
-                Object.keys(card.effects).forEach(attr => {
-                    const multiplier = card.effects[attr];
-                    if (attr === 'all') {
-                        attributes.forEach(attribute => {
-                            modifiedData[attribute] = Math.round(modifiedData[attribute] * multiplier);
-                        });
-                    } else if (modifiedData[attr] !== undefined) {
-                        if (multiplier === 0) {
-                            modifiedData[attr] = 0;
-                        } else {
-                            modifiedData[attr] = Math.round(modifiedData[attr] * multiplier);
-                        }
-                    }
-                });
-                
-                recalculateTotal(modifiedData);
-            } else if (card.type === 'special') {
-                // 特殊效果在其他地方處理，這裡只處理all屬性加成
-                if (card.effects.all) {
-                    attributes.forEach(attr => {
-                        modifiedData[attr] = Math.round(modifiedData[attr] * card.effects.all);
-                    });
-                    recalculateTotal(modifiedData);
-                }
-            }
-            
-            return modifiedData;
-        }
-
-        // 重新計算總點數
-        function recalculateTotal(squadData) {
-            let total = 0;
-            attributes.forEach(attr => {
-                total += squadData[attr] || 0;
-            });
-            squadData.total = total;
-        }
-
-        // 處理戰鬥後特殊技能卡
-        function handlePostBattleSpecialCards(originalWinner, winnerSquadId, loserSquadId, totalA, totalB) {
-            let newWinner = null;
-            let newWinnerSquadId = null;
-            let newLoserSquadId = null;
-            let specialScoring = false;
-            let scoreA = 0, scoreB = 0;
-            
-            // 檢查超臭襪子（輸的變勝者）
-            if (loserSquadId && squadItemCards[loserSquadId] === 'smelly_sock') {
-                newWinner = originalWinner === 'A' ? 'B' : 'A';
-                newWinnerSquadId = loserSquadId;
-                newLoserSquadId = winnerSquadId;
-                alert(`小隊 #${loserSquadId} 使用超臭襪子，逆轉勝負！`);
-            }
-            
-            // 檢查充氣懶骨頭（弱者增強）
-            const squadAOriginalTotal = squadData[selectedSquadA].total;
-            const squadBOriginalTotal = squadData[selectedSquadB].total;
-            
-            if (squadItemCards[selectedSquadA] === 'lazy_chair' && squadAOriginalTotal < squadBOriginalTotal) {
-                const enhancedTotal = Math.round(totalA * 1.5);
-                if (enhancedTotal > totalB && originalWinner !== 'A') {
-                    newWinner = 'A';
-                    newWinnerSquadId = selectedSquadA;
-                    newLoserSquadId = selectedSquadB;
-                    alert(`小隊 #${selectedSquadA} 充氣懶骨頭發動！能力提升1.5倍逆轉勝負！`);
-                }
-            }
-            
-            if (squadItemCards[selectedSquadB] === 'lazy_chair' && squadBOriginalTotal < squadAOriginalTotal) {
-                const enhancedTotal = Math.round(totalB * 1.5);
-                if (enhancedTotal > totalA && originalWinner !== 'B') {
-                    newWinner = 'B';
-                    newWinnerSquadId = selectedSquadB;
-                    newLoserSquadId = selectedSquadA;
-                    alert(`小隊 #${selectedSquadB} 充氣懶骨頭發動！能力提升1.5倍逆轉勝負！`);
-                }
-            }
-            
-            // 檢查5090ti顯卡（高風險高回報）
-            if (squadItemCards[selectedSquadA] === 'rtx_5090') {
-                if ((newWinner === 'A' || (newWinner === null && originalWinner === 'A'))) {
-                    scoreA = 200; // 勝利獲得20分
-                    specialScoring = true;
-                } else {
-                    // 失敗減少所有能力10點
-                    attributes.forEach(attr => {
-                        squadData[selectedSquadA][attr] = Math.max(0, squadData[selectedSquadA][attr] - 10);
-                    });
-                    updateTotalPoints(selectedSquadA);
-                }
-            }
-            
-            if (squadItemCards[selectedSquadB] === 'rtx_5090') {
-                if ((newWinner === 'B' || (newWinner === null && originalWinner === 'B'))) {
-                    scoreB = 200; // 勝利獲得20分
-                    specialScoring = true;
-                } else {
-                    // 失敗減少所有能力10點
-                    attributes.forEach(attr => {
-                        squadData[selectedSquadB][attr] = Math.max(0, squadData[selectedSquadB][attr] - 10);
-                    });
-                    updateTotalPoints(selectedSquadB);
-                }
-            }
-            
-            return { 
-                newWinner: newWinner, 
-                newWinnerSquadId: newWinnerSquadId, 
-                newLoserSquadId: newLoserSquadId, 
-                specialScoring: specialScoring, 
-                scoreA: scoreA, 
-                scoreB: scoreB 
-            };
-        }
-
-        // 處理戰後效果
-        function handlePostBattleEffects(winnerSquadId, loserSquadId) {
-            if (!winnerSquadId || !loserSquadId) return;
-            
-            // 閃電五連鞭效果
-            if (squadItemCards[winnerSquadId] === 'lightning_whip') {
-                attributes.forEach(attr => {
-                    squadData[loserSquadId][attr] = Math.max(0, squadData[loserSquadId][attr] - 15);
-                });
-                updateTotalPoints(loserSquadId);
-                alert(`小隊 #${winnerSquadId} 的閃電五連鞭發動！小隊 #${loserSquadId} 所有能力-15點！`);
-            }
-            
-            // Adidos跑鞋效果
-            if (squadItemCards[winnerSquadId] === 'fake_shoes') {
-                // 這裡可以讓玩家選擇要盜取哪個屬性
-                const attrNames = Object.values(attributeNames);
-                const attrKeys = Object.keys(attributeNames);
-                const choice = prompt(`選擇要盜取的屬性：\n${attrKeys.map((key, index) => `${index + 1}. ${attrNames[index]}`).join('\n')}`);
-                const choiceIndex = parseInt(choice) - 1;
-                
-                if (choiceIndex >= 0 && choiceIndex < attrKeys.length) {
-                    const attrKey = attrKeys[choiceIndex];
-                    const stolenPoints = Math.min(80, squadData[loserSquadId][attrKey]);
-                    squadData[loserSquadId][attrKey] = Math.max(0, squadData[loserSquadId][attrKey] - stolenPoints);
-                    squadData[winnerSquadId][attrKey] += stolenPoints;
-                    
-                    updateTotalPoints(winnerSquadId);
-                    updateTotalPoints(loserSquadId);
-                    
-                    alert(`小隊 #${winnerSquadId} 盜取了小隊 #${loserSquadId} 的${attrNames[choiceIndex]} ${stolenPoints}點！`);
-                }
-            }
-        }
-
-        // 顯示增強版戰鬥結果
-        function displayEnhancedBattleResults(originalSquadA, originalSquadB, modifiedSquadA, modifiedSquadB, winner, scoreA, scoreB, postBattleResults) {
-            const resultsContainer = document.getElementById('comparison-results');
-            if (!resultsContainer) return;
-            
-            resultsContainer.innerHTML = '';
-            
-            const totalA = modifiedSquadA.total;
-            const totalB = modifiedSquadB.total;
-            const selectedMap = arenaMaps[selectedArenaMap];
-            
-            let winnerText = '';
-            if (winner === 'A') {
-                winnerText = `🏆 小隊 #${selectedSquadA} 獲勝！ 🏆`;
-            } else if (winner === 'B') {
-                winnerText = `🏆 小隊 #${selectedSquadB} 獲勝！ 🏆`;
-            } else {
-                winnerText = '🤝 平手！ 🤝';
-            }
-            
-            // 顯示地圖信息
-            const mapInfoDiv = document.createElement('div');
-            mapInfoDiv.className = 'arena-map-selector';
-            mapInfoDiv.style.marginBottom = '20px';
-            mapInfoDiv.innerHTML = `
-                <div class="arena-map-title">🗺️ 戰鬥地圖: ${selectedMap.icon} ${selectedMap.name}</div>
-                <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                    ${Object.keys(selectedMap.effects).map(attrKey => {
-                        const multiplier = selectedMap.effects[attrKey];
-                        const attrName = attributeNames[attrKey];
-                        const attrIcon = attributeIcons[attrKey];
-                        let effectClass = '';
-                        let effectText = '';
-                        
-                        if (multiplier === 0) {
-                            effectClass = 'arena-effect-zero';
-                            effectText = `${attrIcon} ${attrName} → 0`;
-                        } else if (multiplier < 1) {
-                            effectClass = 'arena-effect-nerf';
-                            effectText = `${attrIcon} ${attrName} ×${multiplier}`;
-                        } else if (multiplier > 1) {
-                            effectClass = 'arena-effect-boost';
-                            effectText = `${attrIcon} ${attrName} ×${multiplier}`;
-                        }
-                        
-                        return `<div class="arena-effect-item ${effectClass}" style="margin: 5px;">${effectText}</div>`;
-                    }).join('')}
-                </div>
-            `;
-            resultsContainer.appendChild(mapInfoDiv);
-            
-            // 創建總能力值比較顯示
-            const totalComparisonDiv = document.createElement('div');
-            totalComparisonDiv.className = 'total-comparison';
-            totalComparisonDiv.innerHTML = `
-                <div class="total-comparison-title">⚔️ 最終戰鬥結果 ⚔️</div>
-                <div class="total-vs-display">
-                    <div class="total-squad-info">
-                        <div class="total-squad-name">小隊 #${selectedSquadA}</div>
-                        <div style="color: #ffd700; font-size: 1em; margin: 5px 0;">
-                            原始: ${originalSquadA.total} → 最終: ${totalA}
-                        </div>
-                        <div class="total-value ${winner === 'A' ? 'winner' : (winner === 'B' ? 'loser' : '')}">${totalA}</div>
-                    </div>
-                    
-                    <div class="total-vs-text">VS</div>
-                    
-                    <div class="total-squad-info">
-                        <div class="total-squad-name">小隊 #${selectedSquadB}</div>
-                        <div style="color: #ffd700; font-size: 1em; margin: 5px 0;">
-                            原始: ${originalSquadB.total} → 最終: ${totalB}
-                        </div>
-                        <div class="total-value ${winner === 'B' ? 'winner' : (winner === 'A' ? 'loser' : '')}">${totalB}</div>
-                    </div>
-                </div>
-                
-                <div class="total-difference">
-                    ${winner ? `最終能力值差距: ${Math.abs(totalA - totalB)} 點` : '實力相當！'}
-                </div>
-            `;
-            resultsContainer.appendChild(totalComparisonDiv);
-            
-            // 顯示積分獲得情況
-            const scoreDiv = document.createElement('div');
-            scoreDiv.className = 'final-result';
-            scoreDiv.innerHTML = `
-                <div class="final-result-title">🏆 戰鬥結果 🏆</div>
-                <div class="winner-announcement">${winnerText}</div>
-                <div class="score-display">
-                    <div class="score-item">
-                        <div class="score-label">小隊 #${selectedSquadA}</div>
-                        <div class="score-value">+${scoreA}</div>
-                    </div>
-                    <div class="score-item">
-                        <div class="score-label">小隊 #${selectedSquadB}</div>
-                        <div class="score-value">+${scoreB}</div>
-                    </div>
-                </div>
-                ${postBattleResults && postBattleResults.specialScoring ? 
-                    '<div class="victory-details">⚡ 特殊技能卡效果影響了積分獲得！</div>' : 
-                    '<div class="victory-details">勝者獲得100積分，敗者獲得0積分</div>'
-                }
-            `;
-            
-            resultsContainer.appendChild(scoreDiv);
-            resultsContainer.classList.add('active');
-            
-            // 隱藏戰鬥按鈕
-            const skillsRevealed = document.getElementById('skills-revealed');
-            const battleBtn = skillsRevealed ? skillsRevealed.querySelector('.battle-button-arena') : null;
-            if (battleBtn) {
-                battleBtn.disabled = true;
-                battleBtn.textContent = '戰鬥已完成';
-            }
-        }
-
-        // ======== 積分排行榜相關函數 ========
-        
-        // 更新積分排行榜
-        function updateRankings() {
-            const rankingsList = document.getElementById('rankings-list');
-            if (!rankingsList) return;
-            
-            // 創建排行數組
-            const rankings = [];
-            for (let squadId = 1; squadId <= 10; squadId++) {
-                rankings.push({
-                    id: squadId,
-                    score: squadScores[squadId] || 0,
-                    power: squadData[squadId]?.total || 40,
-                    passive: squadPassiveSkills[squadId] ? passiveSkills[squadPassiveSkills[squadId]].name : '無',
-                    item: squadItemCards[squadId] ? itemCards[squadItemCards[squadId]].name : '無'
-                });
-            }
-            
-            // 按積分排序
-            rankings.sort((a, b) => b.score - a.score);
-            
-            rankingsList.innerHTML = '';
-            
-            rankings.forEach((squad, index) => {
-                const rank = index + 1;
-                const rankingItem = document.createElement('div');
-                rankingItem.className = `ranking-item rank-${rank <= 3 ? rank : 'other'}`;
-                
-                rankingItem.innerHTML = `
-                    <div class="rank-number">${rank}</div>
-                    <div class="squad-info">
-                        <div class="squad-rank-name">小隊 #${squad.id}</div>
-                        <div class="squad-skills">被動：${squad.passive} | 道具：${squad.item}</div>
-                    </div>
-                    <div class="squad-score">${squad.score}</div>
-                    <div class="squad-power">${squad.power} 戰力</div>
-                `;
-                
-                rankingsList.appendChild(rankingItem);
-            });
-        }
-
-        // 增加小隊積分
-        function addSquadScore(squadId, points) {
-            squadScores[squadId] = (squadScores[squadId] || 0) + points;
-            console.log(`小隊 #${squadId} 獲得 ${points} 積分，總積分：${squadScores[squadId]}`);
-        }
-
-        // ======== 競技場技能公布和戰鬥系統 ========
-        
-        // 公布技能
-        function revealSkills() {
-            if (!selectedSquadA || !selectedSquadB || selectedSquadA === selectedSquadB || !selectedArenaMap) {
-                alert('請選擇兩支不同的小隊和一個地圖！');
-                return;
-            }
-            
-            const skillsRevealed = document.getElementById('skills-revealed');
-            if (!skillsRevealed) return;
-            
-            skillsRevealed.innerHTML = '';
-            skillsRevealed.style.display = 'block';
-            
-            // 創建技能公布內容
-            const revealContent = document.createElement('div');
-            revealContent.innerHTML = `
-                <div class="skills-revealed-title">⚡ 技能公布 ⚡</div>
-            `;
-            
-            // 公布小隊A的技能
-            const squadAInfo = createSquadSkillInfo(selectedSquadA, 'A');
-            revealContent.appendChild(squadAInfo);
-            
-            // 公布小隊B的技能
-            const squadBInfo = createSquadSkillInfo(selectedSquadB, 'B');
-            revealContent.appendChild(squadBInfo);
-            
-            skillsRevealed.appendChild(revealContent);
-            
-            // 計算並顯示技能效果後的能力值
-            const previewDiv = document.createElement('div');
-            previewDiv.className = 'total-comparison';
-            previewDiv.innerHTML = `
-                <div class="total-comparison-title">🔮 技能效果預覽 🔮</div>
-                <div id="skill-preview-content">
-                    <!-- 預覽內容將在這裡生成 -->
-                </div>
-            `;
-            skillsRevealed.appendChild(previewDiv);
-            
-            // 計算預覽效果
-            updateSkillPreview();
-            
-            // 創建開始戰鬥按鈕
-            const startBattleBtn = document.createElement('button');
-            startBattleBtn.className = 'battle-button-arena';
-            startBattleBtn.textContent = '開始計算戰鬥結果';
-            startBattleBtn.onclick = startEnhancedArenaBattle;
-            skillsRevealed.appendChild(startBattleBtn);
-            
-            // 隱藏公布按鈕
-            document.getElementById('reveal-skills-btn').style.display = 'none';
-        }
-
-        // 更新技能預覽
-        function updateSkillPreview() {
-            const previewContent = document.getElementById('skill-preview-content');
-            if (!previewContent) return;
-            
-            try {
-                // 獲取原始數據
-                const originalSquadA = {...squadData[selectedSquadA]};
-                const originalSquadB = {...squadData[selectedSquadB]};
-                
-                // 應用地圖效果
-                let modifiedSquadA = applyMapEffects(originalSquadA, selectedArenaMap);
-                let modifiedSquadB = applyMapEffects(originalSquadB, selectedArenaMap);
-                
-                // 應用被動技能效果
-                modifiedSquadA = applyPassiveSkillEffects(modifiedSquadA, selectedSquadA, selectedSquadB);
-                modifiedSquadB = applyPassiveSkillEffects(modifiedSquadB, selectedSquadB, selectedSquadA);
-                
-                // 應用技能卡效果
-                const cardResults = applyItemCardEffects(modifiedSquadA, modifiedSquadB, selectedSquadA, selectedSquadB);
-                modifiedSquadA = cardResults.squadA;
-                modifiedSquadB = cardResults.squadB;
-                
-                // 顯示對比
-                previewContent.innerHTML = `
-                    <div class="total-vs-display">
-                        <div class="total-squad-info">
-                            <div class="total-squad-name">小隊 #${selectedSquadA}</div>
-                            <div style="color: #ffd700; font-size: 1em; margin: 5px 0;">
-                                原始: ${originalSquadA.total} → 修正後: ${modifiedSquadA.total}
-                            </div>
-                            <div class="total-value">${modifiedSquadA.total}</div>
-                        </div>
-                        
-                        <div class="total-vs-text">VS</div>
-                        
-                        <div class="total-squad-info">
-                            <div class="total-squad-name">小隊 #${selectedSquadB}</div>
-                            <div style="color: #ffd700; font-size: 1em; margin: 5px 0;">
-                                原始: ${originalSquadB.total} → 修正後: ${modifiedSquadB.total}
-                            </div>
-                            <div class="total-value">${modifiedSquadB.total}</div>
-                        </div>
-                    </div>
-                    
-                    <div class="attribute-details" style="margin-top: 20px;">
-                        <div class="details-title">📊 詳細能力值變化</div>
-                        <div class="details-grid">
-                            ${attributes.map(attr => {
-                                const originalA = originalSquadA[attr];
-                                const modifiedA = modifiedSquadA[attr];
-                                const originalB = originalSquadB[attr];
-                                const modifiedB = modifiedSquadB[attr];
-                                
-                                return `
-                                    <div class="detail-row">
-                                        <div class="detail-value">
-                                            ${originalA !== modifiedA ? `${originalA}→${modifiedA}` : modifiedA}
-                                        </div>
-                                        <div class="detail-attr">${attributeIcons[attr]} ${attributeNames[attr]}</div>
-                                        <div class="detail-value">
-                                            ${originalB !== modifiedB ? `${originalB}→${modifiedB}` : modifiedB}
-                                        </div>
-                                    </div>
-                                `;
-                            }).join('')}
-                        </div>
-                    </div>
-                `;
-                
-                console.log('Skill preview updated successfully');
-                console.log('Squad A:', originalSquadA.total, '→', modifiedSquadA.total);
-                console.log('Squad B:', originalSquadB.total, '→', modifiedSquadB.total);
-                
-            } catch (error) {
-                console.error('Error updating skill preview:', error);
-                previewContent.innerHTML = `<div style="color: red; text-align: center;">預覽計算錯誤: ${error.message}</div>`;
-            }
-        }
-
-        // 創建小隊技能信息
-        function createSquadSkillInfo(squadId, side) {
-            const squadInfo = document.createElement('div');
-            squadInfo.className = 'squad-skill-info';
-            
-            let content = `<div class="squad-skill-name">小隊 #${squadId} (${side}隊)</div>`;
-            
-            // 被動技能
-            if (squadPassiveSkills[squadId]) {
-                const passiveSkill = passiveSkills[squadPassiveSkills[squadId]];
-                content += `
-                    <div class="skill-details">
-                        <div class="skill-type">🔥 被動技能</div>
-                        <div class="skill-description">技能名稱：${passiveSkill.name}</div>
-                        <div class="skill-effect">效果：${getPassiveSkillDescription(squadPassiveSkills[squadId])}</div>
-                    </div>
-                `;
-            } else {
-                content += `
-                    <div class="skill-details">
-                        <div class="skill-type">🔥 被動技能</div>
-                        <div class="skill-description">無被動技能</div>
-                    </div>
-                `;
-            }
-            
-            // 技能卡
-            if (squadItemCards[squadId]) {
-                const itemCard = itemCards[squadItemCards[squadId]];
-                content += `
-                    <div class="skill-details">
-                        <div class="skill-type">🎯 技能卡</div>
-                        <div class="skill-description">${itemCard.description}</div>
-                        <div class="skill-effect">效果：${getItemCardDescription(squadItemCards[squadId])}</div>
-                    </div>
-                `;
-            } else {
-                content += `
-                    <div class="skill-details">
-                        <div class="skill-type">🎯 技能卡</div>
-                        <div class="skill-description">無技能卡</div>
-                    </div>
-                `;
-            }
-            
-            squadInfo.innerHTML = content;
-            return squadInfo;
-        }
-
-        // 獲取被動技能描述
-        function getPassiveSkillDescription(skillKey) {
-            const skill = passiveSkills[skillKey];
-            if (!skill) return '無效果';
-            
-            let description = '';
-            Object.keys(skill.effects).forEach(attr => {
-                const multiplier = skill.effects[attr];
-                if (attr === 'opponent_all') {
-                    description += `對方所有能力值 ×${multiplier} `;
-                } else {
-                    const attrName = attributeNames[attr];
-                    description += `${attrName} ×${multiplier} `;
-                }
-            });
-            
-            return description;
-        }
-
-        // 獲取技能卡描述
-        function getItemCardDescription(itemKey) {
-            const item = itemCards[itemKey];
-            if (!item) return '無效果';
-            
-            if (item.type === 'special') {
-                return getSpecialItemDescription(item);
-            }
-            
-            let description = '';
-            Object.keys(item.effects).forEach(attr => {
-                const multiplier = item.effects[attr];
-                if (attr === 'all') {
-                    description += `所有能力值 ×${multiplier} `;
-                } else {
-                    const attrName = attributeNames[attr];
-                    if (multiplier === 0) {
-                        description += `${attrName} → 0 `;
-                    } else {
-                        description += `${attrName} ×${multiplier} `;
-                    }
-                }
-            });
-            
-            return description;
-        }
-
-        // 獲取特殊技能卡描述
-        function getSpecialItemDescription(item) {
-            const special = item.special;
-            let baseEffect = '';
-            
-            if (item.effects.all) {
-                baseEffect = `所有能力值 ×${item.effects.all} + `;
-            }
-            
-            switch (special) {
-                case 'retry_on_lose':
-                    return baseEffect + '戰敗時可重選地圖再戰';
-                case 'reverse_result':
-                    return '輸的一方變成勝者';
-                case 'choose_opponent':
-                    return baseEffect + '可選擇避戰或換對手';
-                case 'zero_max_attribute':
-                    return baseEffect + '將對手最高數值歸0';
-                case 'steal_attribute':
-                    return baseEffect + '戰後盜取對手80點能力';
-                case 'underdog_boost':
-                    return '能力值較低時自身×1.5';
-                case 'skip_battle':
-                    return '直接獲得勝者積分';
-                case 'steal_item':
-                    return '奪取對方技能卡';
-                case 'mutual_score':
-                    return '雙方同意可各得100分';
-                case 'reduce_opponent':
-                    return baseEffect + '戰後減少對手各能力15點';
-                case 'high_risk_reward':
-                    return baseEffect + '勝利+200分，失敗-10能力';
-                case 'copy_skills':
-                    return '複製對方所有技能';
-                case 'disable_passive':
-                    return baseEffect + '消除對方被動技能';
-                case 'swap_passive':
-                    return baseEffect + '交換雙方被動技能';
-                default:
-                    return '特殊效果';
-            }
-        }
-
-        // ======== 道具牆相關函數 ========
-        
-        // 初始化道具牆
-        function initializeItemsWall() {
-            const itemsGrid = document.getElementById('items-grid');
-            if (!itemsGrid) {
-                console.error('Items grid not found!');
-                return;
-            }
-            
-            console.log('Initializing items wall with', Object.keys(itemCards).length, 'items');
-            itemsGrid.innerHTML = '';
-            
-            Object.keys(itemCards).forEach(itemKey => {
-                const item = itemCards[itemKey];
-                const itemCard = document.createElement('div');
-                itemCard.className = 'item-card';
-                itemCard.setAttribute('data-item-key', itemKey);
-                
-                // 檢查是否已被選擇
-                const takenBy = takenItems[itemKey];
-                if (takenBy) {
-                    itemCard.classList.add('taken');
-                }
-                
-                itemCard.onclick = () => selectItemCard(itemKey);
-                
-                itemCard.innerHTML = `
-                    <div class="item-name">${item.name}</div>
-                    ${takenBy ? `<div class="item-taken-by">小隊 #${takenBy}</div>` : ''}
-                `;
-                
-                itemsGrid.appendChild(itemCard);
-            });
-            
-            console.log('Items wall initialized successfully');
-        }
-
-        // 選擇技能卡
-        function selectItemCard(itemKey) {
-            // 檢查是否已被選擇
-            if (takenItems[itemKey]) {
-                alert(`此技能卡已被小隊 #${takenItems[itemKey]} 選擇！`);
-                return;
-            }
-            
-            // 清除之前的選擇
-            document.querySelectorAll('.item-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-            
-            // 選擇新卡片
-            selectedItemCard = itemKey;
-            const cardElement = document.querySelector(`[data-item-key="${itemKey}"]`);
-            if (cardElement) {
-                cardElement.classList.add('selected');
-            }
-            
-            // 更新顯示
-            updateSelectedItemDisplay();
-            updateAssignButton();
-        }
-
-        // 更新選中技能卡顯示
-        function updateSelectedItemDisplay() {
-            const display = document.getElementById('selected-item-display');
-            if (!display) return;
-            
-            if (selectedItemCard) {
-                const item = itemCards[selectedItemCard];
-                display.innerHTML = `<div class="selected-item-name">${item.name}</div>`;
-            } else {
-                display.innerHTML = '<div class="no-selection">請先選擇一個技能卡</div>';
-            }
-        }
-
-        // 更新小隊按鈕（道具牆用）
-        function updateSquadButtonsForItems() {
-            const container = document.getElementById('squad-buttons');
-            if (!container) {
-                console.error('Squad buttons container not found!');
-                return;
-            }
-            
-            console.log('Updating squad buttons for items...');
-            container.innerHTML = '';
-            
-            for (let squadId = 1; squadId <= 10; squadId++) {
-                const button = document.createElement('button');
-                button.className = 'squad-btn';
-                button.setAttribute('data-squad-id', squadId);
-                button.onclick = () => selectSquadForItem(squadId);
-                
-                let buttonText = `小隊 #${squadId}`;
-                if (squadItemCards[squadId]) {
-                    const itemName = itemCards[squadItemCards[squadId]].name;
-                    buttonText += `\n(${itemName})`;
-                    button.style.fontSize = '0.9em';
-                    button.classList.add('has-item');
-                }
-                
-                button.textContent = buttonText;
-                container.appendChild(button);
-            }
-            
-            console.log('Squad buttons updated successfully');
-        }
-
-        // 選擇要分配技能卡的小隊
-        function selectSquadForItem(squadId) {
-            // 清除之前的選擇
-            document.querySelectorAll('.squad-btn').forEach(btn => {
-                btn.classList.remove('selected');
-            });
-            
-            // 選擇新小隊
-            selectedSquadForItem = squadId;
-            const btnElement = document.querySelector(`[data-squad-id="${squadId}"]`);
-            if (btnElement) {
-                btnElement.classList.add('selected');
-            }
-            
-            updateAssignButton();
-        }
-
-        // 更新分配按鈕狀態
-        function updateAssignButton() {
-            const assignBtn = document.getElementById('assign-btn');
-            if (!assignBtn) return;
-            
-            const canAssign = selectedItemCard && selectedSquadForItem && !takenItems[selectedItemCard];
-            
-            assignBtn.disabled = !canAssign;
-            
-            if (canAssign) {
-                assignBtn.textContent = `分配給小隊 #${selectedSquadForItem}`;
-            } else {
-                assignBtn.textContent = '分配技能卡';
-            }
-        }
-
-        // 分配技能卡給小隊
-        function assignItemToSquad() {
-            if (!selectedItemCard || !selectedSquadForItem) {
-                alert('請先選擇技能卡和小隊！');
-                return;
-            }
-            
-            if (takenItems[selectedItemCard]) {
-                alert('此技能卡已被選擇！');
-                return;
-            }
-            
-            // 如果小隊已有技能卡，釋放舊的
-            if (squadItemCards[selectedSquadForItem]) {
-                const oldItem = squadItemCards[selectedSquadForItem];
-                delete takenItems[oldItem];
-            }
-            
-            // 分配新技能卡
-            squadItemCards[selectedSquadForItem] = selectedItemCard;
-            takenItems[selectedItemCard] = selectedSquadForItem;
-            
-            const itemName = itemCards[selectedItemCard].name;
-            alert(`小隊 #${selectedSquadForItem} 已獲得技能卡：${itemName}`);
-            
-            // 重置選擇
-            selectedItemCard = null;
-            selectedSquadForItem = null;
-            
-            // 更新顯示
-            initializeItemsWall();
-            updateSquadButtonsForItems();
-            updateSelectedItemDisplay();
-            updateAssignButton();
-        }
-
-        // ======== 被動技能相關函數 ========
-        
-        // 更新被動技能選項
-        function updatePassiveSkillOptions() {
-            console.log('Updating passive skill options...');
-            
-            for (let squadId = 1; squadId <= 10; squadId++) {
-                const select = document.getElementById(`passive-skill-${squadId}`);
-                if (!select) {
-                    console.error(`Passive skill select not found for squad ${squadId}`);
-                    continue;
-                }
-                
-                console.log(`Updating options for squad ${squadId}`);
-                
-                // 清空現有選項（保留第一個空選項）
-                select.innerHTML = '<option value="">選擇被動技能</option>';
-                
-                // 獲取已被其他小隊選擇的技能
-                const takenSkills = [];
-                for (let otherId = 1; otherId <= 10; otherId++) {
-                    if (otherId !== squadId && squadPassiveSkills[otherId]) {
-                        takenSkills.push(squadPassiveSkills[otherId]);
-                    }
-                }
-                
-                console.log('Taken skills:', takenSkills);
-                console.log('Available passive skills:', Object.keys(passiveSkills));
-                
-                // 添加可用的被動技能選項
-                Object.keys(passiveSkills).forEach(skillKey => {
-                    if (!takenSkills.includes(skillKey)) {
-                        const option = document.createElement('option');
-                        option.value = skillKey;
-                        option.textContent = passiveSkills[skillKey].name;
-                        select.appendChild(option);
-                        console.log(`Added option: ${passiveSkills[skillKey].name}`);
-                    }
-                });
-                
-                // 設置當前選中的技能
-                if (squadPassiveSkills[squadId]) {
-                    select.value = squadPassiveSkills[squadId];
-                }
-                
-                // 更新顯示
-                updatePassiveSkillDisplay(squadId);
-            }
-            
-            console.log('Passive skill options updated successfully');
-        }
-
-        // 分配被動技能
-        function assignPassiveSkill(squadId, skillKey) {
-            if (skillKey === '') {
-                squadPassiveSkills[squadId] = null;
-            } else {
-                // 檢查是否已被其他小隊選擇
-                for (let otherId = 1; otherId <= 10; otherId++) {
-                    if (otherId !== squadId && squadPassiveSkills[otherId] === skillKey) {
-                        alert(`技能「${passiveSkills[skillKey].name}」已被小隊 #${otherId} 選擇！`);
-                        document.getElementById(`passive-skill-${squadId}`).value = squadPassiveSkills[squadId] || '';
-                        return;
-                    }
-                }
-                
-                squadPassiveSkills[squadId] = skillKey;
-                alert(`小隊 #${squadId} 已獲得被動技能：${passiveSkills[skillKey].name}`);
-            }
-            
-            updatePassiveSkillDisplay(squadId);
-            updatePassiveSkillOptions(); // 更新所有小隊的選項
-        }
-
-        // 更新被動技能顯示
-        function updatePassiveSkillDisplay(squadId) {
-            const display = document.getElementById(`current-passive-${squadId}`);
-            if (!display) return;
-            
-            if (squadPassiveSkills[squadId]) {
-                const skillName = passiveSkills[squadPassiveSkills[squadId]].name;
-                display.textContent = `已選擇：${skillName}`;
-            } else {
-                display.textContent = '未選擇被動技能';
-            }
-        }
-
         // 頁面切換
         function switchPage(pageName) {
             console.log('Switching to page:', pageName);
@@ -4172,6 +3612,7 @@
                 } else if (pageName === 'items') {
                     initializeItemsWall();
                     updateSquadButtonsForItems();
+                    updateSelectedItemDisplay(); // 新增這行
                 } else if (pageName === 'rankings') {
                     updateRankings();
                 }
@@ -5179,6 +4620,7 @@
         function updateArenaBattleButton() {
             const battleBtn = document.getElementById('arena-battle-btn');
             const revealBtn = document.getElementById('reveal-skills-btn');
+            const startBettingBtn = document.getElementById('start-betting-btn');
             
             if (!battleBtn || !revealBtn) return;
             
@@ -5189,8 +4631,20 @@
             
             revealBtn.disabled = !canBattle;
             
+            // 更新下注按鈕狀態
+            if (startBettingBtn) {
+                startBettingBtn.disabled = !canBattle || bettingSystem.enabled;
+            }
+            
             if (canBattle) {
                 revealBtn.textContent = '🔍 公布技能並開始對戰';
+                
+                // 顯示下注系統
+                const bettingSystemDiv = document.getElementById('betting-system');
+                if (bettingSystemDiv && !bettingSystem.enabled) {
+                    bettingSystemDiv.classList.add('active');
+                    updateBettingInfo();
+                }
             } else if (!selectedArenaMap) {
                 revealBtn.textContent = '請選擇地圖';
             } else if (!selectedSquadA || !selectedSquadB) {
@@ -5204,13 +4658,10 @@
 
         // 更新競技場小隊選項
         function updateArenaSquadOptions() {
-            console.log('Updating arena squad options...'); // 調試用
-            console.log('Squad data:', squadData); // 調試用
+            console.log('Updating arena squad options...');
             
             const squadAContainer = document.getElementById('squad-a-options');
             const squadBContainer = document.getElementById('squad-b-options');
-            
-            console.log('Containers found:', !!squadAContainer, !!squadBContainer); // 調試用
             
             if (!squadAContainer || !squadBContainer) {
                 console.error('Arena containers not found!');
@@ -5222,12 +4673,7 @@
             
             for (let squadId = 1; squadId <= 10; squadId++) {
                 const data = squadData[squadId];
-                if (!data) {
-                    console.log(`No data for squad ${squadId}`); // 調試用
-                    continue;
-                }
-                
-                console.log(`Creating options for squad ${squadId}:`, data); // 調試用
+                if (!data) continue;
                 
                 // 計算顯示的總點數（考慮地圖效果）
                 let displayTotal = data.total;
@@ -5250,7 +4696,6 @@
                 optionA.setAttribute('data-side', 'A');
                 optionA.addEventListener('click', function(e) {
                     e.preventDefault();
-                    console.log('Squad A clicked:', squadId); // 調試用
                     selectArenaSquad('A', squadId);
                 });
                 optionA.innerHTML = `
@@ -5266,7 +4711,6 @@
                 optionB.setAttribute('data-side', 'B');
                 optionB.addEventListener('click', function(e) {
                     e.preventDefault();
-                    console.log('Squad B clicked:', squadId); // 調試用
                     selectArenaSquad('B', squadId);
                 });
                 optionB.innerHTML = `
@@ -5275,14 +4719,10 @@
                 `;
                 squadBContainer.appendChild(optionB);
             }
-            
-            console.log('Arena options updated successfully'); // 調試用
         }
 
         // 選擇競技場小隊
         function selectArenaSquad(side, squadId) {
-            console.log('Selecting arena squad:', side, squadId); // 調試用
-            
             try {
                 if (side === 'A') {
                     // 清除之前的選擇
@@ -5295,9 +4735,6 @@
                     const clickedOption = document.querySelector(`#squad-a-options .squad-option[data-squad-id="${squadId}"]`);
                     if (clickedOption) {
                         clickedOption.classList.add('selected');
-                        console.log('Squad A selected successfully'); // 調試用
-                    } else {
-                        console.error('Could not find squad A option'); // 調試用
                     }
                     
                     // 更新顯示（考慮地圖效果）
@@ -5314,9 +4751,6 @@
                     const clickedOption = document.querySelector(`#squad-b-options .squad-option[data-squad-id="${squadId}"]`);
                     if (clickedOption) {
                         clickedOption.classList.add('selected');
-                        console.log('Squad B selected successfully'); // 調試用
-                    } else {
-                        console.error('Could not find squad B option'); // 調試用
                     }
                     
                     // 更新顯示（考慮地圖效果）
@@ -5326,45 +4760,660 @@
                 // 檢查是否可以開始戰鬥
                 updateArenaBattleButton();
             } catch (error) {
-                console.error('Error in selectArenaSquad:', error); // 調試用
+                console.error('Error in selectArenaSquad:', error);
             }
         }
 
-        // 開始競技場戰鬥
-        function startArenaBattle() {
-            if (!selectedSquadA || !selectedSquadB || selectedSquadA === selectedSquadB || !selectedArenaMap) {
-                alert('請選擇兩支不同的小隊和一個地圖！');
-                return;
+        // 增強版競技場戰鬥
+        // 增強版競技場戰鬥
+function startEnhancedArenaBattle() {
+    if (!selectedSquadA || !selectedSquadB || selectedSquadA === selectedSquadB || !selectedArenaMap) {
+        alert('請選擇兩支不同的小隊和一個地圖！');
+        return;
+    }
+    
+    // 處理特殊技能卡（戰鬥前）
+    const specialResults = handlePreBattleSpecialCards();
+    if (specialResults && specialResults.skipBattle) {
+        updateRankings();
+        return;
+    }
+    
+    // 標記參戰小隊和使用的道具卡
+    battleParticipatedSquads[selectedSquadA] = true;
+    battleParticipatedSquads[selectedSquadB] = true;
+
+    // 標記使用過的道具卡為永久使用
+    if (squadItemCards[selectedSquadA]) {
+        permanentlyUsedItems[squadItemCards[selectedSquadA]] = true;
+        delete takenItems[squadItemCards[selectedSquadA]];
+        delete squadItemCards[selectedSquadA];
+    }
+
+    if (squadItemCards[selectedSquadB]) {
+        permanentlyUsedItems[squadItemCards[selectedSquadB]] = true;
+        delete takenItems[squadItemCards[selectedSquadB]];
+        delete squadItemCards[selectedSquadB];
+    }
+
+    // 如果在道具牆頁面，立即更新顯示
+    const currentPage = document.querySelector('.page.active');
+    if (currentPage && currentPage.id === 'items-page') {
+        initializeItemsWall();
+        updateSquadButtonsForItems();
+    }
+    
+    const originalSquadA = {...squadData[selectedSquadA]};
+    const originalSquadB = {...squadData[selectedSquadB]};
+    const selectedMap = arenaMaps[selectedArenaMap];
+    
+    // 重要：使用與顯示計算過程相同的邏輯
+    // 階段1：應用地圖效果
+    let modifiedSquadA = applyMapEffects(originalSquadA, selectedArenaMap);
+    let modifiedSquadB = applyMapEffects(originalSquadB, selectedArenaMap);
+    
+    // 階段2：應用被動技能效果
+    modifiedSquadA = applyPassiveSkillEffects({...modifiedSquadA}, selectedSquadA, selectedSquadB);
+    modifiedSquadB = applyPassiveSkillEffects({...modifiedSquadB}, selectedSquadB, selectedSquadA);
+    
+    // 階段3：應用技能卡效果（確保使用深拷貝）
+    const cardResults = applyItemCardEffects({...modifiedSquadA}, {...modifiedSquadB}, selectedSquadA, selectedSquadB);
+    modifiedSquadA = cardResults.squadA;
+    modifiedSquadB = cardResults.squadB;
+    
+    // 比較最終能力值
+    const totalA = modifiedSquadA.total;
+    const totalB = modifiedSquadB.total;
+    
+    let winner = '';
+    let winnerSquadId = null;
+    let loserSquadId = null;
+    
+    if (totalA > totalB) {
+        winner = 'A';
+        winnerSquadId = selectedSquadA;
+        loserSquadId = selectedSquadB;
+    } else if (totalB > totalA) {
+        winner = 'B';
+        winnerSquadId = selectedSquadB;
+        loserSquadId = selectedSquadA;
+    }
+    
+    // 處理特殊技能卡效果（戰鬥後）
+    const postBattleResults = handlePostBattleSpecialCards(winner, winnerSquadId, loserSquadId, totalA, totalB);
+    
+    // 檢查是否需要重打
+    if (postBattleResults && postBattleResults.retryBattle) {
+        const retrySquadId = postBattleResults.retrySquadId;
+        alert(`小隊 #${retrySquadId} 使用大金幣能力！請重新選擇地圖進行戰鬥。`);
+        
+        selectedArenaMap = null;
+        document.querySelectorAll('.arena-map-option').forEach(option => {
+            option.classList.remove('selected');
+        });
+        
+        const mapEffects = document.getElementById('arena-map-effects');
+        if (mapEffects) {
+            mapEffects.classList.remove('visible');
+        }
+        
+        if (bettingSystem.enabled) {
+            bettingSystem.enabled = false;
+            bettingSystem.bets = {};
+            const bettingSystemDiv = document.getElementById('betting-system');
+            if (bettingSystemDiv) {
+                bettingSystemDiv.classList.remove('active');
+            }
+        }
+        
+        const resultsContainer = document.getElementById('comparison-results');
+        if (resultsContainer) {
+            resultsContainer.innerHTML = `
+                <div class="final-result">
+                    <div class="final-result-title">🪙 大金幣發動！ 🪙</div>
+                    <div class="winner-announcement">小隊 #${retrySquadId} 戰敗但使用大金幣重新挑戰！</div>
+                    <div class="victory-details">請重新選擇地圖，所有能力值將獲得 ×1.1 加成</div>
+                </div>
+            `;
+            resultsContainer.classList.add('active');
+        }
+        
+        const revealBtn = document.getElementById('reveal-skills-btn');
+        if (revealBtn) {
+            revealBtn.style.display = 'block';
+            revealBtn.disabled = true;
+            revealBtn.textContent = '請選擇地圖後重新戰鬥';
+        }
+        
+        const skillsRevealed = document.getElementById('skills-revealed');
+        if (skillsRevealed) {
+            skillsRevealed.style.display = 'none';
+        }
+        
+        return;
+    }
+    
+    // 如果有特殊效果改變了結果
+    if (postBattleResults && postBattleResults.newWinner !== null) {
+        winner = postBattleResults.newWinner;
+        winnerSquadId = postBattleResults.newWinnerSquadId;
+        loserSquadId = postBattleResults.newLoserSquadId;
+    }
+    
+    // 計算積分
+    let scoreA = 0, scoreB = 0;
+    if (winner === 'A') {
+        scoreA = 100;
+    } else if (winner === 'B') {
+        scoreB = 100;
+    } else {
+        scoreA = scoreB = 50;
+    }
+    
+    // 處理特殊積分效果
+    if (postBattleResults && postBattleResults.specialScoring) {
+        scoreA = postBattleResults.scoreA || scoreA;
+        scoreB = postBattleResults.scoreB || scoreB;
+    }
+    
+    // 更新積分
+    addSquadScore(selectedSquadA, scoreA);
+    addSquadScore(selectedSquadB, scoreB);
+    
+    // 顯示戰鬥結果（傳遞正確的修正後數據）
+    displayEnhancedBattleResults(originalSquadA, originalSquadB, modifiedSquadA, modifiedSquadB, winner, scoreA, scoreB, postBattleResults || {});
+    
+    // 處理戰後效果
+    if (winnerSquadId && loserSquadId) {
+        handlePostBattleEffects(winnerSquadId, loserSquadId);
+    }
+    
+    // 更新積分排行榜
+    updateRankings();
+}
+
+        // 處理戰鬥前特殊技能卡
+        function handlePreBattleSpecialCards() {
+            let skipBattle = false;
+            let changedOpponent = false;
+            
+            if (squadItemCards[selectedSquadA] === 'dirty_clothes' || squadItemCards[selectedSquadB] === 'dirty_clothes') {
+                const clothesOwner = squadItemCards[selectedSquadA] === 'dirty_clothes' ? selectedSquadA : selectedSquadB;
+                const otherSquad = clothesOwner === selectedSquadA ? selectedSquadB : selectedSquadA;
+                
+                // 找出所有可選擇的隊伍（除了自己）
+                const availableSquads = [];
+                for (let squadId = 1; squadId <= 10; squadId++) {
+                    // 只要不是擁有衣服的隊伍自己，都可以選
+                    if (squadId !== clothesOwner) {
+                        availableSquads.push(squadId);
+                    }
+                }
+                
+                const squadList = availableSquads.map(id => `${id}`).join(', ');
+                const shouldChange = confirm(`小隊 #${clothesOwner} 擁有十天沒洗的衣服！\n是否要選擇其他隊伍當對手？\n\n可選擇的隊伍：${squadList}\n\n目前對手：小隊 #${otherSquad}`);
+                
+                if (shouldChange) {
+                    const newOpponent = prompt(`請輸入要挑戰的隊伍編號（可選：${squadList}）：`);
+                    const newOpponentId = parseInt(newOpponent);
+                    
+                    if (availableSquads.includes(newOpponentId)) {
+                        // 更換對手
+                        if (clothesOwner === selectedSquadA) {
+                            selectedSquadB = newOpponentId;
+                        } else {
+                            selectedSquadA = newOpponentId;
+                        }
+                        
+                        alert(`對手已更換為小隊 #${newOpponentId}！`);
+                        changedOpponent = true;
+                        
+                        // 更新顯示
+                        updateSquadDisplay('A', selectedSquadA);
+                        updateSquadDisplay('B', selectedSquadB);
+                        updateBettingInfo();
+                        
+                        // 重置下注系統（因為對手改變了）
+                        if (bettingSystem.enabled) {
+                            bettingSystem.enabled = false;
+                            bettingSystem.bets = {};
+                            const bettingSystemDiv = document.getElementById('betting-system');
+                            if (bettingSystemDiv) {
+                                bettingSystemDiv.classList.remove('active');
+                            }
+                        }
+                        
+                        // 重新生成技能公布內容（新增的部分）
+                        const skillsRevealed = document.getElementById('skills-revealed');
+                        if (skillsRevealed && skillsRevealed.style.display === 'block') {
+                            // 清空舊的內容
+                            skillsRevealed.innerHTML = '';
+                            
+                            // 重新創建技能公布內容
+                            const revealContent = document.createElement('div');
+                            revealContent.innerHTML = `
+                                <div class="skills-revealed-title">⚡ 技能公布 ⚡</div>
+                            `;
+                            
+                            // 公布小隊A的技能
+                            const squadAInfo = createSquadSkillInfo(selectedSquadA, 'A');
+                            revealContent.appendChild(squadAInfo);
+                            
+                            // 公布小隊B的技能
+                            const squadBInfo = createSquadSkillInfo(selectedSquadB, 'B');
+                            revealContent.appendChild(squadBInfo);
+                            
+                            skillsRevealed.appendChild(revealContent);
+                            
+                            // 計算並顯示技能效果後的能力值
+                            const previewDiv = document.createElement('div');
+                            previewDiv.className = 'total-comparison';
+                            previewDiv.innerHTML = `
+                                <div class="total-comparison-title">🔮 技能效果預覽 🔮</div>
+                                <div id="skill-preview-content">
+                                    <!-- 預覽內容將在這裡生成 -->
+                                </div>
+                            `;
+                            skillsRevealed.appendChild(previewDiv);
+                            
+                            // 更新預覽效果
+                            updateSkillPreview();
+                            
+                            // 創建開始戰鬥按鈕
+                            const startBattleBtn = document.createElement('button');
+                            startBattleBtn.className = 'battle-button-arena';
+                            startBattleBtn.textContent = '開始計算戰鬥結果';
+                            startBattleBtn.onclick = startEnhancedArenaBattle;
+                            skillsRevealed.appendChild(startBattleBtn);
+                        }
+                    } else {
+                        alert('輸入的隊伍編號無效！');
+                    }
+                }
+            }
+
+            // 檢查AIR JORDAN 1（跳過戰鬥）
+            if (squadItemCards[selectedSquadA] === 'air_jordan') {
+                addSquadScore(selectedSquadA, 100);
+                alert(`小隊 #${selectedSquadA} 使用 AIR JORDAN 1，直接獲得勝者積分！`);
+                skipBattle = true;
+            }
+            if (squadItemCards[selectedSquadB] === 'air_jordan') {
+                addSquadScore(selectedSquadB, 100);
+                alert(`小隊 #${selectedSquadB} 使用 AIR JORDAN 1，直接獲得勝者積分！`);
+                skipBattle = true;
             }
             
-            const originalSquadA = squadData[selectedSquadA];
-            const originalSquadB = squadData[selectedSquadB];
-            const selectedMap = arenaMaps[selectedArenaMap];
+            // 檢查超大絨毛玩偶（雙方同意）
+            if (squadItemCards[selectedSquadA] === 'big_doll' || squadItemCards[selectedSquadB] === 'big_doll') {
+                const agree = confirm('使用超大絨毛玩偶：雙方是否同意各得100分？');
+                if (agree) {
+                    addSquadScore(selectedSquadA, 100);
+                    addSquadScore(selectedSquadB, 100);
+                    alert('雙方都獲得了100分！');
+                    skipBattle = true;
+                }
+            }
             
-            // 應用地圖效果
-            const modifiedSquadA = applyMapEffects(originalSquadA, selectedArenaMap);
-            const modifiedSquadB = applyMapEffects(originalSquadB, selectedArenaMap);
+            return { skipBattle: skipBattle };
+        }
+
+        // 應用被動技能效果
+        function applyPassiveSkillEffects(squadData, selfSquadId, opponentSquadId) {
+            // 確保深拷貝所有屬性
+            let modifiedData = {};
+            attributes.forEach(attr => {
+                modifiedData[attr] = squadData[attr];
+            });
+            modifiedData.total = squadData.total;
             
+            // 檢查是否被超大雨傘消除
+            const opponentItem = squadItemCards[opponentSquadId];
+            if (opponentItem === 'big_umbrella') {
+                return modifiedData; // 被動技能被消除
+            }
+            
+            const passiveSkill = squadPassiveSkills[selfSquadId];
+            if (!passiveSkill) return modifiedData;
+            
+            const skill = passiveSkills[passiveSkill];
+            if (!skill) return modifiedData;
+            
+            // 應用被動技能效果
+            Object.keys(skill.effects).forEach(attr => {
+                const multiplier = skill.effects[attr];
+                if (attr === 'opponent_all') {
+                    // 毒氣炸彈效果會在對手身上體現，這裡先記錄
+                    return;
+                } else if (modifiedData[attr] !== undefined) {
+                    modifiedData[attr] = Math.round(modifiedData[attr] * multiplier);
+                }
+            });
+            
+            // 重新計算總點數
+            recalculateTotal(modifiedData);
+            
+            return modifiedData;
+        }
+
+        // 應用技能卡效果
+        function applyItemCardEffects(squadAData, squadBData, squadAId, squadBId) {
+            let modifiedSquadA = {...squadAData};
+            let modifiedSquadB = {...squadBData};
+            
+            
+
+            
+            // 處理小隊A的技能卡
+            if (squadItemCards[squadAId]) {
+                const cardKey = squadItemCards[squadAId];
+                const card = itemCards[cardKey];
+                const result = applyItemCardToSquad(modifiedSquadA, card, modifiedSquadB, squadAId, squadBId);
+                modifiedSquadA = result;
+            }
+        
+            // 處理小隊B的技能卡
+            if (squadItemCards[squadBId]) {
+                const cardKey = squadItemCards[squadBId];
+                const card = itemCards[cardKey];
+                const result = applyItemCardToSquad(modifiedSquadB, card, modifiedSquadA, squadBId, squadAId);
+                modifiedSquadB = result;
+            }
+            
+            // 處理毒氣炸彈（被動技能）
+            if (squadPassiveSkills[squadAId] === 'poison_bomb') {
+                attributes.forEach(attr => {
+                    modifiedSquadB[attr] = Math.round(modifiedSquadB[attr] * 0.7);
+                });
+                recalculateTotal(modifiedSquadB);
+            }
+            if (squadPassiveSkills[squadBId] === 'poison_bomb') {
+                attributes.forEach(attr => {
+                    modifiedSquadA[attr] = Math.round(modifiedSquadA[attr] * 0.7);
+                });
+                recalculateTotal(modifiedSquadA);
+            }
+            
+            // 處理 iPhone18 效果（小隊A擁有）
+            if (squadItemCards[squadAId] === 'iphone18') {
+                const attrNames = Object.values(attributeNames);
+                const attrKeys = Object.keys(attributeNames);
+                const choice = prompt(
+                    `小隊 #${squadAId} 使用 iPhone18！\n` +
+                    `選擇要將小隊 #${squadBId} 的哪個能力歸零：\n\n` +
+                    attrKeys.map((key, index) => `${index + 1}. ${attributeIcons[key]} ${attrNames[index]} (目前: ${modifiedSquadB[key]})`).join('\n')
+                );
+                
+                const choiceIndex = parseInt(choice) - 1;
+                if (choiceIndex >= 0 && choiceIndex < attrKeys.length) {
+                    const attrKey = attrKeys[choiceIndex];
+                    const originalValue = modifiedSquadB[attrKey];
+                    modifiedSquadB[attrKey] = 0;
+                    recalculateTotal(modifiedSquadB);
+                    alert(`小隊 #${squadBId} 的${attrNames[choiceIndex]}從 ${originalValue} 歸零！`);
+                }
+            }
+        
+            // 處理 iPhone18 效果（小隊B擁有）
+            if (squadItemCards[squadBId] === 'iphone18') {
+                const attrNames = Object.values(attributeNames);
+                const attrKeys = Object.keys(attributeNames);
+                const choice = prompt(
+                    `小隊 #${squadBId} 使用 iPhone18！\n` +
+                    `選擇要將小隊 #${squadAId} 的哪個能力歸零：\n\n` +
+                    attrKeys.map((key, index) => `${index + 1}. ${attributeIcons[key]} ${attrNames[index]} (目前: ${modifiedSquadA[key]})`).join('\n')
+                );
+                
+                const choiceIndex = parseInt(choice) - 1;
+                if (choiceIndex >= 0 && choiceIndex < attrKeys.length) {
+                    const attrKey = attrKeys[choiceIndex];
+                    const originalValue = modifiedSquadA[attrKey];
+                    modifiedSquadA[attrKey] = 0;
+                    recalculateTotal(modifiedSquadA);
+                    alert(`小隊 #${squadAId} 的${attrNames[choiceIndex]}從 ${originalValue} 歸零！`);
+                }
+            }
+            
+            return { squadA: modifiedSquadA, squadB: modifiedSquadB };
+        }
+
+
+// 應用單個技能卡效果
+function applyItemCardToSquad(squadData, card, opponentData, selfSquadId, opponentSquadId) {
+    let modifiedData = {...squadData};
+    
+    if (!card) return modifiedData;
+    
+    if (card.type === 'attribute') {
+        // 普通屬性調整
+        Object.keys(card.effects).forEach(attr => {
+            const multiplier = card.effects[attr];
+            if (attr === 'all') {
+                // 所有屬性乘以倍數
+                attributes.forEach(attribute => {
+                    modifiedData[attribute] = Math.round(modifiedData[attribute] * multiplier);
+                });
+            } else if (modifiedData[attr] !== undefined) {
+                if (multiplier === 0) {
+                    modifiedData[attr] = 0;
+                } else {
+                    modifiedData[attr] = Math.round(modifiedData[attr] * multiplier);
+                }
+            }
+        });
+        
+        recalculateTotal(modifiedData);
+    } else if (card.type === 'special') {
+        // 特殊效果在其他地方處理
+        // 但仍需要處理 all 屬性加成
+        if (card.effects.all) {
+            attributes.forEach(attr => {
+                modifiedData[attr] = Math.round(modifiedData[attr] * card.effects.all);
+            });
+            recalculateTotal(modifiedData);
+        }
+    }
+    
+    return modifiedData;
+}
+    
+        // 重新計算總點數
+        function recalculateTotal(squadData) {
+            let total = 0;
+            attributes.forEach(attr => {
+                total += squadData[attr] || 0;
+            });
+            squadData.total = total;
+        }
+
+        // 處理戰鬥後特殊技能卡
+        function handlePostBattleSpecialCards(originalWinner, winnerSquadId, loserSquadId, totalA, totalB) {
+            let newWinner = null;
+            let newWinnerSquadId = null;
+            let newLoserSquadId = null;
+            let specialScoring = false;
+            let scoreA = 0, scoreB = 0;
+            
+            
+            // 新增：檢查大金幣（戰敗重打）
+            let retryBattle = false;
+            let retrySquadId = null;
+            
+            // 檢查敗者是否有大金幣
+            if (loserSquadId && squadItemCards[loserSquadId] === 'gold_coin') {
+                const shouldRetry = confirm(`小隊 #${loserSquadId} 擁有大金幣！是否要更換地圖重新戰鬥？\n（之前的下注和積分將不計算）`);
+                if (shouldRetry) {
+                    retryBattle = true;
+                    retrySquadId = loserSquadId;
+                    // 暫時不處理勝負，等待重打
+                    return { 
+                        retryBattle: true, 
+                        retrySquadId: retrySquadId,
+                        skipScoring: true // 跳過這次的積分計算
+                    };
+                }
+            }
+            // 檢查超臭襪子（顛倒勝負）
+            if ((squadItemCards[selectedSquadA] === 'smelly_sock') || (squadItemCards[selectedSquadB] === 'smelly_sock')) {
+                // 不管誰有超臭襪子，都顛倒結果
+                newWinner = originalWinner === 'A' ? 'B' : 'A';
+                newWinnerSquadId = originalWinner === 'A' ? selectedSquadB : selectedSquadA;
+                newLoserSquadId = originalWinner === 'A' ? selectedSquadA : selectedSquadB;
+                
+                const sockOwner = squadItemCards[selectedSquadA] === 'smelly_sock' ? selectedSquadA : selectedSquadB;
+                alert(`小隊 #${sockOwner} 因為超臭襪子，顛倒勝負！原本的${originalWinner === 'A' ? '勝者' : '敗者'}變成敗者！`);
+            }
+            
+            // 檢查充氣懶骨頭（弱者增強）
+            const squadAOriginalTotal = squadData[selectedSquadA].total;
+            const squadBOriginalTotal = squadData[selectedSquadB].total;
+            
+            if (squadItemCards[selectedSquadA] === 'lazy_chair' && squadAOriginalTotal < squadBOriginalTotal) {
+                const enhancedTotal = Math.round(totalA * 1.5);
+                if (enhancedTotal > totalB && originalWinner !== 'A') {
+                    newWinner = 'A';
+                    newWinnerSquadId = selectedSquadA;
+                    newLoserSquadId = selectedSquadB;
+                    alert(`小隊 #${selectedSquadA} 充氣懶骨頭發動！能力提升1.5倍逆轉勝負！`);
+                }
+            }
+            
+            if (squadItemCards[selectedSquadB] === 'lazy_chair' && squadBOriginalTotal < squadAOriginalTotal) {
+                const enhancedTotal = Math.round(totalB * 1.5);
+                if (enhancedTotal > totalA && originalWinner !== 'B') {
+                    newWinner = 'B';
+                    newWinnerSquadId = selectedSquadB;
+                    newLoserSquadId = selectedSquadA;
+                    alert(`小隊 #${selectedSquadB} 充氣懶骨頭發動！能力提升1.5倍逆轉勝負！`);
+                }
+            }
+            
+            // 檢查5090ti顯卡（高風險高回報）
+            if (squadItemCards[selectedSquadA] === 'rtx_5090') {
+                if ((newWinner === 'A' || (newWinner === null && originalWinner === 'A'))) {
+                    scoreA = 200; // 勝利獲得200分
+                    specialScoring = true;
+                } else {
+                    // 失敗減少所有能力10點
+                    attributes.forEach(attr => {
+                        squadData[selectedSquadA][attr] = Math.max(0, squadData[selectedSquadA][attr] - 10);
+                    });
+                    updateTotalPoints(selectedSquadA);
+                }
+            }
+            
+            if (squadItemCards[selectedSquadB] === 'rtx_5090') {
+                if ((newWinner === 'B' || (newWinner === null && originalWinner === 'B'))) {
+                    scoreB = 200; // 勝利獲得200分
+                    specialScoring = true;
+                } else {
+                    // 失敗減少所有能力10點
+                    attributes.forEach(attr => {
+                        squadData[selectedSquadB][attr] = Math.max(0, squadData[selectedSquadB][attr] - 10);
+                    });
+                    updateTotalPoints(selectedSquadB);
+                }
+            }
+            
+            return { 
+                newWinner: newWinner, 
+                newWinnerSquadId: newWinnerSquadId, 
+                newLoserSquadId: newLoserSquadId, 
+                specialScoring: specialScoring, 
+                scoreA: scoreA, 
+                scoreB: scoreB 
+            };
+        }
+
+        // 處理戰後效果
+        function handlePostBattleEffects(winnerSquadId, loserSquadId) {
+            if (!winnerSquadId || !loserSquadId) return;
+            
+            // 閃電五連鞭效果
+            if (squadItemCards[winnerSquadId] === 'lightning_whip') {
+                attributes.forEach(attr => {
+                    squadData[loserSquadId][attr] = Math.max(0, squadData[loserSquadId][attr] - 15);
+                });
+                updateTotalPoints(loserSquadId);
+                alert(`小隊 #${winnerSquadId} 的閃電五連鞭發動！小隊 #${loserSquadId} 所有能力-15點！`);
+            }
+            
+// Adidos跑鞋效果
+if (squadItemCards[winnerSquadId] === 'fake_shoes') {
+    // 讓玩家選擇要盜取哪個屬性
+    const attrNames = Object.values(attributeNames);
+    const attrKeys = Object.keys(attributeNames);
+    const choice = prompt(
+        `選擇要盜取的屬性：\n` +
+        attrKeys.map((key, index) => 
+            `${index + 1}. ${attributeIcons[key]} ${attrNames[index]} ` +
+            `(你的: ${squadData[winnerSquadId][key]}, 對方: ${squadData[loserSquadId][key]})`
+        ).join('\n')
+    );
+    const choiceIndex = parseInt(choice) - 1;
+    
+    if (choiceIndex >= 0 && choiceIndex < attrKeys.length) {
+        const attrKey = attrKeys[choiceIndex];
+        const winnerCurrent = squadData[winnerSquadId][attrKey];
+        const loserCurrent = squadData[loserSquadId][attrKey];
+        
+        // 計算可以盜取的點數
+        // 1. 最多盜取到自己100點
+        // 2. 最多盜取到對方剩0點
+        // 3. 兩者取較小值
+        const maxCanSteal = Math.min(
+            100 - winnerCurrent,  // 自己最多到100
+            loserCurrent          // 對方最多到0
+        );
+        
+        const stolenPoints = Math.max(0, maxCanSteal);
+        
+        if (stolenPoints > 0) {
+            squadData[loserSquadId][attrKey] = loserCurrent - stolenPoints;
+            squadData[winnerSquadId][attrKey] = winnerCurrent + stolenPoints;
+            
+            updateTotalPoints(winnerSquadId);
+            updateTotalPoints(loserSquadId);
+            
+            alert(
+                `小隊 #${winnerSquadId} 盜取了小隊 #${loserSquadId} 的${attrNames[choiceIndex]} ${stolenPoints}點！\n` +
+                `小隊 #${winnerSquadId}: ${winnerCurrent} → ${squadData[winnerSquadId][attrKey]}\n` +
+                `小隊 #${loserSquadId}: ${loserCurrent} → ${squadData[loserSquadId][attrKey]}`
+            );
+        } else {
+            alert(`無法盜取！你的${attrNames[choiceIndex]}已達100或對方已經是0！`);
+        }
+    }
+}
+        }
+
+        // 顯示增強版戰鬥結果
+        function displayEnhancedBattleResults(originalSquadA, originalSquadB, modifiedSquadA, modifiedSquadB, winner, scoreA, scoreB, postBattleResults) {
             const resultsContainer = document.getElementById('comparison-results');
             if (!resultsContainer) return;
             
             resultsContainer.innerHTML = '';
             
-            // 比較修改後的總能力值
             const totalA = modifiedSquadA.total;
             const totalB = modifiedSquadB.total;
+            const selectedMap = arenaMaps[selectedArenaMap];
             
-            let winner = '';
             let winnerText = '';
-            
-            if (totalA > totalB) {
-                winner = 'A';
+            if (winner === 'A') {
                 winnerText = `🏆 小隊 #${selectedSquadA} 獲勝！ 🏆`;
-            } else if (totalB > totalA) {
-                winner = 'B';
+            } else if (winner === 'B') {
                 winnerText = `🏆 小隊 #${selectedSquadB} 獲勝！ 🏆`;
             } else {
                 winnerText = '🤝 平手！ 🤝';
+            }
+            
+            // 處理下注結算
+            if (bettingSystem.enabled) {
+                const bettingResults = calculateBettingRewards(winner);
+                displayBettingResults(bettingResults);
+                
+                // 更新積分排行榜（因為下注可能改變了積分）
+                updateRankings();
             }
             
             // 顯示地圖信息
@@ -5402,12 +5451,12 @@
             const totalComparisonDiv = document.createElement('div');
             totalComparisonDiv.className = 'total-comparison';
             totalComparisonDiv.innerHTML = `
-                <div class="total-comparison-title">⚔️ 地圖效果後總能力值對決 ⚔️</div>
+                <div class="total-comparison-title">⚔️ 最終戰鬥結果 ⚔️</div>
                 <div class="total-vs-display">
                     <div class="total-squad-info">
                         <div class="total-squad-name">小隊 #${selectedSquadA}</div>
                         <div style="color: #ffd700; font-size: 1em; margin: 5px 0;">
-                            原始: ${originalSquadA.total} → 修正: ${totalA}
+                            原始: ${originalSquadA.total} → 最終: ${totalA}
                         </div>
                         <div class="total-value ${winner === 'A' ? 'winner' : (winner === 'B' ? 'loser' : '')}">${totalA}</div>
                     </div>
@@ -5417,86 +5466,59 @@
                     <div class="total-squad-info">
                         <div class="total-squad-name">小隊 #${selectedSquadB}</div>
                         <div style="color: #ffd700; font-size: 1em; margin: 5px 0;">
-                            原始: ${originalSquadB.total} → 修正: ${totalB}
+                            原始: ${originalSquadB.total} → 最終: ${totalB}
                         </div>
                         <div class="total-value ${winner === 'B' ? 'winner' : (winner === 'A' ? 'loser' : '')}">${totalB}</div>
                     </div>
                 </div>
                 
                 <div class="total-difference">
-                    ${winner ? `能力值差距: ${Math.abs(totalA - totalB)} 點` : '實力相當！'}
+                    ${winner ? `最終能力值差距: ${Math.abs(totalA - totalB)} 點` : '實力相當！'}
                 </div>
             `;
             resultsContainer.appendChild(totalComparisonDiv);
             
-            // 顯示詳細屬性比較（地圖效果後）
-            const detailsDiv = document.createElement('div');
-            detailsDiv.className = 'attribute-details';
-            detailsDiv.innerHTML = `
-                <div class="details-title">📊 詳細屬性比較（地圖效果後）</div>
-                <div class="details-grid">
-            `;
-            
-            // 顯示各屬性的詳細比較
-            attributes.forEach(attr => {
-                const originalA = originalSquadA[attr];
-                const originalB = originalSquadB[attr];
-                const modifiedA = modifiedSquadA[attr];
-                const modifiedB = modifiedSquadB[attr];
-                
-                let attrWinner = '';
-                if (modifiedA > modifiedB) {
-                    attrWinner = 'A';
-                } else if (modifiedB > modifiedA) {
-                    attrWinner = 'B';
-                }
-                
-                detailsDiv.innerHTML += `
-                    <div class="detail-row">
-                        <div class="detail-value ${attrWinner === 'A' ? 'detail-winner' : ''}">
-                            ${originalA !== modifiedA ? `${originalA}→` : ''}${modifiedA}
-                        </div>
-                        <div class="detail-attr">${attributeIcons[attr]} ${attributeNames[attr]}</div>
-                        <div class="detail-value ${attrWinner === 'B' ? 'detail-winner' : ''}">
-                            ${originalB !== modifiedB ? `${originalB}→` : ''}${modifiedB}
-                        </div>
-                    </div>
-                `;
-            });
-            
-            detailsDiv.innerHTML += '</div>';
-            resultsContainer.appendChild(detailsDiv);
-            
-            // 顯示最終結果
-            const finalResult = document.createElement('div');
-            finalResult.className = 'final-result';
-            finalResult.innerHTML = `
-                <div class="final-result-title">🏆 對戰結果 🏆</div>
+            // 顯示積分獲得情況
+            const scoreDiv = document.createElement('div');
+            scoreDiv.className = 'final-result';
+            scoreDiv.innerHTML = `
+                <div class="final-result-title">🏆 戰鬥結果 🏆</div>
                 <div class="winner-announcement">${winnerText}</div>
-                ${winner ? `
-                    <div class="victory-details">
-                        勝利方式：地圖效果後總能力值優勢<br>
-                        戰鬥地圖：${selectedMap.icon} ${selectedMap.name}<br>
-                        ${winner === 'A' ? `小隊 #${selectedSquadA}` : `小隊 #${selectedSquadB}`} 
-                        以 ${Math.max(totalA, totalB)} 點擊败了 ${Math.min(totalA, totalB)} 點
+                <div class="score-display">
+                    <div class="score-item">
+                        <div class="score-label">小隊 #${selectedSquadA}</div>
+                        <div class="score-value">+${scoreA}</div>
                     </div>
-                ` : `
-                    <div class="tie-details">
-                        即使在 ${selectedMap.icon} ${selectedMap.name} 的地圖效果下，<br>
-                        兩隊仍然實力相當，都擁有 ${totalA} 點總能力值！
+                    <div class="score-item">
+                        <div class="score-label">小隊 #${selectedSquadB}</div>
+                        <div class="score-value">+${scoreB}</div>
                     </div>
-                `}
+                </div>
+                ${postBattleResults && postBattleResults.specialScoring ? 
+                    '<div class="victory-details">⚡ 特殊技能卡效果影響了積分獲得！</div>' : 
+                    '<div class="victory-details">勝者獲得100積分，敗者獲得0積分</div>'
+                }
+                ${bettingSystem.enabled ? 
+                    '<div class="victory-details">💰 下注系統已結算，詳見上方結果！</div>' : ''
+                }
             `;
             
-            resultsContainer.appendChild(finalResult);
+            resultsContainer.appendChild(scoreDiv);
             resultsContainer.classList.add('active');
             
-            // 禁用戰鬥按鈕
-            const battleBtn = document.getElementById('arena-battle-btn');
+            // 隱藏戰鬥按鈕
+            const skillsRevealed = document.getElementById('skills-revealed');
+            const battleBtn = skillsRevealed ? skillsRevealed.querySelector('.battle-button-arena') : null;
             if (battleBtn) {
                 battleBtn.disabled = true;
-                battleBtn.textContent = '對戰已完成';
+                battleBtn.textContent = '戰鬥已完成';
             }
+        }
+
+        // 增加小隊積分
+        function addSquadScore(squadId, points) {
+            squadScores[squadId] = (squadScores[squadId] || 0) + points;
+            console.log(`小隊 #${squadId} 獲得 ${points} 積分，總積分：${squadScores[squadId]}`);
         }
 
         // 重置競技場戰鬥
@@ -5569,10 +5591,1053 @@
                 resultsContainer.classList.remove('active');
                 resultsContainer.innerHTML = '';
             }
-            
-            console.log('Arena battle reset completed');
         }
 
+        // 公布技能
+// 公布技能
+function revealSkills() {
+    if (!selectedSquadA || !selectedSquadB || selectedSquadA === selectedSquadB || !selectedArenaMap) {
+        alert('請選擇兩支不同的小隊和一個地圖！');
+        return;
+    }
+    
+    const skillsRevealed = document.getElementById('skills-revealed');
+    if (!skillsRevealed) return;
+    
+    skillsRevealed.innerHTML = '';
+    skillsRevealed.style.display = 'block';
+    
+    // 創建技能公布內容
+    const revealContent = document.createElement('div');
+    revealContent.innerHTML = `
+        <div class="skills-revealed-title">⚡ 技能公布 ⚡</div>
+    `;
+    
+    // 公布小隊A的技能
+    const squadAInfo = createSquadSkillInfo(selectedSquadA, 'A');
+    revealContent.appendChild(squadAInfo);
+    
+    // 公布小隊B的技能
+    const squadBInfo = createSquadSkillInfo(selectedSquadB, 'B');
+    revealContent.appendChild(squadBInfo);
+    
+    skillsRevealed.appendChild(revealContent);
+    
+    // 顯示詳細的數值變化過程
+    const detailedCalculation = createDetailedCalculation();
+    skillsRevealed.appendChild(detailedCalculation);
+    
+    // 創建開始戰鬥按鈕
+    const startBattleBtn = document.createElement('button');
+    startBattleBtn.className = 'battle-button-arena';
+    startBattleBtn.textContent = '開始計算戰鬥結果';
+    startBattleBtn.onclick = startEnhancedArenaBattle;
+    skillsRevealed.appendChild(startBattleBtn);
+    
+    // 隱藏公布按鈕
+    document.getElementById('reveal-skills-btn').style.display = 'none';
+}
+
+        // 更新技能預覽
+function updateSkillPreview() {
+    const previewContent = document.getElementById('skill-preview-content');
+    if (!previewContent) return;
+    
+    try {
+        // 獲取原始數據（深拷貝）
+        const originalSquadA = {};
+        const originalSquadB = {};
+        attributes.forEach(attr => {
+            originalSquadA[attr] = squadData[selectedSquadA][attr];
+            originalSquadB[attr] = squadData[selectedSquadB][attr];
+        });
+        originalSquadA.total = squadData[selectedSquadA].total;
+        originalSquadB.total = squadData[selectedSquadB].total;
+        
+        // 應用地圖效果
+        let modifiedSquadA = applyMapEffects(originalSquadA, selectedArenaMap);
+        let modifiedSquadB = applyMapEffects(originalSquadB, selectedArenaMap);
+        
+        // 應用被動技能效果（使用深拷貝）
+        modifiedSquadA = applyPassiveSkillEffects({...modifiedSquadA}, selectedSquadA, selectedSquadB);
+        modifiedSquadB = applyPassiveSkillEffects({...modifiedSquadB}, selectedSquadB, selectedSquadA);
+        
+        // 應用技能卡效果（使用深拷貝，與實際戰鬥計算保持一致）
+        const cardResults = applyItemCardEffects({...modifiedSquadA}, {...modifiedSquadB}, selectedSquadA, selectedSquadB);
+        modifiedSquadA = cardResults.squadA;
+        modifiedSquadB = cardResults.squadB;
+        
+        // 顯示對比
+        previewContent.innerHTML = `
+            <div class="total-vs-display">
+                <div class="total-squad-info">
+                    <div class="total-squad-name">小隊 #${selectedSquadA}</div>
+                    <div style="color: #ffd700; font-size: 1em; margin: 5px 0;">
+                        原始: ${originalSquadA.total} → 修正後: ${modifiedSquadA.total}
+                    </div>
+                    <div class="total-value">${modifiedSquadA.total}</div>
+                </div>
+                
+                <div class="total-vs-text">VS</div>
+                
+                <div class="total-squad-info">
+                    <div class="total-squad-name">小隊 #${selectedSquadB}</div>
+                    <div style="color: #ffd700; font-size: 1em; margin: 5px 0;">
+                        原始: ${originalSquadB.total} → 修正後: ${modifiedSquadB.total}
+                    </div>
+                    <div class="total-value">${modifiedSquadB.total}</div>
+                </div>
+            </div>
+            
+            <div class="attribute-details" style="margin-top: 20px;">
+                <div class="details-title">📊 詳細能力值變化</div>
+                <div class="details-grid">
+                    ${attributes.map(attr => {
+                        const originalA = originalSquadA[attr];
+                        const modifiedA = modifiedSquadA[attr];
+                        const originalB = originalSquadB[attr];
+                        const modifiedB = modifiedSquadB[attr];
+                        
+                        return `
+                            <div class="detail-row">
+                                <div class="detail-value">
+                                    ${originalA !== modifiedA ? `${originalA}→${modifiedA}` : modifiedA}
+                                </div>
+                                <div class="detail-attr">${attributeIcons[attr]} ${attributeNames[attr]}</div>
+                                <div class="detail-value">
+                                    ${originalB !== modifiedB ? `${originalB}→${modifiedB}` : modifiedB}
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+        
+        console.log('Skill preview updated successfully');
+        console.log('Squad A:', originalSquadA.total, '→', modifiedSquadA.total);
+        console.log('Squad B:', originalSquadB.total, '→', modifiedSquadB.total);
+        
+    } catch (error) {
+        console.error('Error updating skill preview:', error);
+        previewContent.innerHTML = `<div style="color: red; text-align: center;">預覽計算錯誤: ${error.message}</div>`;
+    }
+}
+
+        // 創建小隊技能信息
+        function createSquadSkillInfo(squadId, side) {
+            const squadInfo = document.createElement('div');
+            squadInfo.className = 'squad-skill-info';
+            
+            let content = `<div class="squad-skill-name">小隊 #${squadId} (${side}隊)</div>`;
+            
+            // 被動技能
+            if (squadPassiveSkills[squadId]) {
+                const passiveSkill = passiveSkills[squadPassiveSkills[squadId]];
+                content += `
+                    <div class="skill-details">
+                        <div class="skill-type">🔥 被動技能</div>
+                        <div class="skill-description">技能名稱：${passiveSkill.name}</div>
+                        <div class="skill-effect">效果：${getPassiveSkillDescription(squadPassiveSkills[squadId])}</div>
+                    </div>
+                `;
+            } else {
+                content += `
+                    <div class="skill-details">
+                        <div class="skill-type">🔥 被動技能</div>
+                        <div class="skill-description">無被動技能</div>
+                    </div>
+                `;
+            }
+            
+            // 技能卡
+            if (squadItemCards[squadId]) {
+                const itemCard = itemCards[squadItemCards[squadId]];
+                content += `
+                    <div class="skill-details">
+                        <div class="skill-type">🎯 技能卡</div>
+                        <div class="skill-description">${itemCard.description}</div>
+                        <div class="skill-effect">效果：${getItemCardDescription(squadItemCards[squadId])}</div>
+                    </div>
+                `;
+            } else {
+                content += `
+                    <div class="skill-details">
+                        <div class="skill-type">🎯 技能卡</div>
+                        <div class="skill-description">無技能卡</div>
+                    </div>
+                `;
+            }
+            
+            squadInfo.innerHTML = content;
+            return squadInfo;
+        }
+        // 創建詳細計算過程顯示
+function createDetailedCalculation() {
+    const container = document.createElement('div');
+    container.className = 'total-comparison';
+    container.innerHTML = `<div class="total-comparison-title">📊 詳細數值變化過程 📊</div>`;
+    
+    // 獲取原始數據
+    const originalSquadA = {...squadData[selectedSquadA]};
+    const originalSquadB = {...squadData[selectedSquadB]};
+    
+    // 階段1：地圖效果
+    let stage1SquadA = applyMapEffects(originalSquadA, selectedArenaMap);
+    let stage1SquadB = applyMapEffects(originalSquadB, selectedArenaMap);
+    
+    // 階段2：被動技能效果
+    let stage2SquadA = applyPassiveSkillEffects({...stage1SquadA}, selectedSquadA, selectedSquadB);
+    let stage2SquadB = applyPassiveSkillEffects({...stage1SquadB}, selectedSquadB, selectedSquadA);
+    
+    // 階段3：技能卡效果
+    const cardResults = applyItemCardEffects({...stage2SquadA}, {...stage2SquadB}, selectedSquadA, selectedSquadB);
+    let finalSquadA = cardResults.squadA;
+    let finalSquadB = cardResults.squadB;
+    
+    // 創建階段顯示
+    const stagesDiv = document.createElement('div');
+    stagesDiv.style.cssText = 'margin-top: 20px;';
+    
+    // 階段0：原始數值
+    stagesDiv.appendChild(createStageDisplay('原始能力值', originalSquadA, originalSquadB, null, null));
+    
+    // 階段1：地圖效果
+    const mapName = arenaMaps[selectedArenaMap].name;
+    stagesDiv.appendChild(createStageDisplay(`地圖效果：${mapName}`, stage1SquadA, stage1SquadB, originalSquadA, originalSquadB));
+    
+    // 階段2：被動技能
+    const passiveAName = squadPassiveSkills[selectedSquadA] ? passiveSkills[squadPassiveSkills[selectedSquadA]].name : '無';
+    const passiveBName = squadPassiveSkills[selectedSquadB] ? passiveSkills[squadPassiveSkills[selectedSquadB]].name : '無';
+    stagesDiv.appendChild(createStageDisplay(`被動技能效果`, stage2SquadA, stage2SquadB, stage1SquadA, stage1SquadB));
+    
+    // 階段3：技能卡效果
+    const itemAName = squadItemCards[selectedSquadA] ? itemCards[squadItemCards[selectedSquadA]].name : '無';
+    const itemBName = squadItemCards[selectedSquadB] ? itemCards[squadItemCards[selectedSquadB]].name : '無';
+    stagesDiv.appendChild(createStageDisplay(`技能卡效果`, finalSquadA, finalSquadB, stage2SquadA, stage2SquadB));
+    
+    container.appendChild(stagesDiv);
+    return container;
+}
+
+// 創建階段顯示
+function createStageDisplay(stageName, squadA, squadB, prevSquadA, prevSquadB) {
+    const stageDiv = document.createElement('div');
+    stageDiv.style.cssText = 'background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 20px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.2);';
+    
+    let content = `
+        <div style="color: #ffd700; font-size: 1.2em; font-weight: bold; text-align: center; margin-bottom: 15px;">
+            ⚔️ ${stageName} ⚔️
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: start;">
+            <div>
+                <div style="color: #00ffff; font-weight: bold; text-align: center; margin-bottom: 10px;">小隊 #${selectedSquadA}</div>
+                ${createAttributesList(squadA, prevSquadA)}
+                <div style="color: #ffd700; font-size: 1.1em; font-weight: bold; text-align: center; margin-top: 10px; padding: 10px; background: rgba(255, 215, 0, 0.1); border-radius: 8px;">
+                    總點數: ${prevSquadA ? `${prevSquadA.total} → ` : ''}${squadA.total}
+                </div>
+            </div>
+            <div style="color: #ff4757; font-size: 2em; font-weight: bold; align-self: center;">VS</div>
+            <div>
+                <div style="color: #00ffff; font-weight: bold; text-align: center; margin-bottom: 10px;">小隊 #${selectedSquadB}</div>
+                ${createAttributesList(squadB, prevSquadB)}
+                <div style="color: #ffd700; font-size: 1.1em; font-weight: bold; text-align: center; margin-top: 10px; padding: 10px; background: rgba(255, 215, 0, 0.1); border-radius: 8px;">
+                    總點數: ${prevSquadB ? `${prevSquadB.total} → ` : ''}${squadB.total}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    stageDiv.innerHTML = content;
+    return stageDiv;
+}
+
+// 創建屬性列表
+function createAttributesList(squad, prevSquad) {
+    let html = '<div style="display: grid; gap: 5px;">';
+    
+    attributes.forEach(attr => {
+        const current = squad[attr];
+        const prev = prevSquad ? prevSquad[attr] : null;
+        const changed = prev !== null && prev !== current;
+        
+        let valueText = current.toString();
+        if (changed) {
+            valueText = `${prev} → ${current}`;
+        }
+        
+        let color = '#fff';
+        let bgColor = 'rgba(0, 0, 0, 0.3)';
+        
+        if (changed) {
+            if (current > prev) {
+                color = '#00ff88';
+                bgColor = 'rgba(0, 255, 136, 0.1)';
+            } else if (current < prev) {
+                color = '#ff4757';
+                bgColor = 'rgba(255, 71, 87, 0.1)';
+            }
+        }
+        
+        html += `
+            <div style="display: grid; grid-template-columns: 40px 100px 100px; gap: 10px; align-items: center; padding: 5px; background: ${bgColor}; border-radius: 5px; ${changed ? 'border: 1px solid ' + color + ';' : ''}">
+                <div style="text-align: center;">${attributeIcons[attr]}</div>
+                <div style="color: #ccc; font-size: 0.9em;">${attributeNames[attr]}</div>
+                <div style="color: ${color}; font-weight: bold; text-align: right;">${valueText}</div>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    return html;
+}
+
+        // 獲取被動技能描述
+        function getPassiveSkillDescription(skillKey) {
+            const skill = passiveSkills[skillKey];
+            if (!skill) return '無效果';
+            
+            let description = '';
+            Object.keys(skill.effects).forEach(attr => {
+                const multiplier = skill.effects[attr];
+                if (attr === 'opponent_all') {
+                    description += `對方所有能力值 ×${multiplier} `;
+                } else {
+                    const attrName = attributeNames[attr];
+                    description += `${attrName} ×${multiplier} `;
+                }
+            });
+            
+            return description;
+        }
+
+        // 獲取技能卡描述
+        function getItemCardDescription(itemKey) {
+            const item = itemCards[itemKey];
+            if (!item) return '無效果';
+            
+            if (item.type === 'special') {
+                return getSpecialItemDescription(item);
+            }
+            
+            let description = '';
+            Object.keys(item.effects).forEach(attr => {
+                const multiplier = item.effects[attr];
+                if (attr === 'all') {
+                    description += `所有能力值 ×${multiplier} `;
+                } else {
+                    const attrName = attributeNames[attr];
+                    if (multiplier === 0) {
+                        description += `${attrName} → 0 `;
+                    } else {
+                        description += `${attrName} ×${multiplier} `;
+                    }
+                }
+            });
+            
+            return description;
+        }
+
+        // 獲取特殊技能卡描述
+        function getSpecialItemDescription(item) {
+            const special = item.special;
+            let baseEffect = '';
+            
+            if (item.effects.all) {
+                baseEffect = `所有能力值 ×${item.effects.all} + `;
+            }
+            
+            switch (special) {
+                case 'retry_on_lose':
+                    return baseEffect + '戰敗時可重選地圖再戰';
+                case 'reverse_result':
+                    return '輸的一方變成勝者';
+                case 'choose_opponent':
+                    return baseEffect + '可選擇避戰或換對手';
+                case 'zero_max_attribute':
+                    return baseEffect + '自行選擇將對手一項能力歸0';
+                case 'steal_attribute':
+                    return baseEffect + '戰後盜取對手80點能力';
+                case 'underdog_boost':
+                    return '能力值較低時自身×1.5';
+                case 'skip_battle':
+                    return '直接獲得勝者積分';
+                case 'steal_item':
+                    return '奪取對方技能卡';
+                case 'mutual_score':
+                    return '雙方同意可各得100分';
+                case 'reduce_opponent':
+                    return baseEffect + '戰後減少對手各能力15點';
+                case 'high_risk_reward':
+                    return baseEffect + '勝利+200分，失敗-10能力';
+                case 'copy_skills':
+                    return '複製對方所有技能';
+                case 'disable_passive':
+                    return baseEffect + '消除對方被動技能';
+                case 'swap_passive':
+                    return baseEffect + '交換雙方被動技能';
+                default:
+                    return '特殊效果';
+            }
+        }
+
+        // ======== 道具牆相關函數 ========
+        
+        // 初始化道具牆
+        function initializeItemsWall() {
+            const itemsGrid = document.getElementById('items-grid');
+            if (!itemsGrid) return;
+            
+            itemsGrid.innerHTML = '';
+            
+            Object.keys(itemCards).forEach(itemKey => {
+                const item = itemCards[itemKey];
+                const itemCard = document.createElement('div');
+                itemCard.className = 'item-card';
+                itemCard.setAttribute('data-item-key', itemKey);
+                
+                // 檢查是否已被永久使用
+                if (permanentlyUsedItems[itemKey]) {
+                    itemCard.classList.add('taken');
+                    itemCard.style.background = 'rgba(128, 128, 128, 0.3)';
+                    itemCard.style.opacity = '0.4';
+                    itemCard.onclick = () => {
+                        alert('此技能卡已在戰鬥中使用過，無法再選擇！');
+                    };
+                    itemCard.innerHTML = `
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-taken-by" style="color: #888;">已使用</div>
+                    `;
+                }
+                // 檢查是否已被選擇
+                else if (takenItems[itemKey]) {
+                    const takenBy = takenItems[itemKey];
+                    itemCard.classList.add('taken');
+                    itemCard.onclick = () => {
+                        alert(`此技能卡已被小隊 #${takenBy} 選擇！`);
+                    };
+                    itemCard.innerHTML = `
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-taken-by">小隊 #${takenBy}</div>
+                    `;
+                }
+                // 可選擇的道具卡
+                else {
+                    itemCard.onclick = () => selectItemCard(itemKey);
+                    itemCard.innerHTML = `
+                        <div class="item-name">${item.name}</div>
+                    `;
+                }
+                
+                itemsGrid.appendChild(itemCard);
+            });
+        }
+
+        // 選擇技能卡
+        function selectItemCard(itemKey) {
+    // 檢查是否已被永久使用
+    if (permanentlyUsedItems[itemKey]) {
+        alert('此技能卡已被使用過，無法再選擇！');
+        return;
+    }
+    
+    // 檢查是否已被選擇
+    if (takenItems[itemKey]) {
+        alert(`此技能卡已被小隊 #${takenItems[itemKey]} 選擇！`);
+        return;
+    }
+    
+    // 清除之前的選擇
+    document.querySelectorAll('.item-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    // 選擇新卡片
+    selectedItemCard = itemKey;
+    const cardElement = document.querySelector(`[data-item-key="${itemKey}"]`);
+    if (cardElement) {
+        cardElement.classList.add('selected');
+    }
+    
+    // 更新顯示
+    updateSelectedItemDisplay();
+    updateAssignButton();
+}
+
+        // 更新選中技能卡顯示
+        function updateSelectedItemDisplay() {
+    const container = document.getElementById('squad-buttons');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    for (let squadId = 1; squadId <= 10; squadId++) {
+        const button = document.createElement('button');
+        button.className = 'squad-btn';
+        button.setAttribute('data-squad-id', squadId);
+        
+        let buttonText = `小隊 #${squadId}`;
+        
+        // 檢查是否已參與戰鬥
+        const hasBattled = battleParticipatedSquads[squadId];
+        
+        if (squadItemCards[squadId]) {
+            const itemName = itemCards[squadItemCards[squadId]].name;
+            
+            if (hasBattled) {
+                // 已戰鬥的小隊顯示特殊樣式，可以重新選擇
+                buttonText += `\n(${itemName} - 已戰鬥)`;
+                button.style.fontSize = '0.8em';
+                button.style.background = 'rgba(138, 43, 226, 0.2)';
+                button.style.borderColor = '#8a2be2';
+                button.onclick = () => selectSquadForItem(squadId);
+            } else {
+                // 未戰鬥的小隊正常顯示
+                buttonText += `\n(${itemName})`;
+                button.style.fontSize = '0.9em';
+                button.classList.add('has-item');
+                button.style.opacity = '0.6';
+                button.style.cursor = 'not-allowed';
+                button.onclick = () => {
+                    alert(`小隊 #${squadId} 已經擁有技能卡「${itemName}」！需要先參與戰鬥才能更換。`);
+                };
+            }
+        } else {
+            // 沒有道具的小隊
+            if (hasBattled) {
+                buttonText += '\n(可選新卡)';
+                button.style.fontSize = '0.8em';
+                button.style.borderColor = '#00ff88';
+            }
+            button.onclick = () => selectSquadForItem(squadId);
+        }
+        
+        button.textContent = buttonText;
+        container.appendChild(button);
+    }
+}
+
+        // 選擇要分配技能卡的小隊
+        function selectSquadForItem(squadId) {
+    // 檢查小隊是否已經有道具卡且未戰鬥
+    if (squadItemCards[squadId] && !battleParticipatedSquads[squadId]) {
+        alert(`小隊 #${squadId} 已經擁有技能卡「${itemCards[squadItemCards[squadId]].name}」！需要先參與戰鬥才能更換。`);
+        return;
+    }
+    
+    // 清除之前的選擇
+    document.querySelectorAll('.squad-btn').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    
+    // 選擇新小隊
+    selectedSquadForItem = squadId;
+    const btnElement = document.querySelector(`[data-squad-id="${squadId}"]`);
+    if (btnElement) {
+        btnElement.classList.add('selected');
+    }
+    
+    updateAssignButton();
+}
+
+        // 更新分配按鈕狀態
+        function updateAssignButton() {
+            const assignBtn = document.getElementById('assign-btn');
+            if (!assignBtn) return;
+            
+            const canAssign = selectedItemCard && selectedSquadForItem && !takenItems[selectedItemCard];
+            
+            assignBtn.disabled = !canAssign;
+            
+            if (canAssign) {
+                assignBtn.textContent = `分配給小隊 #${selectedSquadForItem}`;
+            } else {
+                assignBtn.textContent = '分配技能卡';
+            }
+        }
+
+        // 分配技能卡給小隊
+        function assignItemToSquad() {
+    if (!selectedItemCard || !selectedSquadForItem) {
+        alert('請先選擇技能卡和小隊！');
+        return;
+    }
+    
+    if (permanentlyUsedItems[selectedItemCard]) {
+        alert('此技能卡已被使用過，無法再選擇！');
+        return;
+    }
+    
+    if (takenItems[selectedItemCard]) {
+        alert('此技能卡已被選擇！');
+        return;
+    }
+    
+    // 檢查小隊是否已經有道具卡且未戰鬥
+    if (squadItemCards[selectedSquadForItem] && !battleParticipatedSquads[selectedSquadForItem]) {
+        alert(`小隊 #${selectedSquadForItem} 已經擁有技能卡且尚未戰鬥，無法更換！`);
+        return;
+    }
+    
+    // 如果小隊之前有道具，先釋放它（但已戰鬥的道具會被標記為永久使用）
+    if (squadItemCards[selectedSquadForItem]) {
+        const oldItem = squadItemCards[selectedSquadForItem];
+        delete takenItems[oldItem];
+    }
+    
+    // 分配新技能卡
+    squadItemCards[selectedSquadForItem] = selectedItemCard;
+    takenItems[selectedItemCard] = selectedSquadForItem;
+    
+    const itemName = itemCards[selectedItemCard].name;
+    alert(`小隊 #${selectedSquadForItem} 已獲得技能卡：${itemName}`);
+    
+    // 重置選擇
+    selectedItemCard = null;
+    selectedSquadForItem = null;
+    
+    // 更新顯示
+    initializeItemsWall();
+    updateSquadButtonsForItems();
+    updateSelectedItemDisplay();
+    updateAssignButton();
+}
+
+        // ======== 被動技能相關函數 ========
+        
+        // 更新被動技能選項
+        function updatePassiveSkillOptions() {
+            for (let squadId = 1; squadId <= 10; squadId++) {
+                const select = document.getElementById(`passive-skill-${squadId}`);
+                if (!select) continue;
+                
+                // 清空現有選項（保留第一個空選項）
+                select.innerHTML = '<option value="">選擇被動技能</option>';
+                
+                // 獲取已被其他小隊選擇的技能
+                const takenSkills = [];
+                for (let otherId = 1; otherId <= 10; otherId++) {
+                    if (otherId !== squadId && squadPassiveSkills[otherId]) {
+                        takenSkills.push(squadPassiveSkills[otherId]);
+                    }
+                }
+                
+                // 添加可用的被動技能選項
+                Object.keys(passiveSkills).forEach(skillKey => {
+                    if (!takenSkills.includes(skillKey)) {
+                        const option = document.createElement('option');
+                        option.value = skillKey;
+                        option.textContent = passiveSkills[skillKey].name;
+                        select.appendChild(option);
+                    }
+                });
+                
+                // 設置當前選中的技能
+                if (squadPassiveSkills[squadId]) {
+                    select.value = squadPassiveSkills[squadId];
+                }
+                
+                // 更新顯示
+                updatePassiveSkillDisplay(squadId);
+            }
+        }
+
+        // 分配被動技能
+        function assignPassiveSkill(squadId, skillKey) {
+            if (skillKey === '') {
+                squadPassiveSkills[squadId] = null;
+            } else {
+                // 檢查是否已被其他小隊選擇
+                for (let otherId = 1; otherId <= 10; otherId++) {
+                    if (otherId !== squadId && squadPassiveSkills[otherId] === skillKey) {
+                        alert(`技能「${passiveSkills[skillKey].name}」已被小隊 #${otherId} 選擇！`);
+                        document.getElementById(`passive-skill-${squadId}`).value = squadPassiveSkills[squadId] || '';
+                        return;
+                    }
+                }
+                
+                squadPassiveSkills[squadId] = skillKey;
+                alert(`小隊 #${squadId} 已獲得被動技能：${passiveSkills[skillKey].name}`);
+            }
+            
+            updatePassiveSkillDisplay(squadId);
+            updatePassiveSkillOptions(); // 更新所有小隊的選項
+        }
+
+        // 更新被動技能顯示
+        function updatePassiveSkillDisplay(squadId) {
+            const display = document.getElementById(`current-passive-${squadId}`);
+            if (!display) return;
+            
+            if (squadPassiveSkills[squadId]) {
+                const skillName = passiveSkills[squadPassiveSkills[squadId]].name;
+                display.textContent = `已選擇：${skillName}`;
+            } else {
+                display.textContent = '未選擇被動技能';
+            }
+        }
+
+        // ======== 下注系統相關函數 ========
+        
+function startBetting() {
+    if (!selectedSquadA || !selectedSquadB || selectedSquadA === selectedSquadB) {
+        alert('請先選擇兩支不同的對戰小隊！');
+        return;
+    }
+    
+    bettingSystem.enabled = true;
+    bettingSystem.bets = {};
+    
+    // 顯示下注界面 - 修改變數名稱避免衝突
+    const bettingSystemDiv = document.getElementById('betting-system');
+    const bettingOptions = document.getElementById('betting-options');
+    const bettingParticipants = document.getElementById('betting-participants');
+    const bettingSummary = document.getElementById('betting-summary');
+    
+    if (bettingSystemDiv) bettingSystemDiv.classList.add('active');
+    if (bettingOptions) bettingOptions.style.display = 'grid';
+    if (bettingParticipants) bettingParticipants.style.display = 'block';
+    if (bettingSummary) bettingSummary.style.display = 'grid';
+    
+    // 更新下注信息
+    updateBettingInfo();
+    updateBettingGrid();
+    updateBettingSummary();
+    updateBettingOdds();
+    
+    // 更新按鈕狀態
+    const startBtn = document.getElementById('start-betting-btn');
+    const clearBtn = document.getElementById('clear-bets-btn');
+    if (startBtn) startBtn.disabled = true;
+    if (clearBtn) clearBtn.disabled = false;
+    
+    console.log('下注系統已啟動');
+}
+
+        // 更新下注信息
+        function updateBettingInfo() {
+            const matchupElement = document.getElementById('betting-matchup');
+            const squadAElement = document.getElementById('betting-squad-a');
+            const squadBElement = document.getElementById('betting-squad-b');
+            
+            if (matchupElement) {
+                matchupElement.textContent = `小隊 #${selectedSquadA} VS 小隊 #${selectedSquadB}`;
+            }
+            if (squadAElement) {
+                squadAElement.textContent = `小隊 #${selectedSquadA}`;
+            }
+            if (squadBElement) {
+                squadBElement.textContent = `小隊 #${selectedSquadB}`;
+            }
+        }
+
+        // 更新下注參與者網格
+        function updateBettingGrid() {
+            const bettingGrid = document.getElementById('betting-grid');
+            if (!bettingGrid) return;
+            
+            bettingGrid.innerHTML = '';
+            
+            for (let squadId = 1; squadId <= 10; squadId++) {
+                // 跳過對戰的兩支隊伍
+                if (squadId === selectedSquadA || squadId === selectedSquadB) continue;
+                
+                const squadBtn = document.createElement('div');
+                squadBtn.className = 'betting-squad-btn';
+                squadBtn.setAttribute('data-squad-id', squadId);
+                squadBtn.onclick = () => toggleSquadBet(squadId);
+                
+                const currentBet = bettingSystem.bets[squadId];
+                if (currentBet === 'A') {
+                    squadBtn.classList.add('bet-a');
+                    squadBtn.textContent = `小隊 #${squadId}\n(押 A)`;
+                } else if (currentBet === 'B') {
+                    squadBtn.classList.add('bet-b');
+                    squadBtn.textContent = `小隊 #${squadId}\n(押 B)`;
+                } else {
+                    squadBtn.textContent = `小隊 #${squadId}\n(未下注)`;
+                }
+                
+                bettingGrid.appendChild(squadBtn);
+            }
+        }
+
+        // 切換小隊下注
+        function toggleSquadBet(squadId) {
+            if (!bettingSystem.enabled) return;
+            
+            const currentBet = bettingSystem.bets[squadId];
+            
+            // 循環切換：未下注 -> 押A -> 押B -> 未下注
+            if (!currentBet) {
+                bettingSystem.bets[squadId] = 'A';
+            } else if (currentBet === 'A') {
+                bettingSystem.bets[squadId] = 'B';
+            } else {
+                delete bettingSystem.bets[squadId];
+            }
+            
+            updateBettingGrid();
+            updateBettingSummary();
+            updateBettingOdds();
+        }
+
+        // 選擇下注方（點擊左右側面板時的快速下注）
+        function selectBettingSide(side) {
+            if (!bettingSystem.enabled) return;
+            
+            // 找出還沒下注的隊伍，自動幫他們下注到這一方
+            for (let squadId = 1; squadId <= 10; squadId++) {
+                if (squadId === selectedSquadA || squadId === selectedSquadB) continue;
+                if (!bettingSystem.bets[squadId]) {
+                    bettingSystem.bets[squadId] = side;
+                    break; // 只幫第一個未下注的隊伍下注
+                }
+            }
+            
+            updateBettingGrid();
+            updateBettingSummary();
+            updateBettingOdds();
+        }
+
+        // 更新下注統計
+        function updateBettingSummary() {
+            let countA = 0, countB = 0;
+            
+            Object.values(bettingSystem.bets).forEach(bet => {
+                if (bet === 'A') countA++;
+                if (bet === 'B') countB++;
+            });
+            
+            const countAElement = document.getElementById('betting-count-a');
+            const countBElement = document.getElementById('betting-count-b');
+            
+            if (countAElement) countAElement.textContent = countA;
+            if (countBElement) countBElement.textContent = countB;
+        }
+
+        // 更新下注賠率
+        function updateBettingOdds() {
+            let countA = 0, countB = 0;
+            
+            Object.values(bettingSystem.bets).forEach(bet => {
+                if (bet === 'A') countA++;
+                if (bet === 'B') countB++;
+            });
+            
+            const totalBets = countA + countB;
+            
+            if (totalBets === 0) {
+                document.getElementById('betting-odds-a').textContent = '等待下注';
+                document.getElementById('betting-odds-b').textContent = '等待下注';
+                return;
+            }
+            
+            // 計算賠率：基礎積分 × (1 + 對方下注數量 ÷ 總下注數量)
+            const oddsA = totalBets > 0 ? bettingSystem.baseReward * (1 + countB / totalBets) : bettingSystem.baseReward;
+            const oddsB = totalBets > 0 ? bettingSystem.baseReward * (1 + countA / totalBets) : bettingSystem.baseReward;
+            
+            document.getElementById('betting-odds-a').textContent = `獲勝可得: ${oddsA.toFixed(1)} 分`;
+            document.getElementById('betting-odds-b').textContent = `獲勝可得: ${oddsB.toFixed(1)} 分`;
+        }
+
+        // 清空所有下注
+        function clearAllBets() {
+            bettingSystem.bets = {};
+            updateBettingGrid();
+            updateBettingSummary();
+            updateBettingOdds();
+        }
+
+        // 計算下注獎勵
+        function calculateBettingRewards(winner) {
+            if (!bettingSystem.enabled || Object.keys(bettingSystem.bets).length === 0) {
+                return { rewards: [], message: '沒有下注，無需結算' };
+            }
+            
+            let countA = 0, countB = 0;
+            const bettorsA = [];
+            const bettorsB = [];
+            
+            Object.entries(bettingSystem.bets).forEach(([squadId, bet]) => {
+                if (bet === 'A') {
+                    countA++;
+                    bettorsA.push(parseInt(squadId));
+                } else if (bet === 'B') {
+                    countB++;
+                    bettorsB.push(parseInt(squadId));
+                }
+            });
+            
+            const totalBets = countA + countB;
+            const rewards = [];
+            
+            if (totalBets === 0) {
+                return { rewards: [], message: '沒有有效下注' };
+            }
+            
+            let winnerText = '';
+            if (winner === 'A') {
+                // 小隊A獲勝，押A的人獲得獎勵
+                const rewardPerSquad = bettingSystem.baseReward * (1 + countB / totalBets);
+                bettorsA.forEach(squadId => {
+                    addSquadScore(squadId, Math.round(rewardPerSquad));
+                    rewards.push({
+                        squadId: squadId,
+                        points: Math.round(rewardPerSquad),
+                        bet: 'A'
+                    });
+                });
+                winnerText = `小隊 #${selectedSquadA} 獲勝！押中的隊伍獲得獎勵！`;
+            } else if (winner === 'B') {
+                // 小隊B獲勝，押B的人獲得獎勵
+                const rewardPerSquad = bettingSystem.baseReward * (1 + countA / totalBets);
+                bettorsB.forEach(squadId => {
+                    addSquadScore(squadId, Math.round(rewardPerSquad));
+                    rewards.push({
+                        squadId: squadId,
+                        points: Math.round(rewardPerSquad),
+                        bet: 'B'
+                    });
+                });
+                winnerText = `小隊 #${selectedSquadB} 獲勝！押中的隊伍獲得獎勵！`;
+            } else {
+                // 平手，所有下注者獲得基礎獎勵
+                [...bettorsA, ...bettorsB].forEach(squadId => {
+                    addSquadScore(squadId, bettingSystem.baseReward);
+                    rewards.push({
+                        squadId: squadId,
+                        points: bettingSystem.baseReward,
+                        bet: 'tie'
+                    });
+                });
+                winnerText = '平手！所有下注者獲得基礎獎勵！';
+            }
+            
+            return { rewards: rewards, message: winnerText };
+        }
+
+        // 顯示下注結算結果
+        function displayBettingResults(bettingResults) {
+            const bettingResultsDiv = document.getElementById('betting-results');
+            const winnerText = document.getElementById('betting-winner-text');
+            const rewardsContent = document.getElementById('betting-rewards-content');
+            
+            if (!bettingResultsDiv || !winnerText || !rewardsContent) return;
+            
+            bettingResultsDiv.classList.add('active');
+            winnerText.textContent = bettingResults.message;
+            
+            rewardsContent.innerHTML = '';
+            
+            if (bettingResults.rewards.length === 0) {
+                rewardsContent.innerHTML = '<div style="text-align: center; color: #888;">無獎勵發放</div>';
+                return;
+            }
+            
+            bettingResults.rewards.forEach(reward => {
+                const rewardItem = document.createElement('div');
+                rewardItem.className = 'betting-reward-item';
+                
+                let betText = '';
+                if (reward.bet === 'A') {
+                    betText = `押小隊 #${selectedSquadA}`;
+                } else if (reward.bet === 'B') {
+                    betText = `押小隊 #${selectedSquadB}`;
+                } else {
+                    betText = '平手獎勵';
+                }
+                
+                rewardItem.innerHTML = `
+                    <div class="betting-reward-squad">小隊 #${reward.squadId} (${betText})</div>
+                    <div class="betting-reward-points">+${reward.points} 分</div>
+                `;
+                
+                rewardsContent.appendChild(rewardItem);
+            });
+        }
+        
+        // 更新積分排行榜
+        function updateRankings() {
+            const rankingsList = document.getElementById('rankings-list');
+            if (!rankingsList) return;
+            
+            // 創建排行數組
+            const rankings = [];
+            for (let squadId = 1; squadId <= 10; squadId++) {
+                rankings.push({
+                    id: squadId,
+                    score: squadScores[squadId] || 0,
+                    power: squadData[squadId]?.total || 40,
+                    passive: squadPassiveSkills[squadId] ? passiveSkills[squadPassiveSkills[squadId]].name : '無',
+                    item: squadItemCards[squadId] ? itemCards[squadItemCards[squadId]].name : '無'
+                });
+            }
+            
+            // 按積分排序
+            rankings.sort((a, b) => b.score - a.score);
+            
+            rankingsList.innerHTML = '';
+            
+            rankings.forEach((squad, index) => {
+                const rank = index + 1;
+                const rankingItem = document.createElement('div');
+                rankingItem.className = `ranking-item rank-${rank <= 3 ? rank : 'other'}`;
+                
+                rankingItem.innerHTML = `
+                    <div class="rank-number">${rank}</div>
+                    <div class="squad-info">
+                        <div class="squad-rank-name">小隊 #${squad.id}</div>
+                        <div class="squad-skills">被動：${squad.passive} | 道具：${squad.item}</div>
+                    </div>
+                    <div class="squad-score-container">
+                        <input type="number" 
+                            class="squad-score-input" 
+                            id="score-input-${squad.id}" 
+                            value="${squad.score}" 
+                            min="0" 
+                            max="9999"
+                            onchange="updateSquadScore(${squad.id}, this.value)">
+                        <button class="score-update-btn" onclick="confirmScoreUpdate(${squad.id})">✓</button>
+                    </div>
+                    <div class="squad-power">${squad.power} 戰力</div>
+                `;
+                
+                rankingsList.appendChild(rankingItem);
+            });
+        }
+        
+        function updateSquadScore(squadId, newScore) {
+            const score = parseInt(newScore);
+            if (isNaN(score) || score < 0) {
+                alert('請輸入有效的積分（0或以上）！');
+                // 恢復原值
+                document.getElementById(`score-input-${squadId}`).value = squadScores[squadId] || 0;
+                return;
+            }
+            
+            // 暫時儲存新積分（尚未確認）
+            document.getElementById(`score-input-${squadId}`).setAttribute('data-new-score', score);
+        }
+        
+        // 確認積分更新
+        function confirmScoreUpdate(squadId) {
+            const input = document.getElementById(`score-input-${squadId}`);
+            const newScore = parseInt(input.getAttribute('data-new-score') || input.value);
+            
+            if (isNaN(newScore) || newScore < 0) {
+                alert('請輸入有效的積分！');
+                return;
+            }
+            
+            const oldScore = squadScores[squadId] || 0;
+            squadScores[squadId] = newScore;
+            
+            alert(`小隊 #${squadId} 積分已從 ${oldScore} 更新為 ${newScore}`);
+            
+            // 重新排序並更新顯示
+            updateRankings();
+        }
         // 創建星星背景
         function createStars() {
             const starsContainer = document.getElementById('stars');
