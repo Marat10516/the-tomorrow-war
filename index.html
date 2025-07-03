@@ -3205,6 +3205,10 @@
             bets: {}, // squadId: 'A' or 'B'
             baseReward: 20 // 基礎下注獎勵
         };
+        let copyMachineState = {
+    squadA: { copyPassive: false, copyItem: false },
+    squadB: { copyPassive: false, copyItem: false }
+};
         
         // 競技場變數
         let selectedSquadA = null;
@@ -3466,12 +3470,12 @@
                 special: 'zero_max_attribute'
             },
             'fake_shoes': {
-                name: 'Adidos跑鞋',
-                description: '高仿盜版，戰鬥結束可以盜取對方其中一個部位的80點能力',
-                effects: { all: 1.1 },
-                type: 'special',
-                special: 'steal_attribute'
-            },
+    name: 'Adidos跑鞋',
+    description: '高仿盜版，戰鬥結束可以盜取對方其中一個部位能力點，直到自己為100或對方為0',
+    effects: { all: 1.1 },
+    type: 'special',
+    special: 'steal_attribute'
+},
             'lazy_chair': {
                 name: '充氣懶骨頭',
                 description: '看似攤在椅子上毫無戰意，實則內功運轉，準備反打，若本回合能力點數原本低於對方，自身點數乘1.5倍',
@@ -3495,7 +3499,7 @@
             },
             'big_doll': {
                 name: '超大絨毛玩偶',
-                description: '可可愛愛，散發愛的能量，如果雙方都同意，兩隊皆獲得10分',
+                description: '可可愛愛，散發愛的能量，如果雙方都同意，兩隊皆獲得120分',
                 effects: {},
                 type: 'special',
                 special: 'mutual_score'
@@ -3508,12 +3512,12 @@
                 special: 'reduce_opponent'
             },
             'rtx_5090': {
-                name: '5090ti顯卡',
-                description: '效能大增，畫質8k，但電腦可能燒壞，若獲勝，則獲得20點積分，若輸，則所有能力值-10點',
-                effects: { all: 1.1 },
-                type: 'special',
-                special: 'high_risk_reward'
-            },
+    name: '5090ti顯卡',
+    description: '效能大增，畫質8k，但電腦可能燒壞，若獲勝，則獲得200點積分，若輸，則所有能力值永久-10點',
+    effects: { all: 1.1 },
+    type: 'special',
+    special: 'high_risk_reward'
+},
             'copy_machine': {
                 name: '超級影印機',
                 description: 'copy能力百分百，複製對方被動技能和技能卡技能',
@@ -4771,9 +4775,6 @@ function applyMapEffects(squadData, mapId) {
             }
         }
 
-        // 增強版競技場戰鬥
-        // 增強版競技場戰鬥
-// 主要戰鬥函數 - 需要完全替換
 function startEnhancedArenaBattle() {
     if (!selectedSquadA || !selectedSquadB || selectedSquadA === selectedSquadB || !selectedArenaMap) {
         alert('請選擇兩支不同的小隊和一個地圖！');
@@ -4782,15 +4783,110 @@ function startEnhancedArenaBattle() {
     
     // 處理特殊技能卡（戰鬥前）
     const specialResults = handlePreBattleSpecialCards();
+    
+    // 🆕 修改：完整處理跳過戰鬥的情況
     if (specialResults && specialResults.skipBattle) {
+        // 標記參戰小隊
+        battleParticipatedSquads[selectedSquadA] = true;
+        battleParticipatedSquads[selectedSquadB] = true;
+        
+        // 保存技能卡資訊
+        const usedCardA = squadItemCards[selectedSquadA];
+        const usedCardB = squadItemCards[selectedSquadB];
+        
+        // 確定使用 AIR JORDAN 的隊伍
+        let airJordanUser = null;
+        let airJordanOpponent = null;
+        if (squadItemCards[selectedSquadA] === 'air_jordan') {
+            airJordanUser = selectedSquadA;
+            airJordanOpponent = selectedSquadB;
+        } else if (squadItemCards[selectedSquadB] === 'air_jordan') {
+            airJordanUser = selectedSquadB;
+            airJordanOpponent = selectedSquadA;
+        }
+        
+        // 處理下注結算（如果有）
+        if (bettingSystem.enabled && airJordanUser) {
+            const winner = airJordanUser === selectedSquadA ? 'A' : 'B';
+            const bettingResults = calculateBettingRewards(winner);
+            displayBettingResults(bettingResults);
+        }
+        
+        // 顯示戰鬥結果
+        const resultsContainer = document.getElementById('comparison-results');
+        if (resultsContainer && airJordanUser) {
+            resultsContainer.innerHTML = `
+                <div class="final-result">
+                    <div class="final-result-title">🏀 AIR JORDAN 1 發動！ 🏀</div>
+                    <div class="winner-announcement">
+                        🏆 小隊 #${airJordanUser} 使用 AIR JORDAN 1 直接獲勝！ 🏆
+                    </div>
+                    <div class="score-display">
+                        <div class="score-item">
+                            <div class="score-label">小隊 #${airJordanUser}</div>
+                            <div class="score-value">+100</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-label">小隊 #${airJordanOpponent}</div>
+                            <div class="score-value">+0</div>
+                        </div>
+                    </div>
+                    <div class="victory-details">
+                        變身成為籃球之神，跳過本輪對戰，直接成為勝利者！
+                    </div>
+                    ${bettingSystem.enabled ? 
+                        '<div class="victory-details">💰 下注系統已結算，詳見上方結果！</div>' : ''
+                    }
+                </div>
+            `;
+            resultsContainer.classList.add('active');
+        }
+        
+        // 清理技能卡
+        if (usedCardA) {
+            permanentlyUsedItems[usedCardA] = true;
+            delete takenItems[usedCardA];
+            delete squadItemCards[selectedSquadA];
+        }
+        
+        if (usedCardB) {
+            permanentlyUsedItems[usedCardB] = true;
+            delete takenItems[usedCardB];
+            delete squadItemCards[selectedSquadB];
+        }
+        
+        // 如果在道具牆頁面，更新顯示
+        const currentPage = document.querySelector('.page.active');
+        if (currentPage && currentPage.id === 'items-page') {
+            initializeItemsWall();
+            updateSquadButtonsForItems();
+        }
+        
+        // 隱藏戰鬥按鈕
+        const skillsRevealed = document.getElementById('skills-revealed');
+        const battleBtn = skillsRevealed ? skillsRevealed.querySelector('.battle-button-arena') : null;
+        if (battleBtn) {
+            battleBtn.disabled = true;
+            battleBtn.textContent = '戰鬥已完成';
+        }
+        
+        // 更新積分排行榜
         updateRankings();
-        return;
+        return;  // 結束函數，不繼續執行後續戰鬥邏輯
+    }
+    
+    // ⚠️ 重要修改：如果更換了對手，需要重新獲取數據
+    if (specialResults && specialResults.changedOpponent) {
+        // 重新更新顯示以反映新的對手
+        updateSquadDisplay('A', selectedSquadA);
+        updateSquadDisplay('B', selectedSquadB);
+        updateBettingInfo();
     }
     
     // 標記參戰小隊（但先不刪除技能卡！）
     battleParticipatedSquads[selectedSquadA] = true;
     battleParticipatedSquads[selectedSquadB] = true;
-
+    
     // ⚠️ 重要：先保存技能卡資訊，戰鬥後再刪除
     const usedCardA = squadItemCards[selectedSquadA];
     const usedCardB = squadItemCards[selectedSquadB];
@@ -4832,10 +4928,7 @@ function startEnhancedArenaBattle() {
     // 顯示戰鬥結果
     displayBattleResults(battleResult, finalWinner, scores, finalResult || {});
     
-    // 處理戰後效果
-    if (finalWinnerSquadId && finalLoserSquadId) {
-        handlePostBattleEffects(finalWinnerSquadId, finalLoserSquadId);
-    }
+    handlePostBattleEffects(selectedSquadA, selectedSquadB, finalWinnerSquadId, finalLoserSquadId);
     
     // ⚠️ 戰鬥完成後才清理技能卡
     if (usedCardA) {
@@ -4843,13 +4936,12 @@ function startEnhancedArenaBattle() {
         delete takenItems[usedCardA];
         delete squadItemCards[selectedSquadA];
     }
-
     if (usedCardB) {
         permanentlyUsedItems[usedCardB] = true;
         delete takenItems[usedCardB];
         delete squadItemCards[selectedSquadB];
     }
-
+    
     // 如果在道具牆頁面，立即更新顯示
     const currentPage = document.querySelector('.page.active');
     if (currentPage && currentPage.id === 'items-page') {
@@ -4860,7 +4952,63 @@ function startEnhancedArenaBattle() {
     // 更新積分排行榜
     updateRankings();
 }
-// 完全重寫 calculateBattleResult 函數 - 這是問題的核心
+
+// 🆕 新增：獲取被動技能名稱
+function getPassiveSkillName(skillKey) {
+    if (!skillKey) return '無';
+    const skill = passiveSkills[skillKey];
+    return skill ? skill.name : '無';
+}
+
+// 🆕 新增：使用指定被動技能應用效果
+function applyPassiveSkillEffectsWithOverride(squadData, selfSquadId, opponentSquadId, overridePassiveSkill) {
+    console.log(`應用被動技能效果 - 小隊 #${selfSquadId}`);
+    console.log('輸入總點數:', squadData.total);
+    
+    // 確保深拷貝
+    let modifiedData = deepCopy(squadData);
+    
+    // 檢查是否被超大雨傘消除
+    const opponentItem = squadItemCards[opponentSquadId];
+    if (opponentItem === 'big_umbrella') {
+        console.log('被動技能被超大雨傘消除');
+        return modifiedData;
+    }
+    
+    const passiveSkill = overridePassiveSkill;  // 使用傳入的被動技能
+    if (!passiveSkill) {
+        console.log('沒有被動技能');
+        return modifiedData;
+    }
+    
+    const skill = passiveSkills[passiveSkill];
+    if (!skill) {
+        console.log('被動技能數據無效');
+        return modifiedData;
+    }
+    
+    console.log(`使用被動技能: ${skill.name}`);
+    
+    // 應用被動技能效果
+    Object.keys(skill.effects).forEach(attr => {
+        const multiplier = skill.effects[attr];
+        if (attr === 'opponent_all') {
+            console.log('毒氣炸彈效果會在後續處理');
+            return;
+        } else if (modifiedData[attr] !== undefined) {
+            const oldValue = modifiedData[attr];
+            modifiedData[attr] = Math.round(modifiedData[attr] * multiplier);
+            console.log(`被動技能 ${attr}: ${oldValue} → ${modifiedData[attr]} (×${multiplier})`);
+        }
+    });
+    
+    // 重新計算總點數
+    recalculateTotal(modifiedData);
+    console.log(`被動技能後總點數: ${modifiedData.total}`);
+    
+    return modifiedData;
+}
+
 function calculateBattleResult(originalSquadA, originalSquadB) {
     console.log('=== 開始計算戰鬥結果 ===');
     console.log('輸入原始數據:');
@@ -4877,9 +5025,58 @@ function calculateBattleResult(originalSquadA, originalSquadB) {
     console.log('  小隊A:', originalSquadA.total, '→', stage1SquadA.total);
     console.log('  小隊B:', originalSquadB.total, '→', stage1SquadB.total);
     
-    // 階段2：應用被動技能效果（使用階段1的結果）
-    let stage2SquadA = applyPassiveSkillEffects(deepCopy(stage1SquadA), selectedSquadA, selectedSquadB);
-    let stage2SquadB = applyPassiveSkillEffects(deepCopy(stage1SquadB), selectedSquadB, selectedSquadA);
+    // 🆕 新增：檢查是否有超大根球棒，如果有則交換被動技能
+    let actualPassiveA = squadPassiveSkills[selectedSquadA];
+    let actualPassiveB = squadPassiveSkills[selectedSquadB];
+    let passiveSwapped = false;
+    
+    if (squadItemCards[selectedSquadA] === 'baseball_bat' || squadItemCards[selectedSquadB] === 'baseball_bat') {
+        // 交換被動技能
+        const tempPassive = actualPassiveA;
+        actualPassiveA = actualPassiveB;
+        actualPassiveB = tempPassive;
+        passiveSwapped = true;
+        
+        const userSquad = squadItemCards[selectedSquadA] === 'baseball_bat' ? selectedSquadA : selectedSquadB;
+        
+        console.log('超大根球棒發動！被動技能互換');
+        alert(
+            `⚾ 超大根球棒發動！ ⚾\n\n` +
+            `小隊 #${userSquad} 使用超大根球棒！\n` +
+            `雙方被動技能已互換！\n\n` +
+            `小隊 #${selectedSquadA}: ${getPassiveSkillName(squadPassiveSkills[selectedSquadA])} → ${getPassiveSkillName(actualPassiveA)}\n` +
+            `小隊 #${selectedSquadB}: ${getPassiveSkillName(squadPassiveSkills[selectedSquadB])} → ${getPassiveSkillName(actualPassiveB)}`
+        );
+    }
+    
+// 🆕 處理超級影印機的被動技能複製 - 改為疊加效果
+let copiedPassiveA = null;
+let copiedPassiveB = null;
+
+if (squadItemCards[selectedSquadA] === 'copy_machine' && copyMachineState.squadA.copyPassive && squadPassiveSkills[selectedSquadB]) {
+    copiedPassiveA = squadPassiveSkills[selectedSquadB];
+    console.log(`小隊A使用超級影印機額外複製了小隊B的被動技能: ${getPassiveSkillName(copiedPassiveA)}`);
+}
+
+if (squadItemCards[selectedSquadB] === 'copy_machine' && copyMachineState.squadB.copyPassive && squadPassiveSkills[selectedSquadA]) {
+    copiedPassiveB = squadPassiveSkills[selectedSquadA];
+    console.log(`小隊B使用超級影印機額外複製了小隊A的被動技能: ${getPassiveSkillName(copiedPassiveB)}`);
+}
+    
+   // 階段2：應用被動技能效果（使用階段1的結果和可能交換的被動技能）
+let stage2SquadA = applyPassiveSkillEffectsWithOverride(deepCopy(stage1SquadA), selectedSquadA, selectedSquadB, actualPassiveA);
+let stage2SquadB = applyPassiveSkillEffectsWithOverride(deepCopy(stage1SquadB), selectedSquadB, selectedSquadA, actualPassiveB);
+
+// 如果有複製的被動技能，疊加效果
+if (copiedPassiveA) {
+    stage2SquadA = applyPassiveSkillEffectsWithOverride(deepCopy(stage2SquadA), selectedSquadA, selectedSquadB, copiedPassiveA);
+    console.log(`小隊A疊加複製的被動技能後總點數: ${stage2SquadA.total}`);
+}
+
+if (copiedPassiveB) {
+    stage2SquadB = applyPassiveSkillEffectsWithOverride(deepCopy(stage2SquadB), selectedSquadB, selectedSquadA, copiedPassiveB);
+    console.log(`小隊B疊加複製的被動技能後總點數: ${stage2SquadB.total}`);
+}
     
     console.log('階段2 - 被動技能後:');
     console.log('  小隊A:', stage1SquadA.total, '→', stage2SquadA.total);
@@ -4935,7 +5132,8 @@ function calculateBattleResult(originalSquadA, originalSquadB) {
         finalSquadB: finalSquadB,  // ⚠️ 確保這個是正確的
         winner: winner,
         winnerSquadId: winnerSquadId,
-        loserSquadId: loserSquadId
+        loserSquadId: loserSquadId,
+        passiveSwapped: passiveSwapped  // 🆕 記錄是否交換了被動技能
     };
 }
 
@@ -5057,6 +5255,56 @@ function handleRetryBattle(retrySquadId) {
                 const squadId = cardInfo.squad;
                 const cardKey = cardInfo.card;
                 
+                // 🆕 新增：處理很黏的膠帶
+                if (cardKey === 'sticky_tape') {
+                    const opponentSquadId = squadId === selectedSquadA ? selectedSquadB : selectedSquadA;
+                    const opponentCard = squadItemCards[opponentSquadId];
+                    
+                    if (opponentCard) {
+                        const opponentCardName = itemCards[opponentCard].name;
+                        const shouldSteal = confirm(
+                            `小隊 #${squadId} 使用很黏的膠帶！\n\n` +
+                            `是否要奪取小隊 #${opponentSquadId} 的技能卡「${opponentCardName}」？\n\n` +
+                            `選擇「確定」將奪取對方技能卡\n` +
+                            `選擇「取消」將保留自己的膠帶`
+                        );
+                        
+                        if (shouldSteal) {
+                            // 執行奪取
+                            const originalCard = squadItemCards[squadId];
+                            
+                            // 將對方的技能卡給自己
+                            squadItemCards[squadId] = opponentCard;
+                            delete takenItems[originalCard]; // 釋放原本的膠帶
+                            takenItems[opponentCard] = squadId; // 標記新卡片歸屬
+                            
+                            // 對方失去技能卡
+                            delete squadItemCards[opponentSquadId];
+                            
+                            alert(
+                                `🎯 奪取成功！\n\n` +
+                                `小隊 #${squadId} 成功奪取了「${opponentCardName}」！\n` +
+                                `小隊 #${opponentSquadId} 失去了技能卡！`
+                            );
+                            
+                            // 更新顯示
+                            updateSquadDisplay('A', selectedSquadA);
+                            updateSquadDisplay('B', selectedSquadB);
+                            
+                            // 如果被奪取的卡片也有特殊效果，需要重新處理
+                            const stolenItem = itemCards[opponentCard];
+                            if (stolenItem && stolenItem.type === 'special' && stolenItem.special !== 'steal_item') {
+                                // 將被奪取的卡片加入待處理列表
+                                processedCards.push({squad: squadId, card: opponentCard});
+                            }
+                        } else {
+                            alert(`小隊 #${squadId} 選擇保留很黏的膠帶，不奪取對方技能卡。`);
+                        }
+                    } else {
+                        alert(`小隊 #${squadId} 使用很黏的膠帶，但對方沒有技能卡可以奪取！`);
+                    }
+                }
+                
                 // 處理 dirty_clothes（十天沒洗的衣服）
                 if (cardKey === 'dirty_clothes' && !changedOpponent) {
                     const otherSquad = squadId === selectedSquadA ? selectedSquadB : selectedSquadA;
@@ -5091,6 +5339,8 @@ function handleRetryBattle(retrySquadId) {
                             updateSquadDisplay('A', selectedSquadA);
                             updateSquadDisplay('B', selectedSquadB);
                             updateBettingInfo();
+                            // ⚠️ 新增：重新更新技能公布內容
+                            updateSkillsRevealed();  // 新增這行
                             
                             // 重置下注系統
                             if (bettingSystem.enabled) {
@@ -5113,18 +5363,18 @@ function handleRetryBattle(retrySquadId) {
                 // 處理 AIR JORDAN 1（跳過戰鬥）
                 if (cardKey === 'air_jordan') {
                     addSquadScore(squadId, 100);
-                    alert(`小隊 #${squadId} 使用 AIR JORDAN 1，直接獲得勝者積分！`);
+                    alert(`小隊 #${squadId} 使用 AIR JORDAN 1，直接成為勝利者！`);
                     skipBattle = true;
                 }
             }
             
             // 檢查超大絨毛玩偶（雙方同意）- 只需檢查一次
             if ((squadItemCards[selectedSquadA] === 'big_doll' || squadItemCards[selectedSquadB] === 'big_doll') && !skipBattle) {
-                const agree = confirm('使用超大絨毛玩偶：雙方是否同意各得100分？');
+                const agree = confirm('使用超大絨毛玩偶：雙方是否同意各得120分？');
                 if (agree) {
-                    addSquadScore(selectedSquadA, 100);
-                    addSquadScore(selectedSquadB, 100);
-                    alert('雙方都獲得了100分！');
+                    addSquadScore(selectedSquadA, 120);
+                    addSquadScore(selectedSquadB, 120);
+                    alert('雙方都獲得了120分！');
                     skipBattle = true;
                 }
             }
@@ -5197,10 +5447,9 @@ function applyItemCardEffects(squadAData, squadBData, squadAId, squadBId) {
     modifiedSquadA.total = squadAData.total;
     modifiedSquadB.total = squadBData.total;
     
-    console.log('深拷貝後 - 小隊A:', modifiedSquadA.total, '小隊B:', modifiedSquadB.total);
-    
-    // 先處理普通屬性效果（確保按順序處理）
-    if (squadItemCards[squadAId]) {
+    // 🆕 處理超級影印機的技能卡複製 - 先應用自己的效果
+    // 小隊A的處理
+    if (squadItemCards[squadAId] && squadItemCards[squadAId] !== 'lazy_chair' && squadItemCards[squadAId] !== 'copy_machine') {
         const cardKey = squadItemCards[squadAId];
         const card = itemCards[cardKey];
         console.log(`小隊A使用技能卡: ${card.name} (${cardKey})`);
@@ -5209,8 +5458,9 @@ function applyItemCardEffects(squadAData, squadBData, squadAId, squadBId) {
         modifiedSquadA = applyItemCardToSquad(modifiedSquadA, card, modifiedSquadB, squadAId, squadBId);
         console.log(`小隊A技能卡效果後:`, modifiedSquadA.total);
     }
-
-    if (squadItemCards[squadBId]) {
+    
+    // 小隊B的處理 - 與小隊A相同邏輯
+    if (squadItemCards[squadBId] && squadItemCards[squadBId] !== 'lazy_chair' && squadItemCards[squadBId] !== 'copy_machine') {
         const cardKey = squadItemCards[squadBId];
         const card = itemCards[cardKey];
         console.log(`小隊B使用技能卡: ${card.name} (${cardKey})`);
@@ -5220,9 +5470,104 @@ function applyItemCardEffects(squadAData, squadBData, squadAId, squadBId) {
         console.log(`小隊B技能卡效果後:`, modifiedSquadB.total);
     }
     
+    // 然後處理超級影印機的複製效果（疊加）
+    // 小隊A的超級影印機
+    if (squadItemCards[squadAId] === 'copy_machine') {
+        // 先應用超級影印機本身的效果（如果有）
+        const copyMachineCard = itemCards['copy_machine'];
+        if (copyMachineCard.effects && Object.keys(copyMachineCard.effects).length > 0) {
+            modifiedSquadA = applyItemCardToSquad(modifiedSquadA, copyMachineCard, modifiedSquadB, squadAId, squadBId);
+            console.log(`小隊A超級影印機本身效果後:`, modifiedSquadA.total);
+        }
+        
+        // 再疊加複製的技能卡效果
+        if (copyMachineState.squadA.copyItem && squadItemCards[squadBId]) {
+            console.log(`小隊A使用超級影印機複製小隊B的技能卡效果`);
+            const copiedCard = itemCards[squadItemCards[squadBId]];
+            
+            // 如果複製的是屬性卡，疊加效果
+            if (copiedCard.type === 'attribute') {
+                modifiedSquadA = applyItemCardToSquad(modifiedSquadA, copiedCard, modifiedSquadB, squadAId, squadBId);
+                console.log(`小隊A疊加複製的技能卡效果後:`, modifiedSquadA.total);
+            }
+        }
+    }
     
-    // 處理需要互動的特殊效果（iPhone18等）
-    const interactiveEffects = [];
+    // 小隊B的超級影印機
+    if (squadItemCards[squadBId] === 'copy_machine') {
+        // 先應用超級影印機本身的效果（如果有）
+        const copyMachineCard = itemCards['copy_machine'];
+        if (copyMachineCard.effects && Object.keys(copyMachineCard.effects).length > 0) {
+            modifiedSquadB = applyItemCardToSquad(modifiedSquadB, copyMachineCard, modifiedSquadA, squadBId, squadAId);
+            console.log(`小隊B超級影印機本身效果後:`, modifiedSquadB.total);
+        }
+        
+        // 再疊加複製的技能卡效果
+        if (copyMachineState.squadB.copyItem && squadItemCards[squadAId]) {
+            console.log(`小隊B使用超級影印機複製小隊A的技能卡效果`);
+            const copiedCard = itemCards[squadItemCards[squadAId]];
+            
+            // 如果複製的是屬性卡，疊加效果
+            if (copiedCard.type === 'attribute') {
+                modifiedSquadB = applyItemCardToSquad(modifiedSquadB, copiedCard, modifiedSquadA, squadBId, squadAId);
+                console.log(`小隊B疊加複製的技能卡效果後:`, modifiedSquadB.total);
+            }
+        }
+    }
+    
+    console.log('深拷貝後 - 小隊A:', modifiedSquadA.total, '小隊B:', modifiedSquadB.total);
+    
+    // 🆕 新增：先檢查充氣懶骨頭效果（需要在應用其他效果前判斷原始總點數）
+    const squadAOriginalTotal = squadData[squadAId].total;
+    const squadBOriginalTotal = squadData[squadBId].total;
+    
+    // 處理小隊A的充氣懶骨頭
+    if (squadItemCards[squadAId] === 'lazy_chair' && squadAOriginalTotal < squadBOriginalTotal) {
+        console.log(`小隊A使用充氣懶骨頭，原始總點數 ${squadAOriginalTotal} < ${squadBOriginalTotal}`);
+        attributes.forEach(attr => {
+            const oldValue = modifiedSquadA[attr];
+            modifiedSquadA[attr] = Math.round(modifiedSquadA[attr] * 1.5);
+            console.log(`充氣懶骨頭效果 - ${attr}: ${oldValue} → ${modifiedSquadA[attr]}`);
+        });
+        recalculateTotal(modifiedSquadA);
+        console.log(`小隊A充氣懶骨頭效果後總點數: ${modifiedSquadA.total}`);
+    }
+    
+    // 處理小隊B的充氣懶骨頭
+    if (squadItemCards[squadBId] === 'lazy_chair' && squadBOriginalTotal < squadAOriginalTotal) {
+        console.log(`小隊B使用充氣懶骨頭，原始總點數 ${squadBOriginalTotal} < ${squadAOriginalTotal}`);
+        attributes.forEach(attr => {
+            const oldValue = modifiedSquadB[attr];
+            modifiedSquadB[attr] = Math.round(modifiedSquadB[attr] * 1.5);
+            console.log(`充氣懶骨頭效果 - ${attr}: ${oldValue} → ${modifiedSquadB[attr]}`);
+        });
+        recalculateTotal(modifiedSquadB);
+        console.log(`小隊B充氣懶骨頭效果後總點數: ${modifiedSquadB.total}`);
+    }
+// 先處理普通屬性效果（確保按順序處理）
+if (squadItemCards[squadAId] && squadItemCards[squadAId] !== 'lazy_chair' && squadItemCards[squadAId] !== 'copy_machine') {  // 🆕 排除已處理的充氣懶骨頭和超級影印機
+    const cardKey = squadItemCards[squadAId];
+    const card = itemCards[cardKey];
+    console.log(`小隊A使用技能卡: ${card.name} (${cardKey})`);
+    
+    // 應用技能卡效果到小隊A
+    modifiedSquadA = applyItemCardToSquad(modifiedSquadA, card, modifiedSquadB, squadAId, squadBId);
+    console.log(`小隊A技能卡效果後:`, modifiedSquadA.total);
+}
+
+if (squadItemCards[squadBId] && squadItemCards[squadBId] !== 'lazy_chair' && squadItemCards[squadBId] !== 'copy_machine') {  // 🆕 排除已處理的充氣懶骨頭和超級影印機
+    const cardKey = squadItemCards[squadBId];
+    const card = itemCards[cardKey];
+    console.log(`小隊B使用技能卡: ${card.name} (${cardKey})`);
+    
+    // 應用技能卡效果到小隊B
+    modifiedSquadB = applyItemCardToSquad(modifiedSquadB, card, modifiedSquadA, squadBId, squadAId);
+    console.log(`小隊B技能卡效果後:`, modifiedSquadB.total);
+}
+
+
+// 處理需要互動的特殊效果（iPhone18等）
+const interactiveEffects = [];
     
     if (squadItemCards[squadAId] === 'iphone18') {
         interactiveEffects.push({
@@ -5401,64 +5746,95 @@ if (loserSquadId && squadItemCards[loserSquadId] === 'gold_coin' && !usedGoldCoi
         alert(`小隊 #${sockUser} 因為超臭襪子，顛倒勝負！`);
     }
     
-    // 檢查充氣懶骨頭（弱者增強）
-    const squadAOriginalTotal = squadData[selectedSquadA].total;
-    const squadBOriginalTotal = squadData[selectedSquadB].total;
-    
-    if (squadItemCards[selectedSquadA] === 'lazy_chair' && squadAOriginalTotal < squadBOriginalTotal) {
-        const enhancedTotal = Math.round(totalA * 1.5);
-        const currentWinner = newWinner || originalWinner;
-        if (enhancedTotal > totalB && currentWinner !== 'A') {
-            newWinner = 'A';
-            newWinnerSquadId = selectedSquadA;
-            newLoserSquadId = selectedSquadB;
-            alert(`小隊 #${selectedSquadA} 充氣懶骨頭發動！能力提升1.5倍逆轉勝負！`);
-        }
+
+// 檢查5090ti顯卡（高風險高回報）
+const finalWinner = newWinner || originalWinner;
+
+if (squadItemCards[selectedSquadA] === 'rtx_5090') {
+    const isWinner = finalWinner === 'A';
+    if (isWinner) {
+        scoreA = 200;
+        specialScoring = true;
+        alert(`🎮 5090ti顯卡效能全開！小隊 #${selectedSquadA} 獲得200積分！`);
+    } else {
+        // 🆕 修改：記錄減少前的數值
+        const beforeStats = {};
+        attributes.forEach(attr => {
+            beforeStats[attr] = squadData[selectedSquadA][attr];
+        });
+        const beforeTotal = squadData[selectedSquadA].total;
+        
+        // 失敗減少所有能力10點（永久效果）
+        attributes.forEach(attr => {
+            squadData[selectedSquadA][attr] = Math.max(0, squadData[selectedSquadA][attr] - 10);
+        });
+        updateTotalPoints(selectedSquadA);
+        
+        // 🆕 新增：構建詳細報告
+        let detailReport = '';
+        attributes.forEach(attr => {
+            const before = beforeStats[attr];
+            const after = squadData[selectedSquadA][attr];
+            if (before !== after) {
+                detailReport += `${attributeIcons[attr]} ${attributeNames[attr]}: ${before} → ${after}\n`;
+            }
+        });
+        
+        alert(
+            `💥 5090ti顯卡燒壞了！ 💥\n\n` +
+            `小隊 #${selectedSquadA} 戰敗導致顯卡過熱！\n\n` +
+            `永久能力值損失：\n${detailReport}\n` +
+            `總點數：${beforeTotal} → ${squadData[selectedSquadA].total}\n\n` +
+            `此效果為永久有效！`
+        );
+        
+        // 🆕 新增：強制更新所有頁面的顯示
+        updateAllDisplays(selectedSquadA, selectedSquadA);
     }
-    
-    if (squadItemCards[selectedSquadB] === 'lazy_chair' && squadBOriginalTotal < squadAOriginalTotal) {
-        const enhancedTotal = Math.round(totalB * 1.5);
-        const currentWinner = newWinner || originalWinner;
-        if (enhancedTotal > totalA && currentWinner !== 'B') {
-            newWinner = 'B';
-            newWinnerSquadId = selectedSquadB;
-            newLoserSquadId = selectedSquadA;
-            alert(`小隊 #${selectedSquadB} 充氣懶骨頭發動！能力提升1.5倍逆轉勝負！`);
-        }
+}
+
+if (squadItemCards[selectedSquadB] === 'rtx_5090') {
+    const isWinner = finalWinner === 'B';
+    if (isWinner) {
+        scoreB = 200;
+        specialScoring = true;
+        alert(`🎮 5090ti顯卡效能全開！小隊 #${selectedSquadB} 獲得200積分！`);
+    } else {
+        // 🆕 修改：記錄減少前的數值
+        const beforeStats = {};
+        attributes.forEach(attr => {
+            beforeStats[attr] = squadData[selectedSquadB][attr];
+        });
+        const beforeTotal = squadData[selectedSquadB].total;
+        
+        // 失敗減少所有能力10點（永久效果）
+        attributes.forEach(attr => {
+            squadData[selectedSquadB][attr] = Math.max(0, squadData[selectedSquadB][attr] - 10);
+        });
+        updateTotalPoints(selectedSquadB);
+        
+        // 🆕 新增：構建詳細報告
+        let detailReport = '';
+        attributes.forEach(attr => {
+            const before = beforeStats[attr];
+            const after = squadData[selectedSquadB][attr];
+            if (before !== after) {
+                detailReport += `${attributeIcons[attr]} ${attributeNames[attr]}: ${before} → ${after}\n`;
+            }
+        });
+        
+        alert(
+            `💥 5090ti顯卡燒壞了！ 💥\n\n` +
+            `小隊 #${selectedSquadB} 戰敗導致顯卡過熱！\n\n` +
+            `永久能力值損失：\n${detailReport}\n` +
+            `總點數：${beforeTotal} → ${squadData[selectedSquadB].total}\n\n` +
+            `此效果為永久有效！`
+        );
+        
+        // 🆕 新增：強制更新所有頁面的顯示
+        updateAllDisplays(selectedSquadB, selectedSquadB);
     }
-    
-    // 檢查5090ti顯卡（高風險高回報）
-    const finalWinner = newWinner || originalWinner;
-    
-    if (squadItemCards[selectedSquadA] === 'rtx_5090') {
-        const isWinner = finalWinner === 'A';
-        if (isWinner) {
-            scoreA = 200;
-            specialScoring = true;
-        } else {
-            // 失敗減少所有能力10點
-            attributes.forEach(attr => {
-                squadData[selectedSquadA][attr] = Math.max(0, squadData[selectedSquadA][attr] - 10);
-            });
-            updateTotalPoints(selectedSquadA);
-            alert(`小隊 #${selectedSquadA} 使用5090ti顯卡失敗，所有能力-10點！`);
-        }
-    }
-    
-    if (squadItemCards[selectedSquadB] === 'rtx_5090') {
-        const isWinner = finalWinner === 'B';
-        if (isWinner) {
-            scoreB = 200;
-            specialScoring = true;
-        } else {
-            // 失敗減少所有能力10點
-            attributes.forEach(attr => {
-                squadData[selectedSquadB][attr] = Math.max(0, squadData[selectedSquadB][attr] - 10);
-            });
-            updateTotalPoints(selectedSquadB);
-            alert(`小隊 #${selectedSquadB} 使用5090ti顯卡失敗，所有能力-10點！`);
-        }
-    }
+}
     
     console.log('戰後特殊效果結果:', { newWinner, newWinnerSquadId, newLoserSquadId, specialScoring, scoreA, scoreB });
     
@@ -5472,67 +5848,173 @@ if (loserSquadId && squadItemCards[loserSquadId] === 'gold_coin' && !usedGoldCoi
     };
 }
 
-        // 處理戰後效果
-        function handlePostBattleEffects(winnerSquadId, loserSquadId) {
-            if (!winnerSquadId || !loserSquadId) return;
+       // 處理戰後效果
+function handlePostBattleEffects(squadAId, squadBId, winnerId, loserId) {
+    // 🆕 修改：閃電五連鞭效果（不管輸贏都能發動）
+    const checkAndExecuteLightningWhip = (ownerId, targetId) => {
+        if (squadItemCards[ownerId] === 'lightning_whip') {
+            console.log(`小隊 #${ownerId} 使用閃電五連鞭攻擊小隊 #${targetId}`);
             
-            // 閃電五連鞭效果
-            if (squadItemCards[winnerSquadId] === 'lightning_whip') {
-                attributes.forEach(attr => {
-                    squadData[loserSquadId][attr] = Math.max(0, squadData[loserSquadId][attr] - 15);
-                });
-                updateTotalPoints(loserSquadId);
-                alert(`小隊 #${winnerSquadId} 的閃電五連鞭發動！小隊 #${loserSquadId} 所有能力-15點！`);
-            }
+            // 記錄減少前的數值
+            const beforeStats = {};
+            attributes.forEach(attr => {
+                beforeStats[attr] = squadData[targetId][attr];
+            });
+            const beforeTotal = squadData[targetId].total;
             
-// Adidos跑鞋效果
-if (squadItemCards[winnerSquadId] === 'fake_shoes') {
-    // 讓玩家選擇要盜取哪個屬性
-    const attrNames = Object.values(attributeNames);
-    const attrKeys = Object.keys(attributeNames);
-    const choice = prompt(
-        `選擇要盜取的屬性：\n` +
-        attrKeys.map((key, index) => 
-            `${index + 1}. ${attributeIcons[key]} ${attrNames[index]} ` +
-            `(你的: ${squadData[winnerSquadId][key]}, 對方: ${squadData[loserSquadId][key]})`
-        ).join('\n')
-    );
-    const choiceIndex = parseInt(choice) - 1;
-    
-    if (choiceIndex >= 0 && choiceIndex < attrKeys.length) {
-        const attrKey = attrKeys[choiceIndex];
-        const winnerCurrent = squadData[winnerSquadId][attrKey];
-        const loserCurrent = squadData[loserSquadId][attrKey];
-        
-        // 計算可以盜取的點數
-        // 1. 最多盜取到自己100點
-        // 2. 最多盜取到對方剩0點
-        // 3. 兩者取較小值
-        const maxCanSteal = Math.min(
-            100 - winnerCurrent,  // 自己最多到100
-            loserCurrent          // 對方最多到0
-        );
-        
-        const stolenPoints = Math.max(0, maxCanSteal);
-        
-        if (stolenPoints > 0) {
-            squadData[loserSquadId][attrKey] = loserCurrent - stolenPoints;
-            squadData[winnerSquadId][attrKey] = winnerCurrent + stolenPoints;
+            // 對每個屬性減少15點
+            attributes.forEach(attr => {
+                squadData[targetId][attr] = Math.max(0, squadData[targetId][attr] - 15);
+            });
             
-            updateTotalPoints(winnerSquadId);
-            updateTotalPoints(loserSquadId);
+            // 重新計算總點數
+            updateTotalPoints(targetId);
+            
+            // 構建詳細報告
+            let detailReport = '';
+            attributes.forEach(attr => {
+                const before = beforeStats[attr];
+                const after = squadData[targetId][attr];
+                if (before !== after) {
+                    detailReport += `${attributeIcons[attr]} ${attributeNames[attr]}: ${before} → ${after}\n`;
+                }
+            });
             
             alert(
-                `小隊 #${winnerSquadId} 盜取了小隊 #${loserSquadId} 的${attrNames[choiceIndex]} ${stolenPoints}點！\n` +
-                `小隊 #${winnerSquadId}: ${winnerCurrent} → ${squadData[winnerSquadId][attrKey]}\n` +
-                `小隊 #${loserSquadId}: ${loserCurrent} → ${squadData[loserSquadId][attrKey]}`
+                `⚡ 閃電五連鞭發動！ ⚡\n\n` +
+                `小隊 #${ownerId} 的閃電五連鞭攻擊了小隊 #${targetId}！\n\n` +
+                `能力值變化：\n${detailReport}\n` +
+                `總點數：${beforeTotal} → ${squadData[targetId].total}\n\n` +
+                `此效果為永久有效！`
             );
-        } else {
-            alert(`無法盜取！你的${attrNames[choiceIndex]}已達100或對方已經是0！`);
+            
+            // 強制更新所有頁面的顯示
+            updateAllDisplays(ownerId, targetId);
+        }
+    };
+    
+    // 🆕 檢查雙方是否有閃電五連鞭（不管輸贏）
+    checkAndExecuteLightningWhip(squadAId, squadBId);
+    checkAndExecuteLightningWhip(squadBId, squadAId);
+    
+    // Adidos跑鞋效果 - 不管勝負都能發動
+    const checkAndExecuteAdidasEffect = (ownerId, targetId) => {
+        if (squadItemCards[ownerId] === 'fake_shoes') {
+            // 讓玩家選擇要盜取哪個屬性
+            const attrNames = Object.values(attributeNames);
+            const attrKeys = Object.keys(attributeNames);
+            const isWinner = ownerId === winnerId;
+            const statusText = isWinner ? '（勝者）' : '（敗者）';
+            
+            const choice = prompt(
+                `小隊 #${ownerId} ${statusText} 使用 Adidos跑鞋！\n` +
+                `選擇要盜取小隊 #${targetId} 的屬性（盜取到自己100或對方0為止）：\n\n` +
+                attrKeys.map((key, index) => 
+                    `${index + 1}. ${attributeIcons[key]} ${attrNames[index]} ` +
+                    `(你的: ${squadData[ownerId][key]}, 對方: ${squadData[targetId][key]})`
+                ).join('\n')
+            );
+            const choiceIndex = parseInt(choice) - 1;
+            
+            if (choiceIndex >= 0 && choiceIndex < attrKeys.length) {
+                const attrKey = attrKeys[choiceIndex];
+                const ownerCurrent = squadData[ownerId][attrKey];
+                const targetCurrent = squadData[targetId][attrKey];
+                
+                // 計算可以盜取的點數
+                const maxCanSteal = Math.min(
+                    100 - ownerCurrent,  // 自己最多到100
+                    targetCurrent        // 對方最多到0
+                );
+                
+                const stolenPoints = Math.max(0, maxCanSteal);
+                
+                if (stolenPoints > 0) {
+                    // 執行盜取
+                    squadData[targetId][attrKey] = targetCurrent - stolenPoints;
+                    squadData[ownerId][attrKey] = ownerCurrent + stolenPoints;
+                    
+                    // 更新總點數
+                    updateTotalPoints(ownerId);
+                    updateTotalPoints(targetId);
+                    
+                    // 強制更新所有頁面的顯示
+                    updateAllDisplays(ownerId, targetId, attrKey);
+                    
+                    alert(
+                        `🦶 Adidos跑鞋發動！高仿盜版的力量！\n\n` +
+                        `小隊 #${ownerId} ${statusText} 成功盜取了小隊 #${targetId} 的${attrNames[choiceIndex]} ${stolenPoints}點！\n\n` +
+                        `小隊 #${ownerId} ${attrNames[choiceIndex]}: ${ownerCurrent} → ${squadData[ownerId][attrKey]}\n` +
+                        `小隊 #${targetId} ${attrNames[choiceIndex]}: ${targetCurrent} → ${squadData[targetId][attrKey]}\n\n` +
+                        `此效果為永久有效！`
+                    );
+                } else {
+                    alert(`無法盜取！你的${attrNames[choiceIndex]}已達100或對方已經是0！`);
+                }
+            }
+        }
+    };
+    
+    // 檢查雙方是否有Adidos跑鞋
+    checkAndExecuteAdidasEffect(squadAId, squadBId);
+    checkAndExecuteAdidasEffect(squadBId, squadAId);
+}
+
+// 更新所有頁面的顯示
+function updateAllDisplays(squadId1, squadId2, changedAttr = null) {
+    // 更新小隊管理頁面
+    [squadId1, squadId2].forEach(squadId => {
+        const squad = document.querySelector(`[data-squad="${squadId}"]`);
+        if (squad) {
+            // 🆕 如果沒有指定特定屬性，更新所有屬性
+            if (!changedAttr) {
+                attributes.forEach(attr => {
+                    const attrInput = squad.querySelector(`[data-attr="${attr}"]`);
+                    if (attrInput) {
+                        attrInput.value = squadData[squadId][attr];
+                        updateAttribute(squadId, attr, squadData[squadId][attr]);
+                    }
+                });
+            } else {
+                // 更新特定屬性
+                const attrInput = squad.querySelector(`[data-attr="${changedAttr}"]`);
+                if (attrInput) {
+                    attrInput.value = squadData[squadId][changedAttr];
+                    updateAttribute(squadId, changedAttr, squadData[squadId][changedAttr]);
+                }
+            }
+            
+            // 更新總點數顯示
+            const totalElement = squad.querySelector('.total-value');
+            if (totalElement) {
+                totalElement.textContent = squadData[squadId].total;
+            }
+        }
+    });
+    
+    // 更新競技場頁面的小隊選項
+    const currentPage = document.querySelector('.page.active');
+    if (currentPage && currentPage.id === 'arena-page') {
+        updateArenaSquadOptions();
+        // 如果已選擇的小隊受到影響，更新顯示
+        if (selectedSquadA === squadId1 || selectedSquadA === squadId2) {
+            updateSquadDisplay('A', selectedSquadA);
+        }
+        if (selectedSquadB === squadId1 || selectedSquadB === squadId2) {
+            updateSquadDisplay('B', selectedSquadB);
         }
     }
+    
+    // 更新戰場頁面的小隊選擇框
+    if (currentPage && currentPage.id === 'battlefield-page') {
+        updateSquadCheckboxes();
+    }
+    
+    // 更新積分排行榜
+    if (currentPage && currentPage.id === 'rankings-page') {
+        updateRankings();
+    }
 }
-        }
 
 // 確保 displayBattleResults 使用正確的數據
 function displayBattleResults(battleResult, finalWinner, scores, specialResults) {
@@ -5804,6 +6286,144 @@ function revealSkills() {
         return;
     }
     
+    // 重置複製狀態
+    copyMachineState = {
+        squadA: { copyPassive: false, copyItem: false },
+        squadB: { copyPassive: false, copyItem: false }
+    };
+    
+    // 🆕 新增：在公布技能時就處理很黏的膠帶
+    let skillsChanged = false;
+    
+    // 檢查小隊A是否有很黏的膠帶
+    if (squadItemCards[selectedSquadA] === 'sticky_tape' && squadItemCards[selectedSquadB]) {
+        const opponentCardName = itemCards[squadItemCards[selectedSquadB]].name;
+        const shouldSteal = confirm(
+            `小隊 #${selectedSquadA} 擁有很黏的膠帶！\n\n` +
+            `是否要奪取小隊 #${selectedSquadB} 的技能卡「${opponentCardName}」？\n\n` +
+            `選擇「確定」將奪取對方技能卡\n` +
+            `選擇「取消」將保留自己的膠帶`
+        );
+        
+        if (shouldSteal) {
+            // 執行奪取
+            delete takenItems['sticky_tape'];
+            squadItemCards[selectedSquadA] = squadItemCards[selectedSquadB];
+            takenItems[squadItemCards[selectedSquadB]] = selectedSquadA;
+            delete squadItemCards[selectedSquadB];
+            skillsChanged = true;
+            
+            alert(`小隊 #${selectedSquadA} 成功奪取了「${opponentCardName}」！`);
+        }
+    }
+    
+    // 檢查小隊B是否有很黏的膠帶
+    if (squadItemCards[selectedSquadB] === 'sticky_tape' && squadItemCards[selectedSquadA]) {
+        const opponentCardName = itemCards[squadItemCards[selectedSquadA]].name;
+        const shouldSteal = confirm(
+            `小隊 #${selectedSquadB} 擁有很黏的膠帶！\n\n` +
+            `是否要奪取小隊 #${selectedSquadA} 的技能卡「${opponentCardName}」？\n\n` +
+            `選擇「確定」將奪取對方技能卡\n` +
+            `選擇「取消」將保留自己的膠帶`
+        );
+        
+        if (shouldSteal) {
+            // 執行奪取
+            delete takenItems['sticky_tape'];
+            squadItemCards[selectedSquadB] = squadItemCards[selectedSquadA];
+            takenItems[squadItemCards[selectedSquadA]] = selectedSquadB;
+            delete squadItemCards[selectedSquadA];
+            skillsChanged = true;
+            
+            alert(`小隊 #${selectedSquadB} 成功奪取了「${opponentCardName}」！`);
+        }
+    }
+    
+    // 檢查小隊A是否有超級影印機
+    if (squadItemCards[selectedSquadA] === 'copy_machine') {
+        const opponentPassive = squadPassiveSkills[selectedSquadB] ? passiveSkills[squadPassiveSkills[selectedSquadB]].name : '無';
+        const opponentItem = squadItemCards[selectedSquadB] ? itemCards[squadItemCards[selectedSquadB]].name : '無';
+        
+const copyPassive = confirm(
+    `📄 超級影印機發動！ 📄\n\n` +
+    `小隊 #${selectedSquadA} 擁有超級影印機！\n\n` +
+    `是否要額外複製小隊 #${selectedSquadB} 的被動技能？\n` +
+    `（將疊加在自己的被動技能之上）\n` +
+    `對方被動技能：${opponentPassive}\n\n` +
+    `選擇「確定」疊加複製被動技能\n` +
+    `選擇「取消」不複製被動技能`
+);
+        
+        copyMachineState.squadA.copyPassive = copyPassive;
+        
+        const copyItem = confirm(
+            `📄 超級影印機發動！ 📄\n\n` +
+            `是否要複製小隊 #${selectedSquadB} 的技能卡效果？\n` +
+            `對方技能卡：${opponentItem}\n\n` +
+            `選擇「確定」複製技能卡效果\n` +
+            `選擇「取消」不複製技能卡效果`
+        );
+        
+        copyMachineState.squadA.copyItem = copyItem;
+        
+        let copyMessage = `小隊 #${selectedSquadA} 的超級影印機：\n`;
+        if (copyPassive && copyItem) {
+            copyMessage += `✅ 複製了被動技能和技能卡效果！`;
+        } else if (copyPassive) {
+            copyMessage += `✅ 只複製了被動技能！`;
+        } else if (copyItem) {
+            copyMessage += `✅ 只複製了技能卡效果！`;
+        } else {
+            copyMessage += `❌ 沒有複製任何技能！`;
+        }
+        alert(copyMessage);
+    }
+    
+    // 檢查小隊B是否有超級影印機
+    if (squadItemCards[selectedSquadB] === 'copy_machine') {
+        const opponentPassive = squadPassiveSkills[selectedSquadA] ? passiveSkills[squadPassiveSkills[selectedSquadA]].name : '無';
+        const opponentItem = squadItemCards[selectedSquadA] ? itemCards[squadItemCards[selectedSquadA]].name : '無';
+        
+        const copyPassive = confirm(
+            `📄 超級影印機發動！ 📄\n\n` +
+            `小隊 #${selectedSquadB} 擁有超級影印機！\n\n` +
+            `是否要複製小隊 #${selectedSquadA} 的被動技能？\n` +
+            `對方被動技能：${opponentPassive}\n\n` +
+            `選擇「確定」複製被動技能\n` +
+            `選擇「取消」不複製被動技能`
+        );
+        
+        copyMachineState.squadB.copyPassive = copyPassive;
+        
+        const copyItem = confirm(
+            `📄 超級影印機發動！ 📄\n\n` +
+            `是否要複製小隊 #${selectedSquadA} 的技能卡效果？\n` +
+            `對方技能卡：${opponentItem}\n\n` +
+            `選擇「確定」複製技能卡效果\n` +
+            `選擇「取消」不複製技能卡效果`
+        );
+        
+        copyMachineState.squadB.copyItem = copyItem;
+        
+        let copyMessage = `小隊 #${selectedSquadB} 的超級影印機：\n`;
+        if (copyPassive && copyItem) {
+            copyMessage += `✅ 複製了被動技能和技能卡效果！`;
+        } else if (copyPassive) {
+            copyMessage += `✅ 只複製了被動技能！`;
+        } else if (copyItem) {
+            copyMessage += `✅ 只複製了技能卡效果！`;
+        } else {
+            copyMessage += `❌ 沒有複製任何技能！`;
+        }
+        alert(copyMessage);
+    }
+    
+    // 如果技能卡有變動，更新顯示
+    if (skillsChanged) {
+        updateSquadDisplay('A', selectedSquadA);
+        updateSquadDisplay('B', selectedSquadB);
+    }
+    
     const skillsRevealed = document.getElementById('skills-revealed');
     if (!skillsRevealed) return;
     
@@ -5839,6 +6459,42 @@ function revealSkills() {
     
     // 隱藏公布按鈕
     document.getElementById('reveal-skills-btn').style.display = 'none';
+}
+
+
+function updateSkillsRevealed() {
+    const skillsRevealed = document.getElementById('skills-revealed');
+    if (!skillsRevealed || skillsRevealed.style.display === 'none') return;
+    
+    // 清空現有內容但保留顯示狀態
+    skillsRevealed.innerHTML = '';
+    
+    // 重新創建技能公布內容
+    const revealContent = document.createElement('div');
+    revealContent.innerHTML = `
+        <div class="skills-revealed-title">⚡ 技能公布${bettingSystem.enabled ? '' : '（技能卡已更新）'} ⚡</div>
+    `;
+    
+    // 公布小隊A的技能（使用最新的技能卡信息）
+    const squadAInfo = createSquadSkillInfo(selectedSquadA, 'A');
+    revealContent.appendChild(squadAInfo);
+    
+    // 公布小隊B的技能（使用最新的技能卡信息）
+    const squadBInfo = createSquadSkillInfo(selectedSquadB, 'B');
+    revealContent.appendChild(squadBInfo);
+    
+    skillsRevealed.appendChild(revealContent);
+    
+    // 顯示詳細的數值變化過程
+    const detailedCalculation = createDetailedCalculation();
+    skillsRevealed.appendChild(detailedCalculation);
+    
+    // 創建開始戰鬥按鈕
+    const startBattleBtn = document.createElement('button');
+    startBattleBtn.className = 'battle-button-arena';
+    startBattleBtn.textContent = '開始計算戰鬥結果';
+    startBattleBtn.onclick = startEnhancedArenaBattle;
+    skillsRevealed.appendChild(startBattleBtn);
 }
 
         // 更新技能預覽
@@ -5934,6 +6590,11 @@ function updateSkillPreview() {
             
             let content = `<div class="squad-skill-name">小隊 #${squadId} (${side}隊)</div>`;
             
+            const copyState = side === 'A' ? copyMachineState.squadA : copyMachineState.squadB;
+    const hasCopyMachine = squadItemCards[squadId] === 'copy_machine';
+            // 🆕 檢查是否有超大根球棒
+    const hasBaseballBat = squadItemCards[selectedSquadA] === 'baseball_bat' || squadItemCards[selectedSquadB] === 'baseball_bat';
+    
             // 被動技能
             if (squadPassiveSkills[squadId]) {
                 const passiveSkill = passiveSkills[squadPassiveSkills[squadId]];
@@ -5976,18 +6637,18 @@ function updateSkillPreview() {
             return squadInfo;
         }
         // 創建詳細計算過程顯示
-// 修復創建詳細計算過程顯示函數 - 需要完全替換原有的 createDetailedCalculation 函數
 function createDetailedCalculation() {
     const container = document.createElement('div');
     container.className = 'total-comparison';
     container.innerHTML = `<div class="total-comparison-title">📊 詳細數值變化過程 📊</div>`;
     
     try {
-        // 獲取原始數據
+        // ⚠️ 修改：使用當前的隊伍ID獲取數據
         const originalSquadA = {...squadData[selectedSquadA]};
         const originalSquadB = {...squadData[selectedSquadB]};
         
-        console.log('創建詳細計算 - 原始數據:', originalSquadA.total, originalSquadB.total);
+        console.log(`創建詳細計算 - 當前對戰：小隊 #${selectedSquadA} VS 小隊 #${selectedSquadB}`);
+        console.log('原始數據:', originalSquadA.total, originalSquadB.total);
         
         // 使用與實際戰鬥相同的計算邏輯
         const battleResult = calculateBattleResult(originalSquadA, originalSquadB);
@@ -6158,19 +6819,19 @@ function createAttributesList(squad, prevSquad) {
                 case 'zero_max_attribute':
                     return baseEffect + '自行選擇將對手一項能力歸0';
                 case 'steal_attribute':
-                    return baseEffect + '戰後盜取對手80點能力';
+    return baseEffect + '戰後盜取對手能力直到自己100或對方0';
                 case 'underdog_boost':
-                    return '能力值較低時自身×1.5';
+                    return '原始能力總和較低時，所有個別能力值×1.5';
                 case 'skip_battle':
-                    return '直接獲得勝者積分';
+                    return '直接成為勝利者';
                 case 'steal_item':
                     return '奪取對方技能卡';
                 case 'mutual_score':
-                    return '雙方同意可各得100分';
+                    return '雙方同意可各得120分';
                 case 'reduce_opponent':
                     return baseEffect + '戰後減少對手各能力15點';
                 case 'high_risk_reward':
-                    return baseEffect + '勝利+200分，失敗-10能力';
+    return baseEffect + '勝利+200分，失敗永久-10能力';
                 case 'copy_skills':
                     return '複製對方所有技能';
                 case 'disable_passive':
