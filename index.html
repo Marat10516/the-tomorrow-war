@@ -3205,10 +3205,7 @@
             bets: {}, // squadId: 'A' or 'B'
             baseReward: 20 // 基礎下注獎勵
         };
-        let copyMachineState = {
-    squadA: { copyPassive: false, copyItem: false },
-    squadB: { copyPassive: false, copyItem: false }
-};
+        
         
         // 競技場變數
         let selectedSquadA = null;
@@ -3436,12 +3433,19 @@
                 type: 'attribute'
             },
             'gold_coin': {
-    name: '大金幣',
-    description: '神奇金幣，擁有神奇技能，此次對戰若戰敗，可以自行選擇地圖再打一次',
-    effects: { all: 1.1 },
-    type: 'special',
-    special: 'retry_on_lose'
-},
+                name: '大金幣',
+                description: '神奇金幣，擁有神奇技能，此次對戰若戰敗，可以自行選擇地圖再打一次',
+                effects: { all: 1.1 },
+                type: 'special',
+                special: 'retry_on_lose'
+            },
+            'mystery_balance': {
+                name: '神秘的天平',
+                description: '神秘的天平，將一切事物平等分配，擁有此卡，戰鬥時可以選擇其中一項能力點數兩隊相加後平分',
+                effects: { all: 1.1 },
+                type: 'special',
+                special: 'balance_attribute'
+            },
             'smelly_sock': {
                 name: '超臭襪子',
                 description: '超級臭，害兩邊都失去思考能力，輸的一方變成勝者',
@@ -3518,13 +3522,6 @@
     type: 'special',
     special: 'high_risk_reward'
 },
-            'copy_machine': {
-                name: '超級影印機',
-                description: 'copy能力百分百，複製對方被動技能和技能卡技能',
-                effects: {},
-                type: 'special',
-                special: 'copy_skills'
-            },
             'big_umbrella': {
                 name: '超大雨傘',
                 description: '傘大遮天，一傘擋之，本次對戰消除對方被動技能的效果',
@@ -5049,34 +5046,11 @@ function calculateBattleResult(originalSquadA, originalSquadB) {
         );
     }
     
-// 🆕 處理超級影印機的被動技能複製 - 改為疊加效果
-let copiedPassiveA = null;
-let copiedPassiveB = null;
-
-if (squadItemCards[selectedSquadA] === 'copy_machine' && copyMachineState.squadA.copyPassive && squadPassiveSkills[selectedSquadB]) {
-    copiedPassiveA = squadPassiveSkills[selectedSquadB];
-    console.log(`小隊A使用超級影印機額外複製了小隊B的被動技能: ${getPassiveSkillName(copiedPassiveA)}`);
-}
-
-if (squadItemCards[selectedSquadB] === 'copy_machine' && copyMachineState.squadB.copyPassive && squadPassiveSkills[selectedSquadA]) {
-    copiedPassiveB = squadPassiveSkills[selectedSquadA];
-    console.log(`小隊B使用超級影印機額外複製了小隊A的被動技能: ${getPassiveSkillName(copiedPassiveB)}`);
-}
     
    // 階段2：應用被動技能效果（使用階段1的結果和可能交換的被動技能）
 let stage2SquadA = applyPassiveSkillEffectsWithOverride(deepCopy(stage1SquadA), selectedSquadA, selectedSquadB, actualPassiveA);
 let stage2SquadB = applyPassiveSkillEffectsWithOverride(deepCopy(stage1SquadB), selectedSquadB, selectedSquadA, actualPassiveB);
 
-// 如果有複製的被動技能，疊加效果
-if (copiedPassiveA) {
-    stage2SquadA = applyPassiveSkillEffectsWithOverride(deepCopy(stage2SquadA), selectedSquadA, selectedSquadB, copiedPassiveA);
-    console.log(`小隊A疊加複製的被動技能後總點數: ${stage2SquadA.total}`);
-}
-
-if (copiedPassiveB) {
-    stage2SquadB = applyPassiveSkillEffectsWithOverride(deepCopy(stage2SquadB), selectedSquadB, selectedSquadA, copiedPassiveB);
-    console.log(`小隊B疊加複製的被動技能後總點數: ${stage2SquadB.total}`);
-}
     
     console.log('階段2 - 被動技能後:');
     console.log('  小隊A:', stage1SquadA.total, '→', stage2SquadA.total);
@@ -5431,7 +5405,6 @@ function applyPassiveSkillEffects(squadData, selfSquadId, opponentSquadId) {
     return modifiedData;
 }
 
-// 修復技能卡效果計算函數 - 需要完全替換原有的 applyItemCardEffects 函數
 function applyItemCardEffects(squadAData, squadBData, squadAId, squadBId) {
     console.log('=== 開始應用技能卡效果 ===');
     console.log('輸入數據 - 小隊A:', squadAData.total, '小隊B:', squadBData.total);
@@ -5447,73 +5420,6 @@ function applyItemCardEffects(squadAData, squadBData, squadAId, squadBId) {
     modifiedSquadA.total = squadAData.total;
     modifiedSquadB.total = squadBData.total;
     
-    // 🆕 處理超級影印機的技能卡複製 - 先應用自己的效果
-    // 小隊A的處理
-    if (squadItemCards[squadAId] && squadItemCards[squadAId] !== 'lazy_chair' && squadItemCards[squadAId] !== 'copy_machine') {
-        const cardKey = squadItemCards[squadAId];
-        const card = itemCards[cardKey];
-        console.log(`小隊A使用技能卡: ${card.name} (${cardKey})`);
-        
-        // 應用技能卡效果到小隊A
-        modifiedSquadA = applyItemCardToSquad(modifiedSquadA, card, modifiedSquadB, squadAId, squadBId);
-        console.log(`小隊A技能卡效果後:`, modifiedSquadA.total);
-    }
-    
-    // 小隊B的處理 - 與小隊A相同邏輯
-    if (squadItemCards[squadBId] && squadItemCards[squadBId] !== 'lazy_chair' && squadItemCards[squadBId] !== 'copy_machine') {
-        const cardKey = squadItemCards[squadBId];
-        const card = itemCards[cardKey];
-        console.log(`小隊B使用技能卡: ${card.name} (${cardKey})`);
-        
-        // 應用技能卡效果到小隊B
-        modifiedSquadB = applyItemCardToSquad(modifiedSquadB, card, modifiedSquadA, squadBId, squadAId);
-        console.log(`小隊B技能卡效果後:`, modifiedSquadB.total);
-    }
-    
-    // 然後處理超級影印機的複製效果（疊加）
-    // 小隊A的超級影印機
-    if (squadItemCards[squadAId] === 'copy_machine') {
-        // 先應用超級影印機本身的效果（如果有）
-        const copyMachineCard = itemCards['copy_machine'];
-        if (copyMachineCard.effects && Object.keys(copyMachineCard.effects).length > 0) {
-            modifiedSquadA = applyItemCardToSquad(modifiedSquadA, copyMachineCard, modifiedSquadB, squadAId, squadBId);
-            console.log(`小隊A超級影印機本身效果後:`, modifiedSquadA.total);
-        }
-        
-        // 再疊加複製的技能卡效果
-        if (copyMachineState.squadA.copyItem && squadItemCards[squadBId]) {
-            console.log(`小隊A使用超級影印機複製小隊B的技能卡效果`);
-            const copiedCard = itemCards[squadItemCards[squadBId]];
-            
-            // 如果複製的是屬性卡，疊加效果
-            if (copiedCard.type === 'attribute') {
-                modifiedSquadA = applyItemCardToSquad(modifiedSquadA, copiedCard, modifiedSquadB, squadAId, squadBId);
-                console.log(`小隊A疊加複製的技能卡效果後:`, modifiedSquadA.total);
-            }
-        }
-    }
-    
-    // 小隊B的超級影印機
-    if (squadItemCards[squadBId] === 'copy_machine') {
-        // 先應用超級影印機本身的效果（如果有）
-        const copyMachineCard = itemCards['copy_machine'];
-        if (copyMachineCard.effects && Object.keys(copyMachineCard.effects).length > 0) {
-            modifiedSquadB = applyItemCardToSquad(modifiedSquadB, copyMachineCard, modifiedSquadA, squadBId, squadAId);
-            console.log(`小隊B超級影印機本身效果後:`, modifiedSquadB.total);
-        }
-        
-        // 再疊加複製的技能卡效果
-        if (copyMachineState.squadB.copyItem && squadItemCards[squadAId]) {
-            console.log(`小隊B使用超級影印機複製小隊A的技能卡效果`);
-            const copiedCard = itemCards[squadItemCards[squadAId]];
-            
-            // 如果複製的是屬性卡，疊加效果
-            if (copiedCard.type === 'attribute') {
-                modifiedSquadB = applyItemCardToSquad(modifiedSquadB, copiedCard, modifiedSquadA, squadBId, squadAId);
-                console.log(`小隊B疊加複製的技能卡效果後:`, modifiedSquadB.total);
-            }
-        }
-    }
     
     console.log('深拷貝後 - 小隊A:', modifiedSquadA.total, '小隊B:', modifiedSquadB.total);
     
@@ -5544,30 +5450,30 @@ function applyItemCardEffects(squadAData, squadBData, squadAId, squadBId) {
         recalculateTotal(modifiedSquadB);
         console.log(`小隊B充氣懶骨頭效果後總點數: ${modifiedSquadB.total}`);
     }
-// 先處理普通屬性效果（確保按順序處理）
-if (squadItemCards[squadAId] && squadItemCards[squadAId] !== 'lazy_chair' && squadItemCards[squadAId] !== 'copy_machine') {  // 🆕 排除已處理的充氣懶骨頭和超級影印機
-    const cardKey = squadItemCards[squadAId];
-    const card = itemCards[cardKey];
-    console.log(`小隊A使用技能卡: ${card.name} (${cardKey})`);
     
-    // 應用技能卡效果到小隊A
-    modifiedSquadA = applyItemCardToSquad(modifiedSquadA, card, modifiedSquadB, squadAId, squadBId);
-    console.log(`小隊A技能卡效果後:`, modifiedSquadA.total);
-}
-
-if (squadItemCards[squadBId] && squadItemCards[squadBId] !== 'lazy_chair' && squadItemCards[squadBId] !== 'copy_machine') {  // 🆕 排除已處理的充氣懶骨頭和超級影印機
-    const cardKey = squadItemCards[squadBId];
-    const card = itemCards[cardKey];
-    console.log(`小隊B使用技能卡: ${card.name} (${cardKey})`);
+    // 先處理普通屬性效果（確保按順序處理）
+    if (squadItemCards[squadAId] && squadItemCards[squadAId] !== 'lazy_chair') {
+        const cardKey = squadItemCards[squadAId];
+        const card = itemCards[cardKey];
+        console.log(`小隊A使用技能卡: ${card.name} (${cardKey})`);
+        
+        // 應用技能卡效果到小隊A
+        modifiedSquadA = applyItemCardToSquad(modifiedSquadA, card, modifiedSquadB, squadAId, squadBId);
+        console.log(`小隊A技能卡效果後:`, modifiedSquadA.total);
+    }
     
-    // 應用技能卡效果到小隊B
-    modifiedSquadB = applyItemCardToSquad(modifiedSquadB, card, modifiedSquadA, squadBId, squadAId);
-    console.log(`小隊B技能卡效果後:`, modifiedSquadB.total);
-}
-
-
-// 處理需要互動的特殊效果（iPhone18等）
-const interactiveEffects = [];
+    if (squadItemCards[squadBId] && squadItemCards[squadBId] !== 'lazy_chair') {
+        const cardKey = squadItemCards[squadBId];
+        const card = itemCards[cardKey];
+        console.log(`小隊B使用技能卡: ${card.name} (${cardKey})`);
+        
+        // 應用技能卡效果到小隊B
+        modifiedSquadB = applyItemCardToSquad(modifiedSquadB, card, modifiedSquadA, squadBId, squadAId);
+        console.log(`小隊B技能卡效果後:`, modifiedSquadB.total);
+    }
+    
+    // 處理需要互動的特殊效果（iPhone18等）
+    const interactiveEffects = [];
     
     if (squadItemCards[squadAId] === 'iphone18') {
         interactiveEffects.push({
@@ -5582,6 +5488,23 @@ const interactiveEffects = [];
             squad: squadBId,
             target: squadAId,
             type: 'iphone18'
+        });
+    }
+    
+    // 🆕 新增：神秘的天平檢查
+    if (squadItemCards[squadAId] === 'mystery_balance') {
+        interactiveEffects.push({
+            squad: squadAId,
+            target: squadBId,
+            type: 'mystery_balance'
+        });
+    }
+    
+    if (squadItemCards[squadBId] === 'mystery_balance') {
+        interactiveEffects.push({
+            squad: squadBId,
+            target: squadAId,
+            type: 'mystery_balance'
         });
     }
     
@@ -5616,6 +5539,55 @@ const interactiveEffects = [];
                 }
                 
                 alert(`小隊 #${effect.target} 的${attrNames[choiceIndex]}從 ${originalValue} 歸零！`);
+            }
+        }
+        
+        // 🆕 新增：處理神秘的天平效果
+        if (effect.type === 'mystery_balance') {
+            console.log(`處理小隊 #${effect.squad} 的神秘天平效果`);
+            
+            const attrNames = Object.values(attributeNames);
+            const attrKeys = Object.keys(attributeNames);
+            
+            const squadData = effect.squad === squadAId ? modifiedSquadA : modifiedSquadB;
+            const targetData = effect.target === squadAId ? modifiedSquadA : modifiedSquadB;
+            
+            const choice = prompt(
+                `小隊 #${effect.squad} 使用神秘的天平！\n` +
+                `選擇要平分的能力：\n\n` +
+                attrKeys.map((key, index) => 
+                    `${index + 1}. ${attributeIcons[key]} ${attrNames[index]} ` +
+                    `(你的: ${squadData[key]}, 對方: ${targetData[key]})`
+                ).join('\n')
+            );
+            
+            const choiceIndex = parseInt(choice) - 1;
+            if (choiceIndex >= 0 && choiceIndex < attrKeys.length) {
+                const attrKey = attrKeys[choiceIndex];
+                const totalValue = squadData[attrKey] + targetData[attrKey];
+                const averageValue = Math.round(totalValue / 2);
+                
+                const originalSquadValue = squadData[attrKey];
+                const originalTargetValue = targetData[attrKey];
+                
+                // 設定平均值
+                squadData[attrKey] = averageValue;
+                targetData[attrKey] = averageValue;
+                
+                // 重新計算總點數
+                recalculateTotal(modifiedSquadA);
+                recalculateTotal(modifiedSquadB);
+                
+                console.log(`神秘天平效果 - ${attrKey}: 小隊${effect.squad} ${originalSquadValue}→${averageValue}, 小隊${effect.target} ${originalTargetValue}→${averageValue}`);
+                console.log(`神秘天平效果後 - 小隊A總點數: ${modifiedSquadA.total}, 小隊B總點數: ${modifiedSquadB.total}`);
+                
+                alert(
+                    `⚖️ 神秘的天平發動！ ⚖️\n\n` +
+                    `${attrNames[choiceIndex]}能力已平分：\n` +
+                    `小隊 #${effect.squad}: ${originalSquadValue} → ${averageValue}\n` +
+                    `小隊 #${effect.target}: ${originalTargetValue} → ${averageValue}\n\n` +
+                    `總和 ${totalValue} 點平均分配！`
+                );
             }
         }
     }
@@ -6286,11 +6258,6 @@ function revealSkills() {
         return;
     }
     
-    // 重置複製狀態
-    copyMachineState = {
-        squadA: { copyPassive: false, copyItem: false },
-        squadB: { copyPassive: false, copyItem: false }
-    };
     
     // 🆕 新增：在公布技能時就處理很黏的膠帶
     let skillsChanged = false;
@@ -6339,84 +6306,7 @@ function revealSkills() {
         }
     }
     
-    // 檢查小隊A是否有超級影印機
-    if (squadItemCards[selectedSquadA] === 'copy_machine') {
-        const opponentPassive = squadPassiveSkills[selectedSquadB] ? passiveSkills[squadPassiveSkills[selectedSquadB]].name : '無';
-        const opponentItem = squadItemCards[selectedSquadB] ? itemCards[squadItemCards[selectedSquadB]].name : '無';
-        
-const copyPassive = confirm(
-    `📄 超級影印機發動！ 📄\n\n` +
-    `小隊 #${selectedSquadA} 擁有超級影印機！\n\n` +
-    `是否要額外複製小隊 #${selectedSquadB} 的被動技能？\n` +
-    `（將疊加在自己的被動技能之上）\n` +
-    `對方被動技能：${opponentPassive}\n\n` +
-    `選擇「確定」疊加複製被動技能\n` +
-    `選擇「取消」不複製被動技能`
-);
-        
-        copyMachineState.squadA.copyPassive = copyPassive;
-        
-        const copyItem = confirm(
-            `📄 超級影印機發動！ 📄\n\n` +
-            `是否要複製小隊 #${selectedSquadB} 的技能卡效果？\n` +
-            `對方技能卡：${opponentItem}\n\n` +
-            `選擇「確定」複製技能卡效果\n` +
-            `選擇「取消」不複製技能卡效果`
-        );
-        
-        copyMachineState.squadA.copyItem = copyItem;
-        
-        let copyMessage = `小隊 #${selectedSquadA} 的超級影印機：\n`;
-        if (copyPassive && copyItem) {
-            copyMessage += `✅ 複製了被動技能和技能卡效果！`;
-        } else if (copyPassive) {
-            copyMessage += `✅ 只複製了被動技能！`;
-        } else if (copyItem) {
-            copyMessage += `✅ 只複製了技能卡效果！`;
-        } else {
-            copyMessage += `❌ 沒有複製任何技能！`;
-        }
-        alert(copyMessage);
-    }
-    
-    // 檢查小隊B是否有超級影印機
-    if (squadItemCards[selectedSquadB] === 'copy_machine') {
-        const opponentPassive = squadPassiveSkills[selectedSquadA] ? passiveSkills[squadPassiveSkills[selectedSquadA]].name : '無';
-        const opponentItem = squadItemCards[selectedSquadA] ? itemCards[squadItemCards[selectedSquadA]].name : '無';
-        
-        const copyPassive = confirm(
-            `📄 超級影印機發動！ 📄\n\n` +
-            `小隊 #${selectedSquadB} 擁有超級影印機！\n\n` +
-            `是否要複製小隊 #${selectedSquadA} 的被動技能？\n` +
-            `對方被動技能：${opponentPassive}\n\n` +
-            `選擇「確定」複製被動技能\n` +
-            `選擇「取消」不複製被動技能`
-        );
-        
-        copyMachineState.squadB.copyPassive = copyPassive;
-        
-        const copyItem = confirm(
-            `📄 超級影印機發動！ 📄\n\n` +
-            `是否要複製小隊 #${selectedSquadA} 的技能卡效果？\n` +
-            `對方技能卡：${opponentItem}\n\n` +
-            `選擇「確定」複製技能卡效果\n` +
-            `選擇「取消」不複製技能卡效果`
-        );
-        
-        copyMachineState.squadB.copyItem = copyItem;
-        
-        let copyMessage = `小隊 #${selectedSquadB} 的超級影印機：\n`;
-        if (copyPassive && copyItem) {
-            copyMessage += `✅ 複製了被動技能和技能卡效果！`;
-        } else if (copyPassive) {
-            copyMessage += `✅ 只複製了被動技能！`;
-        } else if (copyItem) {
-            copyMessage += `✅ 只複製了技能卡效果！`;
-        } else {
-            copyMessage += `❌ 沒有複製任何技能！`;
-        }
-        alert(copyMessage);
-    }
+
     
     // 如果技能卡有變動，更新顯示
     if (skillsChanged) {
@@ -6589,9 +6479,6 @@ function updateSkillPreview() {
             squadInfo.className = 'squad-skill-info';
             
             let content = `<div class="squad-skill-name">小隊 #${squadId} (${side}隊)</div>`;
-            
-            const copyState = side === 'A' ? copyMachineState.squadA : copyMachineState.squadB;
-    const hasCopyMachine = squadItemCards[squadId] === 'copy_machine';
             // 🆕 檢查是否有超大根球棒
     const hasBaseballBat = squadItemCards[selectedSquadA] === 'baseball_bat' || squadItemCards[selectedSquadB] === 'baseball_bat';
     
@@ -6819,11 +6706,13 @@ function createAttributesList(squad, prevSquad) {
                 case 'zero_max_attribute':
                     return baseEffect + '自行選擇將對手一項能力歸0';
                 case 'steal_attribute':
-    return baseEffect + '戰後盜取對手能力直到自己100或對方0';
+                    return baseEffect + '戰後盜取對手能力直到自己100或對方0';
                 case 'underdog_boost':
                     return '原始能力總和較低時，所有個別能力值×1.5';
                 case 'skip_battle':
                     return '直接成為勝利者';
+                case 'balance_attribute':
+                    return baseEffect + '選擇一項能力兩隊相加後平分';    
                 case 'steal_item':
                     return '奪取對方技能卡';
                 case 'mutual_score':
@@ -6832,8 +6721,7 @@ function createAttributesList(squad, prevSquad) {
                     return baseEffect + '戰後減少對手各能力15點';
                 case 'high_risk_reward':
     return baseEffect + '勝利+200分，失敗永久-10能力';
-                case 'copy_skills':
-                    return '複製對方所有技能';
+                
                 case 'disable_passive':
                     return baseEffect + '消除對方被動技能';
                 case 'swap_passive':
