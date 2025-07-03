@@ -3433,12 +3433,12 @@
                 type: 'attribute'
             },
             'gold_coin': {
-                name: '大金幣',
-                description: '神奇金幣，擁有神奇技能，此次對戰若戰敗，可以自行選擇地圖再打一次',
-                effects: { all: 1.1 },
-                type: 'special',
-                special: 'retry_on_lose'
-            },
+    name: '大金幣',
+    description: '神奇金幣，擁有神奇技能，此次對戰後不管勝敗，都可以自行選擇地圖再打一次',
+    effects: { all: 1.1 },
+    type: 'special',
+    special: 'retry_battle'  // 改變特殊效果標記
+},
             'mystery_balance': {
                 name: '神秘的天平',
                 description: '神秘的天平，將一切事物平等分配，擁有此卡，戰鬥時可以選擇其中一項能力點數兩隊相加後平分',
@@ -5165,15 +5165,82 @@ function handleRetryBattle(retrySquadId) {
         mapEffects.classList.remove('visible');
     }
     
-    // 重置下注系統
-    if (bettingSystem.enabled) {
-        bettingSystem.enabled = false;
-        bettingSystem.bets = {};
-        const bettingSystemDiv = document.getElementById('betting-system');
-        if (bettingSystemDiv) {
-            bettingSystemDiv.classList.remove('active');
-        }
-    }
+// 完全重置下注系統
+bettingSystem.enabled = false;
+bettingSystem.bets = {};
+
+// 隱藏下注系統主介面
+const bettingSystemDiv = document.getElementById('betting-system');
+if (bettingSystemDiv) {
+    bettingSystemDiv.classList.remove('active');
+}
+
+// 隱藏下注選項
+const bettingOptions = document.getElementById('betting-options');
+if (bettingOptions) {
+    bettingOptions.style.display = 'none';
+}
+
+// 隱藏下注參與者
+const bettingParticipants = document.getElementById('betting-participants');
+if (bettingParticipants) {
+    bettingParticipants.style.display = 'none';
+}
+
+// 隱藏下注統計
+const bettingSummary = document.getElementById('betting-summary');
+if (bettingSummary) {
+    bettingSummary.style.display = 'none';
+}
+
+// 隱藏下注結果
+const bettingResults = document.getElementById('betting-results');
+if (bettingResults) {
+    bettingResults.classList.remove('active');
+}
+
+// 重置下注按鈕
+const startBettingBtn = document.getElementById('start-betting-btn');
+if (startBettingBtn) {
+    startBettingBtn.disabled = true;
+    startBettingBtn.textContent = '開始下注';
+}
+
+const clearBetsBtn = document.getElementById('clear-bets-btn');
+if (clearBetsBtn) {
+    clearBetsBtn.disabled = true;
+}
+
+// 清空下注側面板的選擇狀態
+document.querySelectorAll('.betting-side').forEach(side => {
+    side.classList.remove('selected');
+});
+
+// 重置下注資訊顯示
+const bettingMatchup = document.getElementById('betting-matchup');
+if (bettingMatchup) {
+    bettingMatchup.textContent = '請選擇對戰雙方後開始下注';
+}
+
+// 重置賠率顯示
+const oddsA = document.getElementById('betting-odds-a');
+if (oddsA) oddsA.textContent = '等待計算賠率';
+
+const oddsB = document.getElementById('betting-odds-b');
+if (oddsB) oddsB.textContent = '等待計算賠率';
+
+// 重置下注統計數字
+const countA = document.getElementById('betting-count-a');
+if (countA) countA.textContent = '0';
+
+const countB = document.getElementById('betting-count-b');
+if (countB) countB.textContent = '0';
+
+// 清空下注網格
+const bettingGrid = document.getElementById('betting-grid');
+if (bettingGrid) {
+    bettingGrid.innerHTML = '';
+}
     
     // 顯示重打結果
     const resultsContainer = document.getElementById('comparison-results');
@@ -5317,14 +5384,20 @@ function handleRetryBattle(retrySquadId) {
                             updateSkillsRevealed();  // 新增這行
                             
                             // 重置下注系統
-                            if (bettingSystem.enabled) {
-                                bettingSystem.enabled = false;
-                                bettingSystem.bets = {};
-                                const bettingSystemDiv = document.getElementById('betting-system');
-                                if (bettingSystemDiv) {
-                                    bettingSystemDiv.classList.remove('active');
-                                }
-                            }
+if (bettingSystem.enabled) {
+    bettingSystem.enabled = false;
+    bettingSystem.bets = {};
+    const bettingSystemDiv = document.getElementById('betting-system');
+    if (bettingSystemDiv) {
+        bettingSystemDiv.classList.remove('active');
+    }
+}
+
+// 重置下注隊伍顯示
+const squadAElement = document.getElementById('betting-squad-a');
+const squadBElement = document.getElementById('betting-squad-b');
+if (squadAElement) squadAElement.textContent = '小隊 A';
+if (squadBElement) squadBElement.textContent = '小隊 B';
                             
                             // 中斷處理，因為對手已更換
                             break;
@@ -5693,18 +5766,42 @@ function handlePostBattleSpecialCards(originalWinner, winnerSquadId, loserSquadI
     
     console.log('處理戰後特殊效果:', { originalWinner, winnerSquadId, loserSquadId, totalA, totalB });
     
-if (loserSquadId && squadItemCards[loserSquadId] === 'gold_coin' && !usedGoldCoins[loserSquadId]) {  // ← 新增檢查條件
-    const shouldRetry = confirm(`小隊 #${loserSquadId} 擁有大金幣！是否要更換地圖重新戰鬥？\n（之前的下注和積分將不計算）`);
-    if (shouldRetry) {
-        usedGoldCoins[loserSquadId] = true;  // ← 標記已使用
-        return { 
-            retryBattle: true, 
-            retrySquadId: loserSquadId,
-            skipScoring: true
-        };
+// 檢查雙方是否有大金幣（不管輸贏）
+const checkGoldCoin = (squadId) => {
+    if (squadItemCards[squadId] === 'gold_coin' && !usedGoldCoins[squadId]) {
+        const result = originalWinner === 'tie' ? '平手' : 
+                      (squadId === winnerSquadId ? '獲勝' : '戰敗');
+        const shouldRetry = confirm(
+            `小隊 #${squadId} ${result}！\n` +
+            `擁有大金幣，是否要更換地圖重新戰鬥？\n` +
+            `（之前的下注和積分將不計算）`
+        );
+        if (shouldRetry) {
+            usedGoldCoins[squadId] = true;
+            return true;
+        }
+    } else if (squadItemCards[squadId] === 'gold_coin' && usedGoldCoins[squadId]) {
+        alert(`小隊 #${squadId} 的大金幣已經使用過一次，無法再次使用！`);
     }
-} else if (loserSquadId && squadItemCards[loserSquadId] === 'gold_coin' && usedGoldCoins[loserSquadId]) {  // ← 新增提示已使用過
-    alert(`小隊 #${loserSquadId} 的大金幣已經使用過一次，無法再次使用！`);
+    return false;
+};
+
+// 檢查小隊A
+if (checkGoldCoin(selectedSquadA)) {
+    return { 
+        retryBattle: true, 
+        retrySquadId: selectedSquadA,
+        skipScoring: true
+    };
+}
+
+// 檢查小隊B
+if (checkGoldCoin(selectedSquadB)) {
+    return { 
+        retryBattle: true, 
+        retrySquadId: selectedSquadB,
+        skipScoring: true
+    };
 }
     
     // 檢查超臭襪子（顛倒勝負）
@@ -6241,7 +6338,10 @@ function createStageComparison(stageName, squadA, squadB, prevSquadA = null, pre
             
             // 重置戰鬥按鈕
             updateArenaBattleButton();
-            
+            // 更新下注資訊（如果下注系統已啟動）
+if (bettingSystem.enabled) {
+    updateBettingInfo();
+} 
             // 隱藏結果
             const resultsContainer = document.getElementById('comparison-results');
             if (resultsContainer) {
@@ -6697,8 +6797,8 @@ function createAttributesList(squad, prevSquad) {
             }
             
             switch (special) {
-                case 'retry_on_lose':
-                    return baseEffect + '戰敗時可重選地圖再戰';
+case 'retry_battle':
+    return baseEffect + '戰後可重選地圖再戰';
                 case 'reverse_result':
                     return '輸的一方變成勝者';
                 case 'choose_opponent':
@@ -7069,6 +7169,8 @@ function startBetting() {
             const matchupElement = document.getElementById('betting-matchup');
             const squadAElement = document.getElementById('betting-squad-a');
             const squadBElement = document.getElementById('betting-squad-b');
+            
+            
             
             if (matchupElement) {
                 matchupElement.textContent = `小隊 #${selectedSquadA} VS 小隊 #${selectedSquadB}`;
