@@ -1873,6 +1873,33 @@
             transform: none;
             box-shadow: none;
         }
+        
+        .undo-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .undo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.5);
+        }
+        
+        .undo-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #666;
+            transform: none;
+            box-shadow: none;
+        }
 
         /* 下注系統樣式 */
         .betting-system {
@@ -3199,6 +3226,7 @@
         let selectedItemCard = null; // 當前選中的技能卡
         let selectedSquadForItem = null; // 當前選中要分配技能卡的小隊
         let usedGoldCoins = {};
+        let itemAssignmentHistory = [];
         // 新增下注相關變數
         let bettingSystem = {
             enabled: false,
@@ -3613,7 +3641,8 @@
                 } else if (pageName === 'items') {
                     initializeItemsWall();
                     updateSquadButtonsForItems();
-                    updateSelectedItemDisplay(); // 新增這行
+                    updateSelectedItemDisplay();
+                    updateUndoButton();// 新增這行
                 } else if (pageName === 'rankings') {
                     updateRankings();
                 }
@@ -6953,6 +6982,16 @@ case 'retry_battle':
         return;
     }
     
+    // 記錄操作前的狀態（新增）
+    const previousItem = squadItemCards[selectedSquadForItem] || null;
+    const operationRecord = {
+        squadId: selectedSquadForItem,
+        newItem: selectedItemCard,
+        previousItem: previousItem,
+        timestamp: Date.now()
+    };
+    
+    
     // 如果小隊之前有道具，先釋放它（但已戰鬥的道具會被標記為永久使用）
     if (squadItemCards[selectedSquadForItem]) {
         const oldItem = squadItemCards[selectedSquadForItem];
@@ -6975,8 +7014,62 @@ case 'retry_battle':
     updateSquadButtonsForItems();
     updateSelectedItemDisplay();
     updateAssignButton();
+    updateUndoButton();
+}
+// 撤銷上一步道具分配
+function undoLastAssignment() {
+    if (itemAssignmentHistory.length === 0) {
+        alert('沒有可以撤銷的操作！');
+        return;
+    }
+    
+    // 獲取最後一次操作
+    const lastOperation = itemAssignmentHistory.pop();
+    const { squadId, newItem, previousItem } = lastOperation;
+    
+    // 撤銷操作
+    // 1. 釋放當前的道具
+    delete takenItems[newItem];
+    
+    // 2. 恢復之前的道具（如果有）
+    if (previousItem) {
+        squadItemCards[squadId] = previousItem;
+        takenItems[previousItem] = squadId;
+    } else {
+        delete squadItemCards[squadId];
+    }
+    
+    // 顯示撤銷信息
+    const undoneItemName = itemCards[newItem].name;
+    if (previousItem) {
+        const previousItemName = itemCards[previousItem].name;
+        alert(`已撤銷：小隊 #${squadId} 的「${undoneItemName}」已移除，恢復為「${previousItemName}」`);
+    } else {
+        alert(`已撤銷：小隊 #${squadId} 的「${undoneItemName}」已移除`);
+    }
+    
+    // 更新顯示
+    initializeItemsWall();
+    updateSquadButtonsForItems();
+    updateSelectedItemDisplay();
+    updateAssignButton();
+    updateUndoButton();
 }
 
+// 更新 undo 按鈕狀態
+function updateUndoButton() {
+    const undoBtn = document.getElementById('undo-btn');
+    if (!undoBtn) return;
+    
+    // 只有在有操作歷史時才啟用按鈕
+    undoBtn.disabled = itemAssignmentHistory.length === 0;
+    
+    if (itemAssignmentHistory.length > 0) {
+        undoBtn.textContent = `↩️ 撤銷上一步 (${itemAssignmentHistory.length})`;
+    } else {
+        undoBtn.textContent = '↩️ 撤銷上一步';
+    }
+}
         // ======== 被動技能相關函數 ========
         
         // 更新被動技能選項
