@@ -2661,6 +2661,9 @@
                 <button class="assign-btn" id="assign-btn" onclick="assignItemToSquad()" disabled>
                     分配技能卡
                 </button>
+                <button class="undo-btn" id="undo-btn" onclick="undoLastAssignment()" disabled>
+                    ↩️ 撤銷上一步
+                </button>
             </div>
         </div>
     </div>
@@ -6991,6 +6994,8 @@ case 'retry_battle':
         timestamp: Date.now()
     };
     
+    
+    itemAssignmentHistory.push(operationRecord);
     
     // 如果小隊之前有道具，先釋放它（但已戰鬥的道具會被標記為永久使用）
     if (squadItemCards[selectedSquadForItem]) {
