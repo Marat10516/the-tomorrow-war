@@ -28,6 +28,118 @@
             display: flex;
             gap: 10px;
         }
+        /* 抽地圖頁面樣式 */
+        .map-draw-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .map-draw-board {
+            background: rgba(0, 0, 0, 0.9);
+            border: 3px solid #ff6b35;
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 0 50px rgba(255, 107, 53, 0.5);
+        }
+        
+        .draw-button {
+            background: linear-gradient(45deg, #ff6b35 0%, #ff8c42 100%);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 30px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.4);
+        }
+        
+        .draw-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 107, 53, 0.6);
+        }
+        
+        .draw-button:active {
+            transform: translateY(0);
+        }
+        
+        .draw-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .map-result {
+            margin-top: 40px;
+            padding: 30px;
+            background: rgba(255, 107, 53, 0.1);
+            border: 2px solid #ff6b35;
+            border-radius: 20px;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .map-icon-large {
+            font-size: 5em;
+            margin-bottom: 20px;
+            animation: bounceIn 1s ease-out;
+        }
+        
+        .map-name-large {
+            color: #ff6b35;
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 0 0 20px #ff6b35;
+            margin-bottom: 20px;
+        }
+        
+        .map-effects-display {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            width: 100%;
+        }
+        
+        .map-effect-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+        
+        .drawing-animation {
+            font-size: 4em;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
 
         .switch-btn {
             background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
@@ -2616,6 +2728,7 @@
         <button class="switch-btn" onclick="switchPage('arena')">競技場</button>
         <button class="switch-btn" onclick="switchPage('items')">道具牆</button>
         <button class="switch-btn" onclick="switchPage('rankings')">積分排行</button>
+        <button class="switch-btn" onclick="switchPage('mapdraw')">抽地圖</button>
     </div>
 
     <!-- 小隊管理頁面 -->
@@ -2677,6 +2790,27 @@
                 <h2 class="rankings-title">小隊積分排行</h2>
                 <div class="rankings-list" id="rankings-list">
                     <!-- 排行榜將在這裡動態生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 抽地圖頁面 -->
+    <div class="page" id="mapdraw-page">
+        <h1 class="main-title">🎲 抽地圖系統 🎲</h1>
+        
+        <div class="map-draw-container">
+            <div class="map-draw-board">
+                <h2 class="arena-map-title">🗺️ 隨機抽取戰鬥地圖 🗺️</h2>
+                
+                <button class="draw-button" id="draw-map-btn" onclick="drawRandomMap()">
+                    抽取地圖
+                </button>
+                
+                <div class="map-result" id="map-result">
+                    <div style="color: #888; font-size: 1.3em;">
+                        點擊上方按鈕開始抽取地圖
+                    </div>
                 </div>
             </div>
         </div>
@@ -3647,7 +3781,8 @@
                     updateUndoButton();// 新增這行
                 } else if (pageName === 'rankings') {
                     updateRankings();
-                }
+                }else if (pageName === 'mapdraw') {
+              }    
             }, 50);
         }
 
@@ -7574,6 +7709,80 @@ function startBetting() {
                 console.error('Initialization error:', error);
             }
         });
+        // ======== 抽地圖功能 ========
+        let isDrawing = false;
+        
+        function drawRandomMap() {
+            if (isDrawing) return;
+            
+            const drawBtn = document.getElementById('draw-map-btn');
+            const resultDiv = document.getElementById('map-result');
+            
+            isDrawing = true;
+            drawBtn.disabled = true;
+            drawBtn.textContent = '抽取中...';
+            
+            // 顯示抽取動畫
+            resultDiv.innerHTML = '<div class="drawing-animation">🎲</div>';
+            
+            // 模擬抽取過程
+            setTimeout(() => {
+                // 從地圖列表中隨機選一個
+                const mapKeys = Object.keys(arenaMaps);
+                const randomIndex = Math.floor(Math.random() * mapKeys.length);
+                const selectedMapKey = mapKeys[randomIndex];
+                const selectedMap = arenaMaps[selectedMapKey];
+                
+                // 顯示結果
+                displayDrawnMap(selectedMapKey, selectedMap);
+                
+                // 重置按鈕
+                isDrawing = false;
+                drawBtn.disabled = false;
+                drawBtn.textContent = '再抽一次';
+            }, 2000); // 2秒的抽取動畫
+        }
+        
+        function displayDrawnMap(mapKey, mapData) {
+            const resultDiv = document.getElementById('map-result');
+            
+            let effectsHTML = '<div class="map-effects-display"><h3 style="color: #ff6b35; margin-bottom: 15px;">地圖效果</h3>';
+            
+            Object.keys(mapData.effects).forEach(attrKey => {
+                const multiplier = mapData.effects[attrKey];
+                const attrName = attributeNames[attrKey];
+                const attrIcon = attributeIcons[attrKey];
+                
+                let effectClass = '';
+                let effectText = '';
+                
+                if (multiplier === 0) {
+                    effectClass = 'arena-effect-zero';
+                    effectText = `${attrIcon} ${attrName} → 0`;
+                } else if (multiplier < 1) {
+                    effectClass = 'arena-effect-nerf';
+                    effectText = `${attrIcon} ${attrName} ×${multiplier}`;
+                } else if (multiplier > 1) {
+                    effectClass = 'arena-effect-boost';
+                    effectText = `${attrIcon} ${attrName} ×${multiplier}`;
+                }
+                
+                effectsHTML += `<div class="map-effect-row">
+                    <div class="arena-effect-item ${effectClass}">${effectText}</div>
+                </div>`;
+            });
+            
+            effectsHTML += '</div>';
+            
+            resultDiv.innerHTML = `
+                <div class="map-icon-large">${mapData.icon}</div>
+                <div class="map-name-large">${mapData.name}</div>
+                ${effectsHTML}
+            `;
+            
+            // 可選：播放音效或震動效果
+            console.log(`抽到地圖：${mapData.name}`);
+        }
     </script>
 </body>
 </html>
