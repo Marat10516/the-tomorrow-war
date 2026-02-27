@@ -31,7 +31,7 @@ The system runs entirely in a single `index.html` file and does not require any 
 
 ##  Main Features
 
-###  Squad Management System
+### 1 Squad Management System
 
 Users can create and manage multiple squads with customizable attributes:
 
